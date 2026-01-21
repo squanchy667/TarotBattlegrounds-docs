@@ -1,5 +1,74 @@
 # Changelog
 
+## Sprint 1: UI System Overhaul - January 21, 2026
+
+### Summary
+Complete rewrite of UI system from polling-based to event-driven architecture. Full game loop now functional.
+
+### Added
+- ✅ **Event System in Player.cs**
+  - OnHandChanged, OnBoardChanged, OnCoinsChanged events
+  - OnTierChanged, OnHealthChanged, OnShopRefreshed events
+  - Static OnAnyPlayerStateChanged for global listeners
+  - NotifyAllStateChanged() for player switching
+
+- ✅ **CombatLogUI** (New Component)
+  - Real-time combat visualization
+  - Color-coded log entries (attacks, deaths, effects)
+  - Auto-scroll with entry limiting
+
+- ✅ **Combat Events in CombatManager.cs**
+  - OnCombatStart, OnCombatLogEntry, OnCombatEnd events
+  - Detailed combat action logging
+
+- ✅ **Test Suite** (35 tests)
+  - CardSystemTests.cs - Card operations
+  - CombatTests.cs - Battle simulation
+  - EconomyTests.cs - Gold/tier mechanics
+  - EdgeCaseTests.cs - Boundary conditions
+
+### Changed
+- 🔄 **GameUIManager.cs** - Complete rewrite
+  - Event subscription model
+  - Player switching with re-subscription
+  - UpdateButtons() method for selection state
+  - Removed Update() polling
+
+- 🔄 **ShopUI.cs** - Event-driven refresh
+  - Subscribes to OnShopRefreshed, OnTierChanged
+  - Selection triggers button state update
+
+- 🔄 **HandUI.cs** - Event-driven refresh
+  - Subscribes to OnHandChanged
+  - Selection triggers button state update
+
+- 🔄 **BoardUI.cs** - Event-driven refresh
+  - Subscribes to OnBoardChanged
+  - Selection triggers button state update
+
+### Fixed
+- ✅ Player switching now properly updates all UI panels
+- ✅ Card selection persists until action taken
+- ✅ Button states update on selection change
+- ✅ Shop refreshes correctly on tier upgrade
+
+### Working Features
+- ✅ Buy cards from shop
+- ✅ Play cards to board
+- ✅ Sell cards from board
+- ✅ Refresh shop (reroll)
+- ✅ Upgrade tavern tier
+- ✅ Switch between players
+- ✅ Combat execution
+- ✅ Turn progression
+
+### Known Issues (To Fix)
+- ⚠️ Health not updating in UI after combat damage
+- ⚠️ Cannot sell cards from hand (only board)
+- ⚠️ UI needs visual polish
+
+---
+
 ## Phase 3 (In Progress) - July 2025
 
 ### July 31, 2025
@@ -38,7 +107,6 @@
 ---
 
 ## Phase 1 (Complete) - July 22, 2025
-
 - ✅ Unity project setup
 - ✅ GameManager with Recruit/Combat phases
 - ✅ Coroutine-based game loop
@@ -48,7 +116,6 @@
 ---
 
 ## Pre-Phase (July 22, 2025)
-
 - ✅ Project initialization
 - ✅ Git repository created
 - ✅ README.md and PRD.md written

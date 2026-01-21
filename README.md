@@ -2,7 +2,7 @@
 
 > Comprehensive documentation for Tarot Battlegrounds - A tarot-themed auto-battler game inspired by Hearthstone Battlegrounds
 
-[![Phase 3](https://img.shields.io/badge/Phase-3%20In%20Progress-yellow)]()
+[![Sprint 1](https://img.shields.io/badge/Sprint-1%20Complete-green)]()
 [![Unity](https://img.shields.io/badge/Unity-2023%20LTS-black)]()
 
 ## 📖 About
@@ -20,7 +20,7 @@ This documentation serves as a centralized knowledge base for the Tarot Battlegr
 ## 📂 Documentation
 
 - **[Developer](developer/)** - Technical documentation
-- **[Product](product/)** - Game design and roadmap  
+- **[Product](product/)** - Game design and roadmap
 - **[Learn](learn/)** - Getting started guides
 - **[Resources](resources/)** - Tech stack, issues, changelog
 
@@ -28,7 +28,7 @@ This documentation serves as a centralized knowledge base for the Tarot Battlegr
 
 ### For Agents
 1. [Architecture Overview](developer/architecture.md)
-2. [Current Phase Status](product/roadmap/phase-3-combat.md)
+2. [Current Status](resources/changelog.md)
 3. [Known Issues](resources/known-issues.md)
 
 ### For Developers
@@ -38,11 +38,36 @@ This documentation serves as a centralized knowledge base for the Tarot Battlegr
 
 ## 📊 Current Status
 
-**Phase 3: Combat System** (In Progress)
-- ✅ Turn-based battle simulation
-- ✅ Health tracking (40 HP, damage cap 5)
-- 🔄 Tribe synergies (in development)
-- 🔄 Balance testing (50+ runs)
+**Sprint 1: UI System Overhaul** ✅ Complete (January 21, 2026)
+
+### Working Features
+- ✅ Buy cards from shop
+- ✅ Play cards to board  
+- ✅ Sell cards from board
+- ✅ Refresh shop (reroll)
+- ✅ Upgrade tavern tier
+- ✅ Switch between players
+- ✅ Combat execution
+- ✅ Turn progression
+- ✅ Event-driven UI system
+
+### In Progress
+- 🔄 Health display fix
+- 🔄 Sell from hand
+- 🔄 UI polish
+
+## 🏗️ Architecture Highlights
+
+The project uses an **event-driven UI architecture**:
+
+```
+Player State Change → Event Fired → UI Subscribes → UI Updates
+```
+
+Key events:
+- `OnHandChanged`, `OnBoardChanged`, `OnCoinsChanged`
+- `OnTierChanged`, `OnHealthChanged`, `OnShopRefreshed`
+- `OnCombatLogEntry` for real-time combat display
 
 ## 🔗 Links
 
@@ -50,4 +75,6 @@ This documentation serves as a centralized knowledge base for the Tarot Battlegr
 - Unity: 2023 LTS
 - Network: Mirror (Phase 5)
 
-Last Updated: January 2026
+---
+
+Last Updated: January 21, 2026
