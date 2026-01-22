@@ -2,6 +2,25 @@
 
 ## Sprint 3: Ability Framework - January 22, 2026
 
+### B2: Create IAbility Interface
+Created the ability framework foundation:
+
+**IAbility.cs:**
+- `IAbility` interface with `Trigger`, `Description`, `Execute()`, `CanExecute()`
+- `AbilityContext` class containing source card, owner, target, board states
+
+**AbilityBase.cs:**
+- Abstract base class with logging and validation
+- `AbilityEffects` static helper for common effects:
+  - `BuffAttack()`, `BuffHealth()`, `BuffStats()`
+  - `DealDamage()`, `GrantAegis()`
+
+**Files Added:**
+- `Assets/Scripts/Abilities/IAbility.cs`
+- `Assets/Scripts/Abilities/AbilityBase.cs`
+
+---
+
 ### B1: Create AbilityTrigger Enum
 Created the `AbilityTrigger` enum defining when abilities trigger:
 - `None` - No ability
