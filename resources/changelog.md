@@ -2,6 +2,31 @@
 
 ## Sprint 3: Ability Framework - January 22, 2026
 
+### B3: Implement Battlecry
+Created Battlecry ability system that triggers when cards are played from hand.
+
+**BattlecryAbility.cs:**
+- Supports multiple effects: BuffAdjacent, BuffAllFriendly, GainAegis, GainCoins, etc.
+- Uses AbilityBase for logging and validation
+
+**AbilityManager.cs:**
+- Static manager for registering/unregistering card abilities
+- `TriggerAbilities()` method to fire abilities by trigger type
+- `CreateBattlecryContext()` helper for play-time context
+
+**Player.cs Integration:**
+- `PlayCard()` now triggers Battlecry abilities after placing card
+- `SellCard()` / `SellCardFromHand()` now unregister abilities
+
+**Files Added:**
+- `Assets/Scripts/Abilities/Abilities/BattlecryAbility.cs`
+- `Assets/Scripts/Abilities/AbilityManager.cs`
+
+**Files Modified:**
+- `Assets/Scripts/Player.cs` - Battlecry trigger + ability cleanup
+
+---
+
 ### B2: Create IAbility Interface
 Created the ability framework foundation:
 

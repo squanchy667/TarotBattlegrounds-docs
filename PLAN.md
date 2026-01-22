@@ -79,7 +79,7 @@ The core engine must be **100% theme-agnostic**:
 |------|----------|--------|--------|
 | B1: Create `AbilityType` enum | HIGH | 30m | ✅ DONE |
 | B2: Create `IAbility` interface | HIGH | 1h | ✅ DONE |
-| B3: Implement Battlecry (on play) | HIGH | 2h | 🔴 TODO |
+| B3: Implement Battlecry (on play) | HIGH | 2h | ✅ DONE |
 | B4: Implement Deathrattle (on death) | HIGH | 2h | 🔴 TODO |
 | B5: Implement OnAttack trigger | MEDIUM | 2h | 🔴 TODO |
 | B6: Implement Taunt (must be attacked first) | HIGH | 2h | 🔴 TODO |
@@ -234,7 +234,7 @@ Example: B3: Implement Battlecry ability
 | Phase | Tasks | Done | Progress |
 |-------|-------|------|----------|
 | A: Bug Fixes | 3 | 3 | 🟩🟩🟩 100% |
-| B: Abilities | 8 | 2 | 🟩🟩⬜⬜⬜⬜⬜⬜ 25% |
+| B: Abilities | 8 | 3 | 🟩🟩🟩⬜⬜⬜⬜⬜ 37% |
 | C: Tribes | 6 | 0 | ⬜⬜⬜⬜⬜⬜ 0% |
 | D: AI | 6 | 0 | ⬜⬜⬜⬜⬜⬜ 0% |
 | E: Lobby | 6 | 0 | ⬜⬜⬜⬜⬜⬜ 0% |
