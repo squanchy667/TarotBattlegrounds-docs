@@ -53,7 +53,7 @@ The core engine must be **100% theme-agnostic**:
 | AI Opponents | 🟡 Placeholder | Basic AI exists, needs strategy |
 | 4-Player Lobby | 🔴 NOT STARTED | Single-player simulation only |
 | Health UI Bug | ✅ Fixed | Combat damage now reflects in UI |
-| Sell from Hand | 🔴 Known Issue | Can only sell from board |
+| Sell from Hand | ✅ Fixed | Can sell from board or hand |
 
 ---
 
@@ -65,7 +65,7 @@ The core engine must be **100% theme-agnostic**:
 | Task | Priority | Effort | Status |
 |------|----------|--------|--------|
 | A1: Fix health UI not updating after combat | HIGH | 2h | ✅ DONE |
-| A2: Enable sell from hand (not just board) | HIGH | 1h | 🔴 TODO |
+| A2: Enable sell from hand (not just board) | HIGH | 1h | ✅ DONE |
 | A3: Validate all event subscriptions working | MEDIUM | 1h | 🔴 TODO |
 
 **Agent Quick Start**: Read `developer/architecture.md` for event system, check `GameUIManager.cs` for UI subscriptions.
@@ -233,7 +233,7 @@ Example: B3: Implement Battlecry ability
 
 | Phase | Tasks | Done | Progress |
 |-------|-------|------|----------|
-| A: Bug Fixes | 3 | 1 | 🟩⬜⬜ 33% |
+| A: Bug Fixes | 3 | 2 | 🟩🟩⬜ 66% |
 | B: Abilities | 8 | 0 | ⬜⬜⬜⬜⬜⬜⬜⬜ 0% |
 | C: Tribes | 6 | 0 | ⬜⬜⬜⬜⬜⬜ 0% |
 | D: AI | 6 | 0 | ⬜⬜⬜⬜⬜⬜ 0% |

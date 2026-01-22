@@ -2,6 +2,20 @@
 
 ## Sprint 2: Bug Fixes - January 22, 2026
 
+### A2: Enable Sell from Hand
+**Problem:** Players could only sell cards from the board, not from their hand.
+
+**Fix:**
+- Added `SellCardFromHand(int index)` method to `Player.cs`
+- Updated sell button to enable when board OR hand card selected
+- Updated sell action to check both board and hand selection
+
+**Files Changed:**
+- `Assets/Scripts/Player.cs` - Added new method (+26 lines)
+- `Assets/Scripts/UI/GameUIManager.cs` - Updated button state and action
+
+---
+
 ### A1: Fix Health UI Not Updating After Combat
 **Problem:** After combat, player health was reduced internally but the UI didn't reflect the change.
 
@@ -85,7 +99,7 @@ Complete rewrite of UI system from polling-based to event-driven architecture. F
 
 ### Known Issues (To Fix)
 - ✅ ~~Health not updating in UI after combat damage~~ (Fixed in Sprint 2 - A1)
-- ⚠️ Cannot sell cards from hand (only board)
+- ✅ ~~Cannot sell cards from hand (only board)~~ (Fixed in Sprint 2 - A2)
 - ⚠️ UI needs visual polish
 
 ---
