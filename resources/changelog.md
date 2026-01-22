@@ -1,5 +1,22 @@
 # Changelog
 
+## Sprint 3: Ability Framework - January 22, 2026
+
+### B1: Create AbilityTrigger Enum
+Created the `AbilityTrigger` enum defining when abilities trigger:
+- `None` - No ability
+- `Battlecry` - When played from hand
+- `Deathrattle` - When card dies
+- `OnAttack` - When card attacks
+- `OnDamaged` - When card takes damage
+- `StartOfCombat` - Before combat begins
+- `EndOfTurn` - At end of recruit phase
+
+**Files Added:**
+- `Assets/Scripts/Abilities/AbilityTrigger.cs`
+
+---
+
 ## Sprint 2: Bug Fixes - January 22, 2026
 
 ### A3: Validate Event Subscriptions
