@@ -52,7 +52,7 @@ The core engine must be **100% theme-agnostic**:
 | Tribe Synergies | 🔴 NOT STARTED | Critical for core engine |
 | AI Opponents | 🟡 Placeholder | Basic AI exists, needs strategy |
 | 4-Player Lobby | 🔴 NOT STARTED | Single-player simulation only |
-| Health UI Bug | 🔴 Known Issue | Combat damage not reflecting |
+| Health UI Bug | ✅ Fixed | Combat damage now reflects in UI |
 | Sell from Hand | 🔴 Known Issue | Can only sell from board |
 
 ---
@@ -64,7 +64,7 @@ The core engine must be **100% theme-agnostic**:
 
 | Task | Priority | Effort | Status |
 |------|----------|--------|--------|
-| A1: Fix health UI not updating after combat | HIGH | 2h | 🔴 TODO |
+| A1: Fix health UI not updating after combat | HIGH | 2h | ✅ DONE |
 | A2: Enable sell from hand (not just board) | HIGH | 1h | 🔴 TODO |
 | A3: Validate all event subscriptions working | MEDIUM | 1h | 🔴 TODO |
 
@@ -233,7 +233,7 @@ Example: B3: Implement Battlecry ability
 
 | Phase | Tasks | Done | Progress |
 |-------|-------|------|----------|
-| A: Bug Fixes | 3 | 0 | ⬜⬜⬜ 0% |
+| A: Bug Fixes | 3 | 1 | 🟩⬜⬜ 33% |
 | B: Abilities | 8 | 0 | ⬜⬜⬜⬜⬜⬜⬜⬜ 0% |
 | C: Tribes | 6 | 0 | ⬜⬜⬜⬜⬜⬜ 0% |
 | D: AI | 6 | 0 | ⬜⬜⬜⬜⬜⬜ 0% |

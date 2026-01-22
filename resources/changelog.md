@@ -1,5 +1,26 @@
 # Changelog
 
+## Sprint 2: Bug Fixes - January 22, 2026
+
+### A1: Fix Health UI Not Updating After Combat
+**Problem:** After combat, player health was reduced internally but the UI didn't reflect the change.
+
+**Root Cause:** Data source mismatch in `GameManager.cs`:
+- Combat damage modified `playerHealths[]` list directly
+- Never updated `Player.Health` property
+- So `OnHealthChanged` event never fired
+- UI never received notification
+
+**Fix:** Added sync lines in `GameManager.cs` after each health modification:
+```csharp
+players[pX].Health = playerHealths[pX]; // Sync to fire OnHealthChanged
+```
+
+**Files Changed:**
+- `Assets/Scripts/GameManager.cs` - 4 lines added (lines 85, 89, 101, 111)
+
+---
+
 ## Sprint 1: UI System Overhaul - January 21, 2026
 
 ### Summary
@@ -63,7 +84,7 @@ Complete rewrite of UI system from polling-based to event-driven architecture. F
 - ✅ Turn progression
 
 ### Known Issues (To Fix)
-- ⚠️ Health not updating in UI after combat damage
+- ✅ ~~Health not updating in UI after combat damage~~ (Fixed in Sprint 2 - A1)
 - ⚠️ Cannot sell cards from hand (only board)
 - ⚠️ UI needs visual polish
 
