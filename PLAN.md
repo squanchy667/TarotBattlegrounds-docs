@@ -66,7 +66,7 @@ The core engine must be **100% theme-agnostic**:
 |------|----------|--------|--------|
 | A1: Fix health UI not updating after combat | HIGH | 2h | ✅ DONE |
 | A2: Enable sell from hand (not just board) | HIGH | 1h | ✅ DONE |
-| A3: Validate all event subscriptions working | MEDIUM | 1h | 🔴 TODO |
+| A3: Validate all event subscriptions working | MEDIUM | 1h | ✅ DONE |
 
 **Agent Quick Start**: Read `developer/architecture.md` for event system, check `GameUIManager.cs` for UI subscriptions.
 
@@ -233,7 +233,7 @@ Example: B3: Implement Battlecry ability
 
 | Phase | Tasks | Done | Progress |
 |-------|-------|------|----------|
-| A: Bug Fixes | 3 | 2 | 🟩🟩⬜ 66% |
+| A: Bug Fixes | 3 | 3 | 🟩🟩🟩 100% |
 | B: Abilities | 8 | 0 | ⬜⬜⬜⬜⬜⬜⬜⬜ 0% |
 | C: Tribes | 6 | 0 | ⬜⬜⬜⬜⬜⬜ 0% |
 | D: AI | 6 | 0 | ⬜⬜⬜⬜⬜⬜ 0% |

@@ -2,6 +2,25 @@
 
 ## Sprint 2: Bug Fixes - January 22, 2026
 
+### A3: Validate Event Subscriptions
+**Audit:** Verified all 10 events (7 Player, 3 CombatManager) have proper subscribers.
+
+**Issue Found:** Duplicate subscriptions in UI components:
+- ShopUI, HandUI, BoardUI subscribed directly to player events
+- GameUIManager also subscribes and calls their refresh methods
+- Result: Every event triggered 2 UI refreshes
+
+**Fix:** Removed direct subscriptions from UI components (-92 lines):
+- GameUIManager is now single source of truth for event handling
+- Cleaner architecture, no duplicate refreshes
+
+**Files Changed:**
+- `Assets/Scripts/UI/ShopUI.cs` - Removed duplicate subscriptions
+- `Assets/Scripts/UI/HandUI.cs` - Removed duplicate subscriptions
+- `Assets/Scripts/UI/BoardUI.cs` - Removed duplicate subscriptions
+
+---
+
 ### A2: Enable Sell from Hand
 **Problem:** Players could only sell cards from the board, not from their hand.
 
