@@ -48,7 +48,7 @@ The core engine must be **100% theme-agnostic**:
 | Tavern/Shop | ✅ Complete | Buy/Sell/Reroll/Tiers functional |
 | Combat Core | ✅ Complete | Turn-based simulation working |
 | Event-Driven UI | ✅ Complete | All player events firing |
-| Ability Framework | 🔴 NOT STARTED | Critical for core engine |
+| Ability Framework | ✅ Complete | Battlecry, Deathrattle, OnAttack, Taunt |
 | Tribe Synergies | 🔴 NOT STARTED | Critical for core engine |
 | AI Opponents | 🟡 Placeholder | Basic AI exists, needs strategy |
 | 4-Player Lobby | 🔴 NOT STARTED | Single-player simulation only |
@@ -80,11 +80,11 @@ The core engine must be **100% theme-agnostic**:
 | B1: Create `AbilityType` enum | HIGH | 30m | ✅ DONE |
 | B2: Create `IAbility` interface | HIGH | 1h | ✅ DONE |
 | B3: Implement Battlecry (on play) | HIGH | 2h | ✅ DONE |
-| B4: Implement Deathrattle (on death) | HIGH | 2h | 🔴 TODO |
-| B5: Implement OnAttack trigger | MEDIUM | 2h | 🔴 TODO |
-| B6: Implement Taunt (must be attacked first) | HIGH | 2h | 🔴 TODO |
-| B7: Add ability field to Card SO | HIGH | 30m | 🔴 TODO |
-| B8: Test with 5+ ability cards | HIGH | 2h | 🔴 TODO |
+| B4: Implement Deathrattle (on death) | HIGH | 2h | ✅ DONE |
+| B5: Implement OnAttack trigger | MEDIUM | 2h | ✅ DONE |
+| B6: Implement Taunt (must be attacked first) | HIGH | 2h | ✅ DONE |
+| B7: Add ability field to Card SO | HIGH | 30m | ✅ DONE |
+| B8: Test with 5+ ability cards | HIGH | 2h | ✅ DONE |
 
 **Ability Types for Core Engine**:
 ```csharp
@@ -234,7 +234,7 @@ Example: B3: Implement Battlecry ability
 | Phase | Tasks | Done | Progress |
 |-------|-------|------|----------|
 | A: Bug Fixes | 3 | 3 | 🟩🟩🟩 100% |
-| B: Abilities | 8 | 3 | 🟩🟩🟩⬜⬜⬜⬜⬜ 37% |
+| B: Abilities | 8 | 8 | 🟩🟩🟩🟩🟩🟩🟩🟩 100% |
 | C: Tribes | 6 | 0 | ⬜⬜⬜⬜⬜⬜ 0% |
 | D: AI | 6 | 0 | ⬜⬜⬜⬜⬜⬜ 0% |
 | E: Lobby | 6 | 0 | ⬜⬜⬜⬜⬜⬜ 0% |

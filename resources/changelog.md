@@ -2,6 +2,46 @@
 
 ## Sprint 3: Ability Framework - January 22, 2026
 
+### B4-B8: Complete Ability Framework
+
+**B4: Deathrattle Ability**
+- Created `DeathrattleAbility.cs` with effects: BuffRandomFriendly, DamageRandomEnemy, DamageAllEnemies
+- Hooked into CombatManager death handling
+
+**B5: OnAttack Ability**
+- Created `OnAttackAbility.cs` with effects: BuffSelf, BonusDamage, Cleave, DamageAdjacent
+- Hooked into CombatManager attack phase
+
+**B6: Taunt Ability**
+- Created `TauntAbility.cs` as passive marker
+- Integrates with existing Guardian combat logic
+
+**B7: Card SO Ability Fields**
+- Added `abilityTrigger`, `abilityEffect`, `abilityValue` to Card.cs
+- Added `AbilityEffectType` enum for inspector configuration
+- Added `RegisterAbility()` method for runtime ability setup
+- Updated Clone() to copy ability fields and auto-register
+
+**B8: Test Cards**
+- Created `AbilityTestCards.cs` with 10 test cards:
+  - Battlecry: Battle Commander, War Drummer, Shield Bearer, Gold Finder
+  - Deathrattle: Dying Mentor, Explosive Imp, Bomb Lobber
+  - OnAttack: Raging Berserker, Whirlwind Warrior
+  - Taunt: Stone Guardian
+
+**Files Added:**
+- `Assets/Scripts/Abilities/Abilities/DeathrattleAbility.cs`
+- `Assets/Scripts/Abilities/Abilities/OnAttackAbility.cs`
+- `Assets/Scripts/Abilities/Abilities/TauntAbility.cs`
+- `Assets/Scripts/Abilities/AbilityTestCards.cs`
+
+**Files Modified:**
+- `Assets/Cards/Card.cs` - Added ability system fields
+- `Assets/Scripts/CombatManager.cs` - Added ability triggers
+- `Assets/Scripts/Player.cs` - Added RegisterAbility() call
+
+---
+
 ### B3: Implement Battlecry
 Created Battlecry ability system that triggers when cards are played from hand.
 
