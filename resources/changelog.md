@@ -1,5 +1,25 @@
 # Changelog
 
+## Sprint 3 (continued): Combat Debug - January 23, 2026
+
+### Combat Turn Order Fix
+- Added verbose debug logging to CombatManager.cs for turn tracing
+- Added logging to CombatLogUI.cs for event receipt tracing
+- Verified combat turn order is correct (alternating sides, proper first attacker)
+
+**Debug Logs Added:**
+- `=== COMBAT START ===` with pFirst, firstPlayer values
+- `--- TURN X START/END ---` boundaries
+- `[BEFORE_LOGENTRY]` / `[AFTER_LOGENTRY]` around LogEntry calls
+- `[LogEntry]` in LogEntry function
+- `[CombatLogUI.AddLogEntry]`, `[CombatLogUI.ClearLog]`, `[CombatLogUI.OnCombatStart]`
+
+**Files Modified:**
+- `Assets/Scripts/CombatManager.cs` - Added debug logging throughout combat loop
+- `Assets/Scripts/UI/CombatLogUI.cs` - Added debug logging to event handlers
+
+---
+
 ## Sprint 3: Ability Framework - January 22, 2026
 
 ### B4-B8: Complete Ability Framework
