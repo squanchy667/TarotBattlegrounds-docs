@@ -1,5 +1,34 @@
 # Changelog
 
+## Phase C Redesign - January 23, 2026
+
+### Tribe Synergy System Expanded
+Phase C has been redesigned with a more flexible, data-driven approach:
+
+**New Features:**
+- Multi-tribe cards (cards can belong to 2+ tribes)
+- Cross-tribe combos (Pentacles + Cups = bonus effect)
+- Data-driven synergies via ScriptableObjects
+- Tiered thresholds (2/4/6 counts)
+
+**New Enums:**
+- `TribeType` - None, Pentacles, Cups, Swords, Wands
+- `SynergyTrigger` - Passive, StartOfCombat, EndOfCombat, OnSell, OnBuy, OnDeath, EndOfTurn
+- `SynergyEffect` - BuffAttack, BuffHealth, BonusGold, ReduceCost, Piercing, Cleave, etc.
+- `SynergyTarget` - AllTribeMembers, AllFriendly, Adjacent, Random, Self
+
+**Tribe Designs:**
+| Tribe | Theme | Combo Partner |
+|-------|-------|---------------|
+| Pentacles | Economy | Cups (+1 gold/turn) |
+| Cups | Healing | Wands (heals buff attack) |
+| Swords | Aggro | Pentacles (kills give gold) |
+| Wands | Buffs | Swords (double attack buffs) |
+
+**Task Count:** 6 → 14 tasks
+
+---
+
 ## Sprint 3 (continued): Combat Debug - January 23, 2026
 
 ### Combat Turn Order Fix

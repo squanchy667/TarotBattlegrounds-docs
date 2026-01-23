@@ -2,7 +2,7 @@
 
 > **Purpose**: This document is the single source of truth for the project. Any agent or developer can pick up a task with minimal context by reading this file.
 
-**Last Updated**: January 22, 2026  
+**Last Updated**: January 23, 2026  
 **Current Phase**: Core Engine Completion  
 **Goal**: Build a fully functional, theme-agnostic auto-battler engine that can be reskinned infinitely
 
@@ -104,24 +104,87 @@ public enum AbilityTrigger {
 ---
 
 ### Phase C: Tribe Synergy System (Sprint 4)
-**Goal**: Generic tribe/tag system for any theme
+**Goal**: Flexible, data-driven tribe system with multi-tribe cards and cross-tribe combos
 
-| Task | Priority | Effort | Status |
-|------|----------|--------|--------|
-| C1: Create `TribeType` enum (generic: TypeA, TypeB, TypeC, TypeD) | HIGH | 30m | 🔴 TODO |
-| C2: Add tribe[] field to Card SO | HIGH | 30m | 🔴 TODO |
-| C3: Create `SynergyManager.cs` | HIGH | 2h | 🔴 TODO |
-| C4: Implement tribe count detection | HIGH | 1h | 🔴 TODO |
-| C5: Implement basic synergy bonuses | HIGH | 3h | 🔴 TODO |
-| C6: Test with 4 tribes, 3+ cards each | HIGH | 2h | 🔴 TODO |
+#### Design Principles
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    SYNERGY DESIGN GOALS                      │
+├─────────────────────────────────────────────────────────────┤
+│ 1. DATA-DRIVEN     → Change synergies without touching code │
+│ 2. MULTI-TRIBE     → Cards can have 1, 2, or even 3 tribes  │
+│ 3. COMBO-FRIENDLY  → Tribes interact with each other        │
+│ 4. TIERED SCALING  → 2/4/6 thresholds with escalating power │
+│ 5. DIVERSE EFFECTS → Economy, Combat, Healing, Buffs        │
+└─────────────────────────────────────────────────────────────┘
+```
 
-**Tarot Theme Tribes** (for reference):
-- Pentacles (Earth) → +1 gold on sell
-- Cups (Water) → Heal adjacent minions
-- Swords (Air) → Piercing damage (TBD)
-- Wands (Fire) → Buff attack (TBD)
+#### Core Enums
+```csharp
+public enum TribeType { None, Pentacles, Cups, Swords, Wands }
 
-**Agent Quick Start**: Read `product/game-design/tarot-mechanics.md` for tribe details.
+public enum SynergyTrigger {
+    Passive, StartOfCombat, EndOfCombat, OnSell, OnBuy, OnDeath, EndOfTurn
+}
+
+public enum SynergyEffect {
+    BuffAttack, BuffHealth, BuffStats, BonusGold, ReduceCost,
+    BonusDamage, Piercing, Cleave, HealFlat, HealPercent, Shield,
+    ExtraCardDraw, Discover
+}
+
+public enum SynergyTarget {
+    AllTribeMembers, AllFriendly, Adjacent, Random, Self
+}
+```
+
+#### TribeSynergy ScriptableObject Structure
+```csharp
+[CreateAssetMenu(menuName = "TarotBG/Tribe Synergy")]
+public class TribeSynergy : ScriptableObject
+{
+    public TribeType tribe;
+    public string tribeName;
+    public string description;
+    public Color themeColor;
+    public SynergyTier[] tiers;
+
+    // Cross-tribe combo
+    public TribeType comboTribe;
+    public SynergyEffect comboEffect;
+    public int comboValue;
+}
+```
+
+#### Tarot Tribe Designs
+| Tribe | Theme | Tier 2 | Tier 4 | Tier 6 | Combo With |
+|-------|-------|--------|--------|--------|------------|
+| **Pentacles** | Economy | +1 gold on sell | +2 gold on sell | -1 cost on buy | Cups: +1 gold/turn |
+| **Cups** | Healing | Heal adjacent 1 | Heal tribe 2 | Shield all 2 | Wands: Heals buff attack |
+| **Swords** | Aggro | +1 attack | +2 bonus damage | Cleave | Pentacles: Kills give gold |
+| **Wands** | Buffs | +1/+1 random | +1/+1 tribe | +2 attack all | Swords: Double attack buffs |
+
+| Task | Description | Effort | Status |
+|------|-------------|--------|--------|
+| C1: Create `TribeType` enum | Define tribe types | 15m | 🔴 TODO |
+| C2: Create `SynergyTrigger` enum | When synergies activate | 15m | 🔴 TODO |
+| C3: Create `SynergyEffect` enum | What synergies do | 15m | 🔴 TODO |
+| C4: Create `SynergyTarget` enum | Who is affected | 15m | 🔴 TODO |
+| C5: Create `TribeSynergy` ScriptableObject | Data container with tiers + combos | 1h | 🔴 TODO |
+| C6: Add `TribeType[] tribes` to Card SO | Multi-tribe support on cards | 30m | 🔴 TODO |
+| C7: Create `SynergyManager.cs` | Count tribes on board | 1.5h | 🔴 TODO |
+| C8: Implement tier threshold checking | Detect 2/4/6 thresholds | 1h | 🔴 TODO |
+| C9: Hook synergies into triggers | OnSell, StartOfCombat, EndOfTurn, etc. | 2h | 🔴 TODO |
+| C10: Implement cross-tribe combo detection | Detect and apply combo bonuses | 1h | 🔴 TODO |
+| C11: Create 4 TribeSynergy SOs | Pentacles, Cups, Swords, Wands | 1h | 🔴 TODO |
+| C12: Create 4 mixed-tribe test cards | Cards with 2 tribes each | 30m | 🔴 TODO |
+| C13: Test tribe tiers | Full board, verify all tiers trigger | 1h | 🔴 TODO |
+| C14: Test cross-tribe combos | Verify combo bonuses activate | 1h | 🔴 TODO |
+
+**Agent Quick Start**:
+1. Read `developer/architecture.md` for system patterns
+2. Look at `Assets/Scripts/Abilities/` for similar ScriptableObject patterns
+3. Reference `product/game-design/tarot-mechanics.md` for tribe lore
 
 ---
 
@@ -235,12 +298,12 @@ Example: B3: Implement Battlecry ability
 |-------|-------|------|----------|
 | A: Bug Fixes | 3 | 3 | 🟩🟩🟩 100% |
 | B: Abilities | 8 | 8 | 🟩🟩🟩🟩🟩🟩🟩🟩 100% |
-| C: Tribes | 6 | 0 | ⬜⬜⬜⬜⬜⬜ 0% |
+| C: Tribes | 14 | 0 | ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜ 0% |
 | D: AI | 6 | 0 | ⬜⬜⬜⬜⬜⬜ 0% |
 | E: Lobby | 6 | 0 | ⬜⬜⬜⬜⬜⬜ 0% |
 | F: Cards | 5 | 0 | ⬜⬜⬜⬜⬜ 0% |
 | G: Polish | 6 | 0 | ⬜⬜⬜⬜⬜⬜ 0% |
-| **TOTAL** | **40** | **0** | **0%** |
+| **TOTAL** | **48** | **11** | **23%** |
 
 ---
 
@@ -248,6 +311,7 @@ Example: B3: Implement Battlecry ability
 
 | Date | Update |
 |------|--------|
+| Jan 23, 2026 | Phase C redesigned - Expanded to 14 tasks with multi-tribe and combo support |
 | Jan 22, 2026 | Initial PLAN.md created - Core engine roadmap defined |
 
 ---
