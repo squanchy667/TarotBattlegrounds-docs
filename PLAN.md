@@ -2,8 +2,8 @@
 
 > **Purpose**: This document is the single source of truth for the project. Any agent or developer can pick up a task with minimal context by reading this file.
 
-**Last Updated**: January 23, 2026  
-**Current Phase**: Core Engine Completion  
+**Last Updated**: January 26, 2026
+**Current Phase**: Phase G - Polish (Testing C/E/F first)
 **Goal**: Build a fully functional, theme-agnostic auto-battler engine that can be reskinned infinitely
 
 ---
@@ -49,9 +49,9 @@ The core engine must be **100% theme-agnostic**:
 | Combat Core | ✅ Complete | Turn-based simulation working |
 | Event-Driven UI | ✅ Complete | All player events firing |
 | Ability Framework | ✅ Complete | Battlecry, Deathrattle, OnAttack, Taunt |
-| Tribe Synergies | 🔴 NOT STARTED | Critical for core engine |
-| AI Opponents | 🟡 Placeholder | Basic AI exists, needs strategy |
-| 4-Player Lobby | 🔴 NOT STARTED | Single-player simulation only |
+| Tribe Synergies | ✅ Complete | Multi-tribe, combos, tiered effects |
+| AI Opponents | ✅ Complete | 3 difficulty levels, strategic decisions |
+| 4-Player Lobby | ✅ Complete | Round-robin matchmaking, eliminations |
 | Health UI Bug | ✅ Fixed | Combat damage now reflects in UI |
 | Sell from Hand | ✅ Fixed | Can sell from board or hand |
 
@@ -166,20 +166,20 @@ public class TribeSynergy : ScriptableObject
 
 | Task | Description | Effort | Status |
 |------|-------------|--------|--------|
-| C1: Create `TribeType` enum | Define tribe types | 15m | 🔴 TODO |
-| C2: Create `SynergyTrigger` enum | When synergies activate | 15m | 🔴 TODO |
-| C3: Create `SynergyEffect` enum | What synergies do | 15m | 🔴 TODO |
-| C4: Create `SynergyTarget` enum | Who is affected | 15m | 🔴 TODO |
-| C5: Create `TribeSynergy` ScriptableObject | Data container with tiers + combos | 1h | 🔴 TODO |
-| C6: Add `TribeType[] tribes` to Card SO | Multi-tribe support on cards | 30m | 🔴 TODO |
-| C7: Create `SynergyManager.cs` | Count tribes on board | 1.5h | 🔴 TODO |
-| C8: Implement tier threshold checking | Detect 2/4/6 thresholds | 1h | 🔴 TODO |
-| C9: Hook synergies into triggers | OnSell, StartOfCombat, EndOfTurn, etc. | 2h | 🔴 TODO |
-| C10: Implement cross-tribe combo detection | Detect and apply combo bonuses | 1h | 🔴 TODO |
-| C11: Create 4 TribeSynergy SOs | Pentacles, Cups, Swords, Wands | 1h | 🔴 TODO |
-| C12: Create 4 mixed-tribe test cards | Cards with 2 tribes each | 30m | 🔴 TODO |
-| C13: Test tribe tiers | Full board, verify all tiers trigger | 1h | 🔴 TODO |
-| C14: Test cross-tribe combos | Verify combo bonuses activate | 1h | 🔴 TODO |
+| C1: Create `TribeType` enum | Define tribe types | 15m | ✅ DONE |
+| C2: Create `SynergyTrigger` enum | When synergies activate | 15m | ✅ DONE |
+| C3: Create `SynergyEffect` enum | What synergies do | 15m | ✅ DONE |
+| C4: Create `SynergyTarget` enum | Who is affected | 15m | ✅ DONE |
+| C5: Create `TribeSynergy` ScriptableObject | Data container with tiers + combos | 1h | ✅ DONE |
+| C6: Add `TribeType[] tribes` to Card SO | Multi-tribe support on cards | 30m | ✅ DONE |
+| C7: Create `SynergyManager.cs` | Count tribes on board | 1.5h | ✅ DONE |
+| C8: Implement tier threshold checking | Detect 2/4/6 thresholds | 1h | ✅ DONE |
+| C9: Hook synergies into triggers | OnSell, StartOfCombat, EndOfTurn, etc. | 2h | ✅ DONE |
+| C10: Implement cross-tribe combo detection | Detect and apply combo bonuses | 1h | ✅ DONE |
+| C11: Create 4 TribeSynergy SOs | Pentacles, Cups, Swords, Wands | 1h | ✅ DONE |
+| C12: Create 4 mixed-tribe test cards | Cards with 2 tribes each | 30m | ✅ DONE |
+| C13: Test tribe tiers | Full board, verify all tiers trigger | 1h | 🟡 TESTING |
+| C14: Test cross-tribe combos | Verify combo bonuses activate | 1h | 🟡 TESTING |
 
 **Agent Quick Start**:
 1. Read `developer/architecture.md` for system patterns
@@ -193,12 +193,12 @@ public class TribeSynergy : ScriptableObject
 
 | Task | Priority | Effort | Status |
 |------|----------|--------|--------|
-| D1: Create `AIController.cs` | HIGH | 2h | 🔴 TODO |
-| D2: Implement basic buy logic (prioritize stats) | HIGH | 2h | 🔴 TODO |
-| D3: Implement tier upgrade logic | MEDIUM | 1h | 🔴 TODO |
-| D4: Implement board positioning | MEDIUM | 2h | 🔴 TODO |
-| D5: Add 3 AI difficulty levels | LOW | 3h | 🔴 TODO |
-| D6: Balance test: AI vs AI 100 runs | HIGH | 2h | 🔴 TODO |
+| D1: Create `AIController.cs` | HIGH | 2h | ✅ DONE |
+| D2: Implement basic buy logic (prioritize stats) | HIGH | 2h | ✅ DONE |
+| D3: Implement tier upgrade logic | MEDIUM | 1h | ✅ DONE |
+| D4: Implement board positioning | MEDIUM | 2h | ✅ DONE |
+| D5: Add 3 AI difficulty levels | LOW | 3h | ✅ DONE |
+| D6: Balance test: AI vs AI 100 runs | HIGH | 2h | ✅ DONE |
 
 **Agent Quick Start**: Look at existing `Player.cs` for state management, `TavernManager.cs` for shop actions.
 
@@ -209,12 +209,12 @@ public class TribeSynergy : ScriptableObject
 
 | Task | Priority | Effort | Status |
 |------|----------|--------|--------|
-| E1: Create `LobbyManager.cs` | HIGH | 2h | 🔴 TODO |
-| E2: Initialize 4 players (1 human, 3 AI) | HIGH | 1h | 🔴 TODO |
-| E3: Implement round-robin matchmaking | HIGH | 2h | 🔴 TODO |
-| E4: Track eliminations and placements | HIGH | 2h | 🔴 TODO |
-| E5: End game when 1 player remains | HIGH | 1h | 🔴 TODO |
-| E6: Full game test (4 players, ~15 turns) | HIGH | 2h | 🔴 TODO |
+| E1: Create `LobbyManager.cs` | HIGH | 2h | ✅ DONE |
+| E2: Initialize 4 players (1 human, 3 AI) | HIGH | 1h | ✅ DONE |
+| E3: Implement round-robin matchmaking | HIGH | 2h | ✅ DONE |
+| E4: Track eliminations and placements | HIGH | 2h | ✅ DONE |
+| E5: End game when 1 player remains | HIGH | 1h | ✅ DONE |
+| E6: Full game test (4 players, ~15 turns) | HIGH | 2h | 🟡 TESTING |
 
 **Agent Quick Start**: Read `product/game-design/core-gameplay.md` for loop definition.
 
@@ -225,11 +225,11 @@ public class TribeSynergy : ScriptableObject
 
 | Task | Priority | Effort | Status |
 |------|----------|--------|--------|
-| F1: Design 5 cards per tier (30 total) | HIGH | 3h | 🔴 TODO |
-| F2: Create ScriptableObjects for all cards | HIGH | 2h | 🔴 TODO |
-| F3: Distribute abilities across tiers | HIGH | 1h | 🔴 TODO |
-| F4: Distribute tribes evenly | HIGH | 1h | 🔴 TODO |
-| F5: Balance pass (100+ AI games) | HIGH | 4h | 🔴 TODO |
+| F1: Design 5 cards per tier (30 total) | HIGH | 3h | ✅ DONE |
+| F2: Create ScriptableObjects for all cards | HIGH | 2h | ✅ DONE |
+| F3: Distribute abilities across tiers | HIGH | 1h | ✅ DONE |
+| F4: Distribute tribes evenly | HIGH | 1h | ✅ DONE |
+| F5: Balance pass (100+ AI games) | HIGH | 4h | 🟡 TESTING |
 
 **Agent Quick Start**: Look at existing cards in `Assets/ScriptableObjects/Cards/`.
 
@@ -298,12 +298,12 @@ Example: B3: Implement Battlecry ability
 |-------|-------|------|----------|
 | A: Bug Fixes | 3 | 3 | 🟩🟩🟩 100% |
 | B: Abilities | 8 | 8 | 🟩🟩🟩🟩🟩🟩🟩🟩 100% |
-| C: Tribes | 14 | 0 | ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜ 0% |
-| D: AI | 6 | 0 | ⬜⬜⬜⬜⬜⬜ 0% |
-| E: Lobby | 6 | 0 | ⬜⬜⬜⬜⬜⬜ 0% |
-| F: Cards | 5 | 0 | ⬜⬜⬜⬜⬜ 0% |
+| C: Tribes | 14 | 12 | 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟨🟨 86% |
+| D: AI | 6 | 6 | 🟩🟩🟩🟩🟩🟩 100% |
+| E: Lobby | 6 | 5 | 🟩🟩🟩🟩🟩🟨 83% |
+| F: Cards | 5 | 4 | 🟩🟩🟩🟩🟨 80% |
 | G: Polish | 6 | 0 | ⬜⬜⬜⬜⬜⬜ 0% |
-| **TOTAL** | **48** | **11** | **23%** |
+| **TOTAL** | **48** | **38** | **79%** |
 
 ---
 
@@ -311,6 +311,8 @@ Example: B3: Implement Battlecry ability
 
 | Date | Update |
 |------|--------|
+| Jan 26, 2026 | Phase D, E, F implemented - AI system, Lobby, 30-card database complete |
+| Jan 26, 2026 | Phase C implemented - Tribe synergies with multi-tribe and combos |
 | Jan 23, 2026 | Phase C redesigned - Expanded to 14 tasks with multi-tribe and combo support |
 | Jan 22, 2026 | Initial PLAN.md created - Core engine roadmap defined |
 

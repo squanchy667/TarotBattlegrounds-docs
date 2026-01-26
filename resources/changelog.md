@@ -1,5 +1,153 @@
 # Changelog
 
+## Sprint 7: Phase F - Card Pool Expansion - January 26, 2026
+
+### F1-F4: Complete Card Database
+Created 30 balanced cards (5 per tier) with distributed abilities and tribes.
+
+**CardDatabase.cs:**
+- Static class generating all 30 cards programmatically
+- Tier 1-2: Simple stats, basic effects
+- Tier 3-4: Complex abilities, synergy enablers
+- Tier 5-6: Powerful finishers, multi-tribe cards
+
+**Tribe Distribution:**
+- Pentacles (Economy): 8 cards
+- Cups (Healing): 8 cards
+- Swords (Aggro): 7 cards
+- Wands (Buffs): 8 cards
+- Multi-tribe cards: 6 (including 1 triple-tribe)
+
+**Ability Distribution:**
+- Battlecry: 12 cards
+- Deathrattle: 4 cards
+- OnAttack: 5 cards
+- Guardian: 4 cards
+
+**CardPoolInitializer.cs:**
+- MonoBehaviour to auto-initialize TavernManager with CardDatabase
+- Optional synergy initialization
+- Debug summary printing
+
+**Files Added:**
+- `Assets/Scripts/Cards/CardDatabase.cs`
+- `Assets/Scripts/Cards/CardPoolInitializer.cs`
+
+---
+
+## Sprint 6: Phase E - 4-Player Lobby - January 26, 2026
+
+### E1-E5: Complete Lobby System
+Created LobbyManager for 1 human + 3 AI player games.
+
+**LobbyManager.cs:**
+- Singleton manager for 4-player lobbies
+- 1 human player + 3 AI opponents with configurable difficulty
+- Round-robin matchmaking avoiding repeat opponents
+- Player elimination tracking with placements (1st-4th)
+- Game end detection when 1 player remains
+
+**Features:**
+- Events: OnTurnStarted, OnPhaseChanged, OnPlayerEliminated, OnGameEnded, OnMatchResult
+- GamePhase enum: Lobby, Recruit, Combat, Results
+- Bye handling for odd player counts
+- Recent opponent tracking to vary matchups
+
+**Files Added:**
+- `Assets/Scripts/Lobby/LobbyManager.cs`
+
+---
+
+## Sprint 5: Phase D - AI System - January 26, 2026
+
+### D1-D6: Complete AI Framework
+Created intelligent AI opponents with 3 difficulty levels.
+
+**AIController.cs:**
+- Component-based AI that controls a Player instance
+- Full recruit phase decision making:
+  - Tavern tier upgrade decisions
+  - Card evaluation and purchasing
+  - Hand-to-board card playing
+  - Weak card selling
+  - Strategic rerolling
+  - Board positioning optimization
+
+**AIDifficulty Levels:**
+- **Easy**: Random choices, slower upgrades, no repositioning
+- **Medium**: Balanced play, standard decisions
+- **Hard**: Optimized choices, aggressive synergy building, strategic positioning
+
+**Card Evaluation System:**
+- Base stats value (attack + health)
+- Tier bonus
+- Synergy potential with existing board
+- Multi-tribe card bonus
+- Ability bonus
+
+**AITestRunner.cs:**
+- Automated AI vs AI balance testing
+- Configurable game count (default 100)
+- Win rate tracking and statistics
+- Average game length calculation
+
+**Files Added:**
+- `Assets/Scripts/AI/AIController.cs`
+- `Assets/Scripts/AI/AITestRunner.cs`
+
+---
+
+## Sprint 4: Phase C - Tribe Synergy System - January 26, 2026
+
+### C1-C12: Complete Synergy Framework
+Implemented data-driven tribe synergy system with multi-tribe cards and combos.
+
+**Core Enums Created:**
+- `TribeType.cs` - None, Pentacles, Cups, Swords, Wands
+- `SynergyTrigger.cs` - Passive, StartOfCombat, EndOfCombat, OnSell, OnBuy, OnDeath, EndOfTurn
+- `SynergyEffect.cs` - BuffAttack, BuffHealth, BonusGold, ReduceCost, Cleave, etc.
+- `SynergyTarget.cs` - AllTribeMembers, AllFriendly, Adjacent, Random, Self
+
+**TribeSynergy.cs (ScriptableObject):**
+- Tribe definition with name, description, theme color
+- Tiered effects (2/4/6 thresholds)
+- Cross-tribe combo configuration
+
+**SynergyManager.cs:**
+- Singleton manager for tribe counting and synergy application
+- `UpdateTribeCounts()` - Recalculates tribes on board changes
+- `TriggerSynergies()` - Applies effects by trigger type
+- `GetSellBonus()` / `GetCostReduction()` - Query synergy bonuses
+
+**Card.cs Updates:**
+- Added `TribeType[] tribes` field for multi-tribe support
+- Added `HasTribe()` and `GetTribes()` helper methods
+
+**Integration Points:**
+- Player.cs: SellCard synergy bonus, PlayCard tribe update, EndRecruitPhase triggers
+- CombatManager.cs: StartOfCombat synergy triggers
+
+**Test Data:**
+- `SynergyTestData.cs` - Creates 4 tribe synergies programmatically
+- `SynergyTestCards.cs` - Creates 17 test cards (12 single-tribe, 4 dual-tribe, 1 triple-tribe)
+
+**Files Added:**
+- `Assets/Scripts/Synergies/TribeType.cs`
+- `Assets/Scripts/Synergies/SynergyTrigger.cs`
+- `Assets/Scripts/Synergies/SynergyEffect.cs`
+- `Assets/Scripts/Synergies/SynergyTarget.cs`
+- `Assets/Scripts/Synergies/TribeSynergy.cs`
+- `Assets/Scripts/Synergies/SynergyManager.cs`
+- `Assets/Scripts/Synergies/SynergyTestData.cs`
+- `Assets/Scripts/Synergies/SynergyTestCards.cs`
+
+**Files Modified:**
+- `Assets/Cards/Card.cs` - Added tribes field and helpers
+- `Assets/Scripts/Player.cs` - Synergy hooks
+- `Assets/Scripts/CombatManager.cs` - Combat synergy triggers
+
+---
+
 ## Phase C Redesign - January 23, 2026
 
 ### Tribe Synergy System Expanded
