@@ -2,9 +2,9 @@
 
 > **Purpose**: This document is the single source of truth for the project. Any agent or developer can pick up a task with minimal context by reading this file.
 
-**Last Updated**: January 26, 2026
-**Current Phase**: Phase G - Polish (Testing C/E/F first)
-**Goal**: Build a fully functional, theme-agnostic auto-battler engine that can be reskinned infinitely
+**Last Updated**: January 27, 2026
+**Current Phase**: Testing & Fixing → Phase G Polish → Phase H Skinning → Phase I Online
+**Goal**: Build a fully functional, theme-agnostic auto-battler engine that can be reskinned and played online
 
 ---
 
@@ -50,10 +50,19 @@ The core engine must be **100% theme-agnostic**:
 | Event-Driven UI | ✅ Complete | All player events firing |
 | Ability Framework | ✅ Complete | Battlecry, Deathrattle, OnAttack, Taunt |
 | Tribe Synergies | ✅ Complete | Multi-tribe, combos, tiered effects |
-| AI Opponents | ✅ Complete | 3 difficulty levels, strategic decisions |
+| AI Opponents | ✅ Complete | 3 difficulty levels, integrated into GameManager |
 | 4-Player Lobby | ✅ Complete | Round-robin matchmaking, eliminations |
+| Card Tooltips | ✅ Complete | Hover shows card details/abilities |
+| Selection Manager | ✅ Complete | Click-to-deselect, cross-panel selection |
 | Health UI Bug | ✅ Fixed | Combat damage now reflects in UI |
 | Sell from Hand | ✅ Fixed | Can sell from board or hand |
+| AI Integration | ✅ Fixed | AI controllers properly initialized |
+
+### 🧪 Currently Testing
+- Tribe synergy activation at 2/4/6 thresholds
+- Card abilities triggering correctly
+- Full 4-player game completion
+- AI balance across difficulty levels
 
 ---
 
@@ -246,6 +255,97 @@ public class TribeSynergy : ScriptableObject
 | G4: Create template card database (generic) | MEDIUM | 2h | 🔴 TODO |
 | G5: Full playtest (10+ games) | HIGH | 4h | 🔴 TODO |
 | G6: Create `template` branch | HIGH | 30m | 🔴 TODO |
+| G7: Make AI/player selection more automatic | MEDIUM | 2h | 🔴 TODO |
+
+---
+
+### Phase H: Skinnable Theme System (Sprint 9)
+**Goal**: Allow complete visual reskinning without code changes
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    THEME SYSTEM ARCHITECTURE                  │
+├─────────────────────────────────────────────────────────────┤
+│  ThemeConfig (ScriptableObject)                              │
+│  ├── Color Palette (primary, secondary, accent, etc.)       │
+│  ├── Font Assets (title, body, stats)                       │
+│  ├── Card Frame Sprites (common, rare, epic, legendary)     │
+│  ├── UI Panel Backgrounds                                    │
+│  ├── Button Styles                                           │
+│  └── Sound Effects Pack (optional)                          │
+│                                                              │
+│  ThemeManager (Singleton)                                    │
+│  ├── LoadTheme(ThemeConfig)                                 │
+│  ├── ApplyToAllUI()                                         │
+│  └── OnThemeChanged event                                   │
+│                                                              │
+│  IThemeable (Interface for UI components)                   │
+│  └── ApplyTheme(ThemeConfig)                                │
+└─────────────────────────────────────────────────────────────┘
+```
+
+| Task | Priority | Effort | Status |
+|------|----------|--------|--------|
+| H1: Create `ThemeConfig` ScriptableObject | HIGH | 2h | 🔴 TODO |
+| H2: Create `ThemeManager.cs` singleton | HIGH | 2h | 🔴 TODO |
+| H3: Create `IThemeable` interface | HIGH | 1h | 🔴 TODO |
+| H4: Make all UI panels implement IThemeable | HIGH | 4h | 🔴 TODO |
+| H5: Create card frame sprite slots | MEDIUM | 2h | 🔴 TODO |
+| H6: Create default "Tarot" theme | HIGH | 2h | 🔴 TODO |
+| H7: Create alternate "Debug/Generic" theme | MEDIUM | 2h | 🔴 TODO |
+| H8: Theme hot-swap testing | HIGH | 2h | 🔴 TODO |
+
+**Agent Quick Start**: Look at `CardDisplayUI.cs` for current UI patterns, create theme assets in `Assets/Themes/`.
+
+---
+
+### Phase I: AWS Online Multiplayer (Sprint 10-12)
+**Goal**: Real-time online multiplayer with matchmaking
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    AWS ARCHITECTURE                          │
+├─────────────────────────────────────────────────────────────┤
+│  CLIENT (Unity)                                              │
+│  ├── NetworkManager.cs (connection handling)                │
+│  ├── GameStateSync.cs (state synchronization)               │
+│  └── MatchmakingUI.cs (lobby/queue interface)               │
+│                                                              │
+│  AWS SERVICES                                                │
+│  ├── Cognito         → User authentication                  │
+│  ├── API Gateway     → REST endpoints                       │
+│  ├── Lambda          → Game logic validation                │
+│  ├── DynamoDB        → Player profiles, match history       │
+│  ├── GameLift/AppSync→ Real-time matchmaking               │
+│  └── WebSocket API   → Live game state updates              │
+│                                                              │
+│  GAME FLOW                                                   │
+│  1. Player authenticates (Cognito)                          │
+│  2. Joins matchmaking queue (GameLift/AppSync)              │
+│  3. Match found → WebSocket connection established          │
+│  4. Game state synced every action (recruit phase)          │
+│  5. Combat results calculated server-side (Lambda)          │
+│  6. Match ends → Results stored (DynamoDB)                  │
+└─────────────────────────────────────────────────────────────┘
+```
+
+| Task | Priority | Effort | Status |
+|------|----------|--------|--------|
+| I1: Set up AWS account and IAM roles | HIGH | 2h | 🔴 TODO |
+| I2: Create Cognito user pool | HIGH | 2h | 🔴 TODO |
+| I3: Create DynamoDB tables (players, matches) | HIGH | 2h | 🔴 TODO |
+| I4: Create API Gateway + Lambda for auth | HIGH | 4h | 🔴 TODO |
+| I5: Implement Unity authentication flow | HIGH | 3h | 🔴 TODO |
+| I6: Set up WebSocket API Gateway | HIGH | 4h | 🔴 TODO |
+| I7: Create `NetworkManager.cs` | HIGH | 4h | 🔴 TODO |
+| I8: Create `GameStateSync.cs` | HIGH | 6h | 🔴 TODO |
+| I9: Implement matchmaking queue | HIGH | 4h | 🔴 TODO |
+| I10: Server-side combat validation | MEDIUM | 4h | 🔴 TODO |
+| I11: Reconnection handling | MEDIUM | 3h | 🔴 TODO |
+| I12: Leaderboard system | LOW | 3h | 🔴 TODO |
+| I13: Full online playtest | HIGH | 4h | 🔴 TODO |
+
+**Agent Quick Start**: Read AWS documentation, consider using Mirror or Netcode for GameObjects as Unity networking layer on top of WebSocket transport.
 
 ---
 
@@ -302,8 +402,15 @@ Example: B3: Implement Battlecry ability
 | D: AI | 6 | 6 | 🟩🟩🟩🟩🟩🟩 100% |
 | E: Lobby | 6 | 5 | 🟩🟩🟩🟩🟩🟨 83% |
 | F: Cards | 5 | 4 | 🟩🟩🟩🟩🟨 80% |
-| G: Polish | 6 | 0 | ⬜⬜⬜⬜⬜⬜ 0% |
-| **TOTAL** | **48** | **38** | **79%** |
+| G: Polish | 7 | 0 | ⬜⬜⬜⬜⬜⬜⬜ 0% |
+| H: Skinning | 8 | 0 | ⬜⬜⬜⬜⬜⬜⬜⬜ 0% |
+| I: Online | 13 | 0 | ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜ 0% |
+| **TOTAL** | **70** | **38** | **54%** |
+
+### 🎯 Milestone Targets
+- **Core Engine Complete**: Phases A-G (ready for skinning)
+- **Skinnable Release**: Phase H complete (can create new themes)
+- **Online Beta**: Phase I complete (multiplayer ready)
 
 ---
 
@@ -311,6 +418,8 @@ Example: B3: Implement Battlecry ability
 
 | Date | Update |
 |------|--------|
+| Jan 27, 2026 | AI integrated into GameManager, card tooltips added, selection manager added |
+| Jan 27, 2026 | Added Phase H (Skinnable Theme System) and Phase I (AWS Online Multiplayer) |
 | Jan 26, 2026 | Phase D, E, F implemented - AI system, Lobby, 30-card database complete |
 | Jan 26, 2026 | Phase C implemented - Tribe synergies with multi-tribe and combos |
 | Jan 23, 2026 | Phase C redesigned - Expanded to 14 tasks with multi-tribe and combo support |
@@ -320,9 +429,12 @@ Example: B3: Implement Battlecry ability
 
 ## ❓ Open Questions
 
-1. Should abilities be ScriptableObjects or just enums with switch logic?
-2. How many cards minimum per tier for good gameplay?
-3. Should AI difficulty affect shop RNG or just decision making?
+1. ~~Should abilities be ScriptableObjects or just enums with switch logic?~~ → **Decided: Enums with switch**
+2. ~~How many cards minimum per tier for good gameplay?~~ → **Decided: 5 per tier (30 total)**
+3. ~~Should AI difficulty affect shop RNG or just decision making?~~ → **Decided: Decision making only**
+4. AWS: GameLift vs custom WebSocket matchmaking?
+5. AWS: Should combat be validated server-side or trust client?
+6. Theme system: Support runtime theme switching or only at startup?
 
 ---
 
