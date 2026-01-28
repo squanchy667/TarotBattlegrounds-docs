@@ -57,12 +57,16 @@ The core engine must be **100% theme-agnostic**:
 | Health UI Bug | ✅ Fixed | Combat damage now reflects in UI |
 | Sell from Hand | ✅ Fixed | Can sell from board or hand |
 | AI Integration | ✅ Fixed | AI controllers properly initialized |
+| Theme System | ✅ Complete | ThemeConfig + ThemeManager for reskinning |
+| GameConfig | ✅ Complete | Automatic player/AI selection |
+| Template Branch | ✅ Created | Clean engine ready for new themes |
 
 ### 🧪 Currently Testing
 - Tribe synergy activation at 2/4/6 thresholds
 - Card abilities triggering correctly
 - Full 4-player game completion
 - AI balance across difficulty levels
+- Full playtest (10+ games) for Phase G
 
 ---
 
@@ -249,13 +253,20 @@ public class TribeSynergy : ScriptableObject
 
 | Task | Priority | Effort | Status |
 |------|----------|--------|--------|
-| G1: Remove all tarot-specific strings from code | HIGH | 2h | 🔴 TODO |
-| G2: Create `ThemeConfig.cs` for theme settings | HIGH | 2h | 🔴 TODO |
-| G3: Document "How to create a new skin" | HIGH | 3h | 🔴 TODO |
-| G4: Create template card database (generic) | MEDIUM | 2h | 🔴 TODO |
-| G5: Full playtest (10+ games) | HIGH | 4h | 🔴 TODO |
-| G6: Create `template` branch | HIGH | 30m | 🔴 TODO |
-| G7: Make AI/player selection more automatic | MEDIUM | 2h | 🔴 TODO |
+| G1: Remove all tarot-specific strings from code | HIGH | 2h | ✅ DONE |
+| G2: Create `ThemeConfig.cs` for theme settings | HIGH | 2h | ✅ DONE |
+| G3: Document "How to create a new skin" | HIGH | 3h | ✅ DONE |
+| G4: Create template card database (generic) | MEDIUM | 2h | ✅ DONE |
+| G5: Full playtest (10+ games) | HIGH | 4h | 🟡 TESTING |
+| G6: Create `template` branch | HIGH | 30m | ✅ DONE |
+| G7: Make AI/player selection more automatic | MEDIUM | 2h | ✅ DONE |
+
+**Phase G Deliverables:**
+- `ThemeConfig.cs` - ScriptableObject for theme data (tribes, colors, UI text)
+- `ThemeManager.cs` - Singleton for accessing active theme
+- `GameConfig.cs` - Static class for game settings (player count, AI difficulty)
+- `SKINNING-GUIDE.md` - Complete documentation for creating new themes
+- `template` branch - Clean engine ready for reskinning
 
 ---
 
@@ -402,10 +413,10 @@ Example: B3: Implement Battlecry ability
 | D: AI | 6 | 6 | 🟩🟩🟩🟩🟩🟩 100% |
 | E: Lobby | 6 | 5 | 🟩🟩🟩🟩🟩🟨 83% |
 | F: Cards | 5 | 4 | 🟩🟩🟩🟩🟨 80% |
-| G: Polish | 7 | 0 | ⬜⬜⬜⬜⬜⬜⬜ 0% |
+| G: Polish | 7 | 6 | 🟩🟩🟩🟩🟩🟩🟨 86% |
 | H: Skinning | 8 | 0 | ⬜⬜⬜⬜⬜⬜⬜⬜ 0% |
 | I: Online | 13 | 0 | ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜ 0% |
-| **TOTAL** | **70** | **38** | **54%** |
+| **TOTAL** | **70** | **44** | **63%** |
 
 ### 🎯 Milestone Targets
 - **Core Engine Complete**: Phases A-G (ready for skinning)
@@ -418,6 +429,7 @@ Example: B3: Implement Battlecry ability
 
 | Date | Update |
 |------|--------|
+| Jan 28, 2026 | Phase G (6/7) - Theme system, GameConfig, SKINNING-GUIDE.md, template branch created |
 | Jan 27, 2026 | AI integrated into GameManager, card tooltips added, selection manager added |
 | Jan 27, 2026 | Added Phase H (Skinnable Theme System) and Phase I (AWS Online Multiplayer) |
 | Jan 26, 2026 | Phase D, E, F implemented - AI system, Lobby, 30-card database complete |
