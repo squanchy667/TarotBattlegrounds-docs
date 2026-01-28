@@ -2,8 +2,8 @@
 
 > **Purpose**: This document is the single source of truth for the project. Any agent or developer can pick up a task with minimal context by reading this file.
 
-**Last Updated**: January 27, 2026
-**Current Phase**: Testing & Fixing → Phase G Polish → Phase H Skinning → Phase I Online
+**Last Updated**: January 28, 2026
+**Current Phase**: Phase H Complete → Testing → Phase I Online
 **Goal**: Build a fully functional, theme-agnostic auto-battler engine that can be reskinned and played online
 
 ---
@@ -60,6 +60,8 @@ The core engine must be **100% theme-agnostic**:
 | Theme System | ✅ Complete | ThemeConfig + ThemeManager for reskinning |
 | GameConfig | ✅ Complete | Automatic player/AI selection |
 | Template Branch | ✅ Created | Clean engine ready for new themes |
+| UI Theming | ✅ Complete | All UI implements IThemeable, hot-swap ready |
+| Tarot Skin | ✅ Complete | tarot-skin branch with full Tarot theme |
 
 ### 🧪 Currently Testing
 - Tribe synergy activation at 2/4/6 thresholds
@@ -297,16 +299,24 @@ public class TribeSynergy : ScriptableObject
 
 | Task | Priority | Effort | Status |
 |------|----------|--------|--------|
-| H1: Create `ThemeConfig` ScriptableObject | HIGH | 2h | 🔴 TODO |
-| H2: Create `ThemeManager.cs` singleton | HIGH | 2h | 🔴 TODO |
-| H3: Create `IThemeable` interface | HIGH | 1h | 🔴 TODO |
-| H4: Make all UI panels implement IThemeable | HIGH | 4h | 🔴 TODO |
-| H5: Create card frame sprite slots | MEDIUM | 2h | 🔴 TODO |
-| H6: Create default "Tarot" theme | HIGH | 2h | 🔴 TODO |
-| H7: Create alternate "Debug/Generic" theme | MEDIUM | 2h | 🔴 TODO |
-| H8: Theme hot-swap testing | HIGH | 2h | 🔴 TODO |
+| H1: Create `ThemeConfig` ScriptableObject | HIGH | 2h | ✅ DONE |
+| H2: Create `ThemeManager.cs` singleton | HIGH | 2h | ✅ DONE |
+| H3: Create `IThemeable` interface | HIGH | 1h | ✅ DONE |
+| H4: Make all UI panels implement IThemeable | HIGH | 4h | ✅ DONE |
+| H5: Create card frame sprite slots | MEDIUM | 2h | ✅ DONE |
+| H6: Create default "Tarot" theme | HIGH | 2h | ✅ DONE |
+| H7: Create alternate "Debug/Generic" theme | MEDIUM | 2h | ✅ DONE |
+| H8: Theme hot-swap testing | HIGH | 2h | ✅ DONE |
 
-**Agent Quick Start**: Look at `CardDisplayUI.cs` for current UI patterns, create theme assets in `Assets/Themes/`.
+**Phase H Deliverables (COMPLETE):**
+- `IThemeable.cs` - Interface + ThemeableUI base class
+- `ThemeConfig.cs` - Extended with colors, card frames, fonts, tribe data
+- `ThemeManager.cs` - Singleton with runtime Tarot theme fallback
+- All UI components (CardDisplayUI, GameUIManager, ShopUI, HandUI, BoardUI, CombatLogUI) now implement IThemeable
+- Editor menu items: `Game/Create Default Tarot Theme` and `Game/Create Debug Theme`
+- All components subscribe to OnThemeChanged for hot-swap
+
+**Agent Quick Start**: Look at `CardDisplayUI.cs` for current UI patterns, create theme assets in `Assets/Resources/`.
 
 ---
 
@@ -414,9 +424,9 @@ Example: B3: Implement Battlecry ability
 | E: Lobby | 6 | 5 | 🟩🟩🟩🟩🟩🟨 83% |
 | F: Cards | 5 | 4 | 🟩🟩🟩🟩🟨 80% |
 | G: Polish | 7 | 6 | 🟩🟩🟩🟩🟩🟩🟨 86% |
-| H: Skinning | 8 | 0 | ⬜⬜⬜⬜⬜⬜⬜⬜ 0% |
+| H: Skinning | 8 | 8 | 🟩🟩🟩🟩🟩🟩🟩🟩 100% |
 | I: Online | 13 | 0 | ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜ 0% |
-| **TOTAL** | **70** | **44** | **63%** |
+| **TOTAL** | **70** | **52** | **74%** |
 
 ### 🎯 Milestone Targets
 - **Core Engine Complete**: Phases A-G (ready for skinning)
@@ -429,6 +439,7 @@ Example: B3: Implement Battlecry ability
 
 | Date | Update |
 |------|--------|
+| Jan 28, 2026 | Phase H COMPLETE - Skinnable theme system implemented on tarot-skin branch |
 | Jan 28, 2026 | Phase G (6/7) - Theme system, GameConfig, SKINNING-GUIDE.md, template branch created |
 | Jan 27, 2026 | AI integrated into GameManager, card tooltips added, selection manager added |
 | Jan 27, 2026 | Added Phase H (Skinnable Theme System) and Phase I (AWS Online Multiplayer) |
@@ -446,7 +457,7 @@ Example: B3: Implement Battlecry ability
 3. ~~Should AI difficulty affect shop RNG or just decision making?~~ → **Decided: Decision making only**
 4. AWS: GameLift vs custom WebSocket matchmaking?
 5. AWS: Should combat be validated server-side or trust client?
-6. Theme system: Support runtime theme switching or only at startup?
+6. ~~Theme system: Support runtime theme switching or only at startup?~~ → **Decided: Runtime switching via OnThemeChanged event**
 
 ---
 
