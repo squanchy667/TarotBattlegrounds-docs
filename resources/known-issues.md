@@ -5,7 +5,14 @@
 ### Medium Priority
 - **Card art placeholder** - Cards showing placeholder colors, no artwork yet
 - **Combat has no visualization** - Combat works in background but no in-game animation
-- **Scene wiring needed for Phase P** - End Turn, Freeze, Game Over, Discovery panels need Inspector setup in Unity
+- **Scene wiring needed for Phase P** - The following must be added manually in Unity Inspector:
+  - **End Turn button**: Add UI Button to Canvas → assign to `GameUIManager.endTurnButton`
+  - **Freeze Shop button**: Add UI Button to Canvas → assign to `GameUIManager.freezeShopButton`
+  - **End Turn label**: Add TMP_Text child → assign to `GameUIManager.endTurnButtonText`
+  - **Freeze label**: Add TMP_Text child → assign to `GameUIManager.freezeShopButtonText`
+  - **Game Over panel**: Add overlay panel with GameOverUI component → wire `titleText`, `placementText`, `standingsText`, `playAgainButton`, `quitButton`
+  - **Discovery panel**: Add overlay panel with DiscoveryUI component → wire `titleText`, `cardSlots[]` (3 CardDisplayUI), `cardContainer`
+  - **Background image**: Add fullscreen Image as first Canvas child (Raycast Target = false) → assign to `GameUIManager.gameBackgroundImage`
 
 ### Low Priority
 - **Combat log styling** - Could use better visual formatting
