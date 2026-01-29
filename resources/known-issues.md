@@ -3,20 +3,25 @@
 ## Active Issues
 
 ### Medium Priority
-- 🟡 **UI polish needed** - Layout and visual improvements required
-- 🟡 **Card art placeholder** - Many cards showing gray placeholder instead of artwork
+- **Card art placeholder** - Cards showing placeholder colors, no artwork yet
+- **Combat has no visualization** - Combat works in background but no in-game animation
+- **Scene wiring needed for Phase P** - End Turn, Freeze, Game Over, Discovery panels need Inspector setup in Unity
 
 ### Low Priority
-- 🟢 **Combat log styling** - Could use better visual formatting
-- 🟢 **Selection highlight** - Could be more visible
+- **Combat log styling** - Could use better visual formatting
+- **Selection highlight** - Could be more visible
 
 ---
 
-## Phase C (Next Up)
+## Pending Verification
 
-### High Priority
-- 🔴 Tribe synergies not implemented
-- 🔴 Need more cards per tier for balanced gameplay
+### Tribe Synergies (Phase C)
+- Tribe synergy activation at 2/4/6 thresholds - needs automated test confirmation
+- Cross-tribe combo bonuses - needs automated test confirmation
+
+### Full Game Loop (Phase E/G)
+- Full 4-player game to completion (~15 turns) - needs automated verification
+- Card balance across 100+ AI games - needs automated verification
 
 ---
 
@@ -37,22 +42,40 @@ These logs help debug turn order and event subscription issues. Keep for future 
 
 ## Resolved
 
+### Phase P - Polish Pass (January 29, 2026)
+- Tier 6 upgrade showing "999g" instead of "MAX" — fixed with themeable maxTierText
+- No way to end turn early — added End Turn button
+- No shop freeze — added Freeze/Unfreeze toggle with auto-unfreeze
+- No board card reordering — added click-to-swap
+- No game over screen — added GameOverUI with standings and navigation
+- No triple/fusion mechanic — added golden cards with discovery reward
+- No game background — added themeable background image/color
+
+### Phase H - Skinnable Theme System (January 28, 2026)
+- Fixed compilation errors in theme system
+- All UI components now implement IThemeable with hot-swap support
+- ThemeManager singleton with runtime Tarot theme fallback
+
+### Phase G - UI/UX Overhaul (January 28, 2026)
+- Removed static board slots - BoardUI creates them dynamically
+- Fixed UI positioning issues for responsive design
+
 ### Sprint 3 (January 23, 2026)
-- ✅ Combat turn order logging - Turn 1 now displays correctly in logs
-- ✅ Combat debug tracing added - Verbose logging for future debugging
+- Combat turn order logging - Turn 1 now displays correctly in logs
+- Combat debug tracing added - Verbose logging for future debugging
 
 ### Sprint 2 (January 22, 2026)
-- ✅ Health not updating in UI - Synced playerHealths[] to Player.Health property
-- ✅ Cannot sell from hand - Added SellCardFromHand() method
-- ✅ Duplicate event subscriptions - Removed direct UI subscriptions, GameUIManager is single source
+- Health not updating in UI - Synced playerHealths[] to Player.Health property
+- Cannot sell from hand - Added SellCardFromHand() method
+- Duplicate event subscriptions - Removed direct UI subscriptions, GameUIManager is single source
 
 ### Sprint 1 (January 21, 2026)
-- ✅ UI not refreshing on player switch
-- ✅ Card selection not persisting
-- ✅ Buy button not enabling after selection
-- ✅ Event system not firing on state changes
+- UI not refreshing on player switch
+- Card selection not persisting
+- Buy button not enabling after selection
+- Event system not firing on state changes
 
 ### Phase 2 (July 2025)
-- ✅ Shop generation fixed
-- ✅ Coin progression fixed
-- ✅ Sell gold bug fixed
+- Shop generation fixed
+- Coin progression fixed
+- Sell gold bug fixed

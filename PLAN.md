@@ -3,7 +3,7 @@
 > **Purpose**: This document is the single source of truth for the project. Any agent or developer can pick up a task with minimal context by reading this file.
 
 **Last Updated**: January 29, 2026
-**Current Phase**: Phase H Complete → Final Testing → Phase I Online
+**Current Phase**: Phase P Complete → Phase T (Automated Testing) → Phase I Online
 **Goal**: Build a fully functional, theme-agnostic auto-battler engine that can be reskinned and played online
 
 ---
@@ -62,6 +62,12 @@ The core engine must be **100% theme-agnostic**:
 | Template Branch | ✅ Created | Clean engine ready for new themes |
 | UI Theming | ✅ Complete | All UI implements IThemeable, hot-swap ready |
 | Tarot Skin | ✅ Complete | tarot-skin branch with full Tarot theme |
+| End Turn Button | ✅ Complete | Skip recruit phase timer early |
+| Freeze Shop | ✅ Complete | Toggle freeze, auto-unfreeze next turn |
+| Board Reordering | ✅ Complete | Click-to-swap cards on board |
+| Game Over Screen | ✅ Complete | Standings, placement, Play Again/Quit |
+| Triple/Fusion | ✅ Complete | 3 copies → golden card + discovery popup |
+| Background Visuals | ✅ Complete | Themeable game background |
 
 ### 🧪 Currently Testing
 - ~~Tribe synergy activation at 2/4/6 thresholds~~ ✅ Automated tests created
@@ -324,7 +330,73 @@ public class TribeSynergy : ScriptableObject
 
 ---
 
-### Phase I: AWS Online Multiplayer (Sprint 10-12)
+### Phase T: Automated Testing (Sprint 10)
+**Goal**: Verify all systems work end-to-end via automated AI gameplay
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    TESTING STRATEGY                           │
+├─────────────────────────────────────────────────────────────┤
+│  1. AI vs AI batch runs (100+ games)                        │
+│     → Verify games complete without errors                  │
+│     → Collect win rates, game lengths, tribe usage          │
+│                                                              │
+│  2. Synergy verification                                    │
+│     → Force specific board states                           │
+│     → Assert 2/4/6 thresholds trigger correctly             │
+│     → Assert cross-tribe combos activate                    │
+│                                                              │
+│  3. Balance analysis                                        │
+│     → No tribe dominates (>40% win rate)                    │
+│     → Games last 8-20 turns on average                      │
+│     → All tiers see play                                    │
+│                                                              │
+│  4. If automated tests inconclusive → manual playtest       │
+└─────────────────────────────────────────────────────────────┘
+```
+
+| Task | Priority | Effort | Status |
+|------|----------|--------|--------|
+| T1: Create automated test runner (AI vs AI batch) | HIGH | 2h | 🔴 TODO |
+| T2: Add synergy threshold verification tests | HIGH | 2h | 🔴 TODO |
+| T3: Add cross-tribe combo verification tests | HIGH | 1h | 🔴 TODO |
+| T4: Run 100+ AI games, collect statistics | HIGH | 2h | 🔴 TODO |
+| T5: Analyze results - balance report | HIGH | 1h | 🔴 TODO |
+| T6: Fix any issues found during testing | MEDIUM | TBD | 🔴 TODO |
+| T7: Manual playtest if automated results inconclusive | LOW | 2h | 🔴 TODO |
+
+**Agent Quick Start**: Look at existing `AITestRunner.cs` and `AIController.cs`. Extend with synergy-specific assertions.
+
+---
+
+### Phase P: Polish Pass (Sprint 11)
+**Goal**: Add missing gameplay features and improve game feel
+
+| Task | Priority | Effort | Status |
+|------|----------|--------|--------|
+| P1: Fix Tier 6 "999 gold" display → show "MAX" | HIGH | 15m | ✅ DONE |
+| P2: Win/Loss resolution screen (GameOverUI) | HIGH | 2h | ✅ DONE |
+| P3: Triple/Fusion system with Discovery (golden cards) | HIGH | 3h | ✅ DONE |
+| P4: Background and arena visuals (theme support) | MEDIUM | 30m | ✅ DONE |
+| P5: Board positioning + card reordering (click-to-swap) | HIGH | 1.5h | ✅ DONE |
+| P6: End Turn button (skip recruit timer) | HIGH | 1h | ✅ DONE |
+| P7: Freeze Shop button (toggle with auto-unfreeze) | HIGH | 1h | ✅ DONE |
+
+**Phase P Deliverables (COMPLETE):**
+- `GameOverUI.cs` — Game over overlay with standings, placement, Play Again / Quit buttons
+- `DiscoveryUI.cs` — Triple discovery popup offering 3 higher-tier cards
+- `Card.cs` — Added `isGolden`, `CreateGoldenVersion()` for triple/fusion
+- `Player.cs` — Added `ShopFrozen`, `ToggleShopFreeze()`, `SwapBoardCards()`, `CheckAndResolveTriples()`, `AddDiscoveryCard()`
+- `GameManager.cs` — Added `GameOverData`, `OnGameOver` event, elimination tracking, `EndRecruitPhaseEarly()`
+- `GameUIManager.cs` — End Turn + Freeze buttons, background image, board swap/slot handlers, MAX tier display
+- `BoardUI.cs` — Empty slot click events, board card swap mode
+- `ThemeConfig.cs` — Added `maxTierText`, `freezeButtonText`, `unfreezeButtonText`, `gameOverTitle`, `playAgainText`, `quitToMenuText`, `gameBackgroundColor`, `gameBackground`, `goldenCardColor`
+
+**Agent Quick Start**: All code is on `tarot-skin` branch. Scene work still needed in Unity Inspector to wire new buttons and panels.
+
+---
+
+### Phase I: AWS Online Multiplayer (Sprint 12-14)
 **Goal**: Real-time online multiplayer with matchmaking
 
 ```
@@ -429,12 +501,16 @@ Example: B3: Implement Battlecry ability
 | F: Cards | 5 | 5 | 🟩🟩🟩🟩🟩 100% |
 | G: Polish | 7 | 6 | 🟩🟩🟩🟩🟩🟩🟨 86% |
 | H: Skinning | 8 | 8 | 🟩🟩🟩🟩🟩🟩🟩🟩 100% |
+| T: Testing | 7 | 0 | ⬜⬜⬜⬜⬜⬜⬜ 0% |
+| P: Polish | 7 | 7 | 🟩🟩🟩🟩🟩🟩🟩 100% |
 | I: Online | 13 | 0 | ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜ 0% |
-| **TOTAL** | **70** | **56** | **80%** |
+| **TOTAL** | **84** | **63** | **75%** |
 
 ### 🎯 Milestone Targets
 - **Core Engine Complete**: Phases A-G (ready for skinning)
 - **Skinnable Release**: Phase H complete (can create new themes)
+- **Battle-Tested**: Phase T complete (automated verification passed)
+- **Polished**: Phase P complete (all known bugs fixed)
 - **Online Beta**: Phase I complete (multiplayer ready)
 
 ---
@@ -443,7 +519,10 @@ Example: B3: Implement Battlecry ability
 
 | Date | Update |
 |------|--------|
+| Jan 29, 2026 | Phase P COMPLETE - 7 polish features: End Turn, Freeze Shop, Board Reordering, Game Over Screen, Triple/Fusion with Discovery, Background Visuals, MAX tier fix |
 | Jan 29, 2026 | Testing tasks COMPLETE (C13, C14, E6, F5) - Added SynergyTests.cs and AIBattleTests.cs with 40+ automated tests |
+| Jan 29, 2026 | Added Phase T (Automated Testing) and Phase P (Polish). Updated roadmap: Docs → Testing → Polish → Online |
+| Jan 29, 2026 | Documentation refresh - updated known-issues, changelog, SUMMARY, PLAN with current state |
 | Jan 28, 2026 | Phase H COMPLETE - Skinnable theme system implemented on tarot-skin branch |
 | Jan 28, 2026 | Phase G (6/7) - Theme system, GameConfig, SKINNING-GUIDE.md, template branch created |
 | Jan 27, 2026 | AI integrated into GameManager, card tooltips added, selection manager added |

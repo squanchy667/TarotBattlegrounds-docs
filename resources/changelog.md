@@ -1,5 +1,144 @@
 # Changelog
 
+## Phase P: Polish Pass - January 29, 2026
+
+### P1: Fix Tier 6 "999 gold" Display
+- Added `maxTierText` field to ThemeConfig (default: "MAX")
+- GameUIManager now shows "Upgrade: MAX" when at tier 6 instead of "Upgrade: 999g"
+
+### P6: End Turn Button
+- Added `recruitPhaseSkipped` bool and `EndRecruitPhaseEarly()` to GameManager
+- Modified recruit phase timer loop: exits immediately when skipped
+- Added `endTurnButton` + `endTurnButtonText` fields to GameUIManager
+- Button enabled only during recruit phase
+
+### P7: Freeze Shop Button
+- Added `ShopFrozen` property with `OnShopFreezeChanged` event to Player
+- Modified `RefreshShop()`: if frozen, keeps current shop and auto-unfreezes
+- Added `ToggleShopFreeze()` method to Player
+- Added `freezeButtonText` / `unfreezeButtonText` to ThemeConfig
+- GameUIManager toggles label between Freeze/Unfreeze based on state
+
+### P4: Background and Arena Visuals
+- Added `gameBackground` (Sprite) and `gameBackgroundColor` fields to ThemeConfig
+- Added `gameBackgroundImage` reference to GameUIManager
+- In `ApplyTheme()`: sets background sprite or fallback to color
+
+### P5: Board Positioning + Card Reordering
+- BoardUI: Added click handlers to empty slots → `OnEmptySlotSelected` event
+- BoardUI: `OnCardClicked` now supports swap mode (select card A, click card B → swap via `OnBoardSwapRequested`)
+- Player: Added `SwapBoardCards(indexA, indexB)` method
+- GameUIManager: Subscribes to BoardUI events for hand-to-slot placement and board swaps
+
+### P2: Win/Loss Resolution Screen
+- Added `GameOverData` struct and `OnGameOver` static event to GameManager
+- Track elimination order in `eliminationOrder` list
+- Replaced `Debug.Log("Game Over")` with `TriggerGameOver()` that builds standings and fires event
+- Added `playAgainText`, `quitToMenuText`, `gameOverTitle` to ThemeConfig
+
+**New file `GameOverUI.cs`:**
+- IThemeable panel subscribing to `GameManager.OnGameOver`
+- Shows title, placement text, standings list, Play Again / Quit buttons
+- Play Again reloads Game scene, Quit loads MainMenu scene
+
+### P3: Triple/Fusion System with Discovery (Golden Minions)
+
+**Triple mechanic:**
+- Card.cs: Added `isGolden` field, `CreateGoldenVersion()` method (doubles attack, health, abilityValue)
+- Player.cs: Added `CheckAndResolveTriples()` — groups hand+board by cardName, if 3+ non-golden copies found → removes 3, creates golden, adds to hand. Called after `BuyCard()`.
+- CardDisplayUI.cs: Golden visual — star prefix in name (`* CardName *`), golden background tint
+- ThemeConfig.cs: Added `goldenCardColor` field
+
+**Discovery reward (on triple):**
+- After merging, fires `OnTripleDiscovery` event with 3 cards from current tier+1 (capped at 6)
+- TavernManager: Added `GetDiscoveryCards(tier, count)` — returns deduplicated random cards from pool at specified tier
+
+**New file `DiscoveryUI.cs`:**
+- Modal overlay with 3 card choices from CardDisplayUI
+- Player picks one, it goes to hand via `AddDiscoveryCard()`
+- AI players auto-pick the first card
+- IThemeable, subscribes to all players' `OnTripleDiscovery` events
+
+**Files Added:**
+- `Assets/Scripts/UI/GameOverUI.cs`
+- `Assets/Scripts/UI/DiscoveryUI.cs`
+
+**Files Modified:**
+- `Assets/Cards/Card.cs` — isGolden, CreateGoldenVersion(), Clone() update
+- `Assets/Scripts/GameManager.cs` — GameOverData, OnGameOver, elimination tracking, EndRecruitPhaseEarly, phase UI refresh
+- `Assets/Scripts/Player.cs` — ShopFrozen, ToggleShopFreeze, SwapBoardCards, CheckAndResolveTriples, AddDiscoveryCard, OnTripleDiscovery event
+- `Assets/Scripts/TavernManager.cs` — GetDiscoveryCards()
+- `Assets/Scripts/Theme/ThemeConfig.cs` — 9 new fields, updated both factory methods
+- `Assets/Scripts/UI/BoardUI.cs` — OnEmptySlotSelected, OnBoardSwapRequested events, swap mode
+- `Assets/Scripts/UI/CardDisplayUI.cs` — Golden card visuals
+- `Assets/Scripts/UI/GameUIManager.cs` — End Turn, Freeze, background, board events, MAX tier, OnShopFreezeChanged
+
+---
+
+## Phase H: Skinnable Theme System - January 28, 2026
+
+### H1-H8: Complete Theme System
+Implemented full skinnable theme system allowing visual reskinning without code changes.
+
+**ThemeConfig.cs (Extended ScriptableObject):**
+- Color palette (primary, secondary, accent, backgrounds)
+- Font asset slots (title, body, stats)
+- Card frame sprites (common, rare, epic, legendary)
+- UI panel backgrounds and button styles
+- Tribe configuration with names, colors, icons
+- UI text customization (shop/hand/board titles, button labels)
+
+**ThemeManager.cs (Singleton):**
+- LoadTheme / SetTheme for runtime switching
+- ApplyToAllUI() broadcasts to all IThemeable components
+- OnThemeChanged event for hot-swap support
+- Runtime Tarot theme fallback
+
+**IThemeable Interface + ThemeableUI Base Class:**
+- All UI components implement IThemeable
+- CardDisplayUI, GameUIManager, ShopUI, HandUI, BoardUI, CombatLogUI
+
+**Editor Tools:**
+- Menu: Game/Create Default Tarot Theme
+- Menu: Game/Create Debug Theme
+
+**Tarot Skin Branch:**
+- Full Tarot theme applied on `tarot-skin` branch
+- All cards, tribes, colors themed to Tarot aesthetic
+
+---
+
+## Phase G: Core Engine Polish & UI/UX Overhaul - January 28, 2026
+
+### G1-G7: Engine Polish
+- G1: Removed all tarot-specific strings from core code
+- G2: Created ThemeConfig.cs for theme settings
+- G3: Documented "How to create a new skin" (SKINNING-GUIDE.md)
+- G4: Created template card database (generic)
+- G6: Created `template` branch - clean engine ready for reskinning
+- G7: GameConfig.cs for automatic player/AI selection
+
+### UI/UX Overhaul
+- Responsive design overhaul for all UI panels
+- Removed static board slots - BoardUI creates them dynamically
+- Fixed UI positioning issues across resolutions
+
+---
+
+## Sprint 8: Phase G Fixes - January 27-28, 2026
+
+### Integration Fixes
+- Fixed synergy system and ability registration bugs
+- Integrated AI controllers into GameManager properly
+- Added SelectionManager for click-to-deselect and cross-panel selection
+- Added card tooltip hover system
+- Fixed game end detection
+- Added Card Generator editor tool
+- Fixed compilation errors in AITestRunner and AIController
+- Fixed CardDatabase.cs to use correct enum types
+
+---
+
 ## Sprint 7: Phase F - Card Pool Expansion - January 26, 2026
 
 ### F1-F4: Complete Card Database
