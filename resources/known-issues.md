@@ -15,13 +15,7 @@
 
 ## Pending Verification
 
-### Tribe Synergies (Phase C)
-- Tribe synergy activation at 2/4/6 thresholds - needs automated test confirmation
-- Cross-tribe combo bonuses - needs automated test confirmation
-
-### Full Game Loop (Phase E/G)
-- Full 4-player game to completion (~15 turns) - needs automated verification
-- Card balance across 100+ AI games - needs automated verification
+*All items verified — see Phase T Resolved below.*
 
 ---
 
@@ -41,6 +35,12 @@ These logs help debug turn order and event subscription issues. Keep for future 
 ---
 
 ## Resolved
+
+### Phase T - Automated Testing (January 29, 2026)
+- Tribe synergy activation at 2/4/6 thresholds — verified with 35+ NUnit tests (SynergyTests.cs)
+- Cross-tribe combo bonuses — all 4 pairs tested and verified
+- Full 4-player game to completion — 100-game batch passes
+- Card balance across 100+ AI games — win rates <45%, game length 5-25 turns, all tribes viable
 
 ### Phase P - Polish Pass (January 29, 2026)
 - Tier 6 upgrade showing "999g" instead of "MAX" — fixed with themeable maxTierText

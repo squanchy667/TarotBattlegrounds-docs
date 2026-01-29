@@ -1,5 +1,43 @@
 # Changelog
 
+## Phase T: Automated Testing - January 29, 2026
+
+### T1-T3: Test Suite Creation
+- **SynergyTests.cs** (35+ tests):
+  - Tribe counting: empty board, single-tribe, multi-tribe, triple-tribe, mixed cards
+  - Threshold activation: tier 2 (2 members), tier 4 (4 members), tier 6 (6 members)
+  - Boundary cases: 1 member (no tier), 3 members (tier 2), 5 members (tier 4), 7+ members (tier 6)
+  - All four tribes tested: Pentacles (economy), Cups (healing), Swords (aggro), Wands (buffs)
+  - Cross-tribe combos: all 4 pairs (Pentacles+Cups, Swords+Pentacles, Wands+Swords, Cups+Wands)
+  - Combo edge cases: insufficient members, symmetric check, multiple simultaneous combos
+  - Effect application: BuffAttack, Shield/Aegis, SellBonus, CostReduction
+  - Board recalculation on add/remove cards
+  - Prebuilt board scenarios using SynergyTestCards
+
+- **AIBattleTests.cs** (15+ tests):
+  - Game completion: 2-player and 4-player games finish without errors
+  - Batch simulations: 100 games each for 2-player and 4-player
+  - Balance: equal difficulty win rates under 45% per player
+  - Difficulty scaling: Hard beats Easy, mixed lobby rankings
+  - Game length: average between 5-25 turns
+  - Tribe balance: no tribe dominates >45% of winning boards
+  - Tribe competitiveness: all tribes >5% win rate (none unviable)
+  - Damage cap: never exceeds 5 per combat round
+  - Health tracking: starts at 40, decreases during game
+
+### T4-T5: Balance Analysis
+- 100-game batch runs verified for both 2-player and 4-player formats
+- Win rates validated at <45% per player in fair lobbies
+- Hard AI consistently beats Easy AI
+- Game length within target range (5-25 turns average)
+- All 4 tribes competitive in tribe-focused strategies
+
+### Files Created
+- `Assets/Scripts/Tests/Editor/SynergyTests.cs`
+- `Assets/Scripts/Tests/Editor/AIBattleTests.cs`
+
+---
+
 ## Phase P: Polish Pass - January 29, 2026
 
 ### P1: Fix Tier 6 "999 gold" Display

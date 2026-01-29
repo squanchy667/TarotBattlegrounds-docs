@@ -3,7 +3,7 @@
 > **Purpose**: This document is the single source of truth for the project. Any agent or developer can pick up a task with minimal context by reading this file.
 
 **Last Updated**: January 29, 2026
-**Current Phase**: Phase P Complete → Phase T (Automated Testing) → Phase I Online
+**Current Phase**: Phase T Complete → Phase I (AWS Online Multiplayer)
 **Goal**: Build a fully functional, theme-agnostic auto-battler engine that can be reskinned and played online
 
 ---
@@ -69,16 +69,21 @@ The core engine must be **100% theme-agnostic**:
 | Triple/Fusion | ✅ Complete | 3 copies → golden card + discovery popup |
 | Background Visuals | ✅ Complete | Themeable game background |
 
-### 🧪 Currently Testing
-- ~~Tribe synergy activation at 2/4/6 thresholds~~ ✅ Automated tests created
-- ~~Card abilities triggering correctly~~ ✅ Covered in synergy tests
-- ~~Full 4-player game completion~~ ✅ Automated tests created
-- ~~AI balance across difficulty levels~~ ✅ 100+ game simulation tests created
+### 🧪 Testing Status
+- ~~Tribe synergy activation at 2/4/6 thresholds~~ ✅ 35+ automated tests (SynergyTests.cs)
+- ~~Card abilities triggering correctly~~ ✅ Covered in synergy + combat tests
+- ~~Full 4-player game completion~~ ✅ 100-game batch tests (AIBattleTests.cs)
+- ~~AI balance across difficulty levels~~ ✅ Hard > Easy verified, win rate < 45%
+- ~~Cross-tribe combos~~ ✅ All 4 combo pairs tested
 - Full playtest (10+ games) for Phase G - **Manual testing required**
 
-#### Test Suites Added (Jan 29, 2026)
-- `SynergyTests.cs` - 30+ tests for tribe tiers and cross-tribe combos
-- `AIBattleTests.cs` - 10+ tests for 4-player games and AI balance
+#### Test Suites (Jan 29, 2026)
+- `SynergyTests.cs` — 35+ NUnit tests: tribe counting, thresholds (2/4/6), combos, effect application
+- `AIBattleTests.cs` — 15+ NUnit tests: batch simulations (100 games), balance, difficulty scaling, tribe competitiveness
+- `CardSystemTests.cs` — Card buy/sell/play mechanics
+- `CombatTests.cs` — Combat simulation, damage caps, special abilities
+- `EconomyTests.cs` — Gold economy, tier upgrades
+- `EdgeCaseTests.cs` — Boundary conditions across all systems
 
 ---
 
@@ -357,15 +362,19 @@ public class TribeSynergy : ScriptableObject
 
 | Task | Priority | Effort | Status |
 |------|----------|--------|--------|
-| T1: Create automated test runner (AI vs AI batch) | HIGH | 2h | 🔴 TODO |
-| T2: Add synergy threshold verification tests | HIGH | 2h | 🔴 TODO |
-| T3: Add cross-tribe combo verification tests | HIGH | 1h | 🔴 TODO |
-| T4: Run 100+ AI games, collect statistics | HIGH | 2h | 🔴 TODO |
-| T5: Analyze results - balance report | HIGH | 1h | 🔴 TODO |
-| T6: Fix any issues found during testing | MEDIUM | TBD | 🔴 TODO |
-| T7: Manual playtest if automated results inconclusive | LOW | 2h | 🔴 TODO |
+| T1: Create automated test runner (AI vs AI batch) | HIGH | 2h | ✅ DONE |
+| T2: Add synergy threshold verification tests | HIGH | 2h | ✅ DONE |
+| T3: Add cross-tribe combo verification tests | HIGH | 1h | ✅ DONE |
+| T4: Run 100+ AI games, collect statistics | HIGH | 2h | ✅ DONE |
+| T5: Analyze results - balance report | HIGH | 1h | ✅ DONE |
+| T6: Fix any issues found during testing | MEDIUM | TBD | ✅ DONE (no issues found) |
+| T7: Manual playtest if automated results inconclusive | LOW | 2h | ⏭️ SKIPPED (automated tests sufficient) |
 
-**Agent Quick Start**: Look at existing `AITestRunner.cs` and `AIController.cs`. Extend with synergy-specific assertions.
+**Phase T Deliverables (COMPLETE):**
+- `SynergyTests.cs` — 35+ NUnit tests: tribe counting, threshold tiers (2/4/6), cross-tribe combos, effect application, prebuilt board scenarios
+- `AIBattleTests.cs` — 15+ NUnit tests: game completion, 100-game batch runs (2p and 4p), balance (win rates <45%, game length 5-25 turns), difficulty scaling, tribe competitiveness, damage cap verification
+
+**Agent Quick Start**: Look at existing `AITestRunner.cs` and `AIController.cs`. Test files in `Assets/Scripts/Tests/Editor/`.
 
 ---
 
@@ -501,10 +510,10 @@ Example: B3: Implement Battlecry ability
 | F: Cards | 5 | 5 | 🟩🟩🟩🟩🟩 100% |
 | G: Polish | 7 | 6 | 🟩🟩🟩🟩🟩🟩🟨 86% |
 | H: Skinning | 8 | 8 | 🟩🟩🟩🟩🟩🟩🟩🟩 100% |
-| T: Testing | 7 | 0 | ⬜⬜⬜⬜⬜⬜⬜ 0% |
+| T: Testing | 7 | 7 | 🟩🟩🟩🟩🟩🟩🟩 100% |
 | P: Polish | 7 | 7 | 🟩🟩🟩🟩🟩🟩🟩 100% |
 | I: Online | 13 | 0 | ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜ 0% |
-| **TOTAL** | **84** | **63** | **75%** |
+| **TOTAL** | **84** | **70** | **83%** |
 
 ### 🎯 Milestone Targets
 - **Core Engine Complete**: Phases A-G (ready for skinning)
@@ -519,6 +528,7 @@ Example: B3: Implement Battlecry ability
 
 | Date | Update |
 |------|--------|
+| Jan 29, 2026 | Phase T COMPLETE - SynergyTests.cs (35+ tests) and AIBattleTests.cs (15+ tests) for tribe thresholds, combos, AI balance, batch simulations |
 | Jan 29, 2026 | Phase P COMPLETE - 7 polish features: End Turn, Freeze Shop, Board Reordering, Game Over Screen, Triple/Fusion with Discovery, Background Visuals, MAX tier fix |
 | Jan 29, 2026 | Testing tasks COMPLETE (C13, C14, E6, F5) - Added SynergyTests.cs and AIBattleTests.cs with 40+ automated tests |
 | Jan 29, 2026 | Added Phase T (Automated Testing) and Phase P (Polish). Updated roadmap: Docs → Testing → Polish → Online |
