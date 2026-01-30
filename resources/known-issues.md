@@ -2,6 +2,16 @@
 
 ## Active Issues
 
+### High Priority (Multiplayer)
+- **SynergyManager global state** — `_tribeCounts`/`_activeTiers` are singleton dicts overwritten by whichever player last called `UpdateTribeCounts()`. Sell bonuses and combat synergy triggers use wrong player's data. (`SynergyManager.cs`)
+- **DiscoveryUI race condition** — `PendingDiscoveryCards` and `pendingPlayer` are singular. Two simultaneous triples overwrite each other; wrong player gets the card. (`DiscoveryUI.cs`)
+- **Shop pool integrity** — Cards placed in shops are not reserved from the master pool. Two players can see and buy the same card, corrupting the pool. (`TavernManager.cs`)
+- **Player 2 cannot buy cards** — In Photon multiplayer, Player 2's buy actions fail or don't reflect. Shop sync and card lookup issues between host and client. (`NetworkGameBridge.cs`, `Player.cs`)
+- **Tavern upgrade cost not reflected** — After upgrading via RPC, the client doesn't see coins deducted. `NetworkPlayerState` doesn't include upgrade cost, and `tierTurnCounter` is never synced. (`Player.cs`, `NetworkPlayerState.cs`)
+- **AbilityManager memory leak** — Static `_cardAbilities` dict never cleared between games. Stale card references accumulate across sessions. (`AbilityManager.cs`)
+- **Combat log shows wrong battle** — Multiple battles fire `OnCombatStart` sequentially, each clearing the log. Only the last battle is visible. (`CombatLogUI.cs`)
+- **RefreshShop bypasses coin setter** — Writes directly to `_coins` backing field, bypassing property setter event. Fragile pattern. (`Player.cs`)
+
 ### Medium Priority
 - **Card art placeholder** - Cards showing placeholder colors, no artwork yet
 - **Combat has no visualization** - Combat works in background but no in-game animation

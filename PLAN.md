@@ -2,8 +2,8 @@
 
 > **Purpose**: This document is the single source of truth for the project. Any agent or developer can pick up a task with minimal context by reading this file.
 
-**Last Updated**: January 29, 2026
-**Current Phase**: Phase T Complete → Phase I (AWS Online Multiplayer)
+**Last Updated**: January 30, 2026
+**Current Phase**: Phase P Complete → Phase M (Multiplayer Bug Fixes)
 **Goal**: Build a fully functional, theme-agnostic auto-battler engine that can be reskinned and played online
 
 ---
@@ -405,7 +405,25 @@ public class TribeSynergy : ScriptableObject
 
 ---
 
-### Phase I: AWS Online Multiplayer (Sprint 12-14)
+### Phase M: Multiplayer Bug Fixes (Sprint 12)
+**Goal**: Fix all bugs found during 2-player ParrelSync testing before online launch
+
+| Task | Priority | Effort | Status |
+|------|----------|--------|--------|
+| M1: Fix SynergyManager global state — make synergy calculation per-player | HIGH | 2h | 🔴 TODO |
+| M2: Fix DiscoveryUI race condition — per-player pending discoveries | HIGH | 1h | 🔴 TODO |
+| M3: Fix shop pool integrity — reserve cards when placed in shop | HIGH | 1.5h | 🔴 TODO |
+| M4: Fix Player 2 buy flow — ensure RPC shop sync and card lookup work | HIGH | 2h | 🔴 TODO |
+| M5: Fix tavern upgrade state sync — include upgrade cost in NetworkPlayerState | HIGH | 1.5h | 🔴 TODO |
+| M6: Fix AbilityManager memory leak — clear static dict between games | MEDIUM | 15m | 🔴 TODO |
+| M7: Fix combat log overwrite — filter to local player's battle | MEDIUM | 1h | 🔴 TODO |
+| M8: Fix RefreshShop coin property bypass — use setter consistently | LOW | 15m | 🔴 TODO |
+
+**Agent Quick Start**: Read `developer/architecture.md` for manager pattern. All bugs found via ParrelSync 2-player testing. Key files: `SynergyManager.cs`, `DiscoveryUI.cs`, `TavernManager.cs`, `NetworkGameBridge.cs`, `Player.cs`, `GameManager.cs`.
+
+---
+
+### Phase I: AWS Online Multiplayer (Sprint 13-15)
 **Goal**: Real-time online multiplayer with matchmaking
 
 ```
@@ -512,14 +530,16 @@ Example: B3: Implement Battlecry ability
 | H: Skinning | 8 | 8 | 🟩🟩🟩🟩🟩🟩🟩🟩 100% |
 | T: Testing | 7 | 7 | 🟩🟩🟩🟩🟩🟩🟩 100% |
 | P: Polish | 7 | 7 | 🟩🟩🟩🟩🟩🟩🟩 100% |
+| M: MP Bugs | 8 | 0 | ⬜⬜⬜⬜⬜⬜⬜⬜ 0% |
 | I: Online | 13 | 0 | ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜ 0% |
-| **TOTAL** | **84** | **70** | **83%** |
+| **TOTAL** | **92** | **70** | **76%** |
 
 ### 🎯 Milestone Targets
 - **Core Engine Complete**: Phases A-G (ready for skinning)
 - **Skinnable Release**: Phase H complete (can create new themes)
 - **Battle-Tested**: Phase T complete (automated verification passed)
 - **Polished**: Phase P complete (all known bugs fixed)
+- **Multiplayer-Ready**: Phase M complete (all MP bugs fixed)
 - **Online Beta**: Phase I complete (multiplayer ready)
 
 ---
@@ -528,6 +548,7 @@ Example: B3: Implement Battlecry ability
 
 | Date | Update |
 |------|--------|
+| Jan 30, 2026 | Added Phase M (Multiplayer Bug Fixes) — 8 bugs from ParrelSync 2-player testing |
 | Jan 29, 2026 | Phase T COMPLETE - SynergyTests.cs (35+ tests) and AIBattleTests.cs (15+ tests) for tribe thresholds, combos, AI balance, batch simulations |
 | Jan 29, 2026 | Phase P COMPLETE - 7 polish features: End Turn, Freeze Shop, Board Reordering, Game Over Screen, Triple/Fusion with Discovery, Background Visuals, MAX tier fix |
 | Jan 29, 2026 | Testing tasks COMPLETE (C13, C14, E6, F5) - Added SynergyTests.cs and AIBattleTests.cs with 40+ automated tests |
