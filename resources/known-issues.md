@@ -2,15 +2,19 @@
 
 ## Active Issues
 
-### High Priority (Multiplayer)
-- **SynergyManager global state** — `_tribeCounts`/`_activeTiers` are singleton dicts overwritten by whichever player last called `UpdateTribeCounts()`. Sell bonuses and combat synergy triggers use wrong player's data. (`SynergyManager.cs`)
-- **DiscoveryUI race condition** — `PendingDiscoveryCards` and `pendingPlayer` are singular. Two simultaneous triples overwrite each other; wrong player gets the card. (`DiscoveryUI.cs`)
-- **Shop pool integrity** — Cards placed in shops are not reserved from the master pool. Two players can see and buy the same card, corrupting the pool. (`TavernManager.cs`)
-- **Player 2 cannot buy cards** — In Photon multiplayer, Player 2's buy actions fail or don't reflect. Shop sync and card lookup issues between host and client. (`NetworkGameBridge.cs`, `Player.cs`)
-- **Tavern upgrade cost not reflected** — After upgrading via RPC, the client doesn't see coins deducted. `NetworkPlayerState` doesn't include upgrade cost, and `tierTurnCounter` is never synced. (`Player.cs`, `NetworkPlayerState.cs`)
-- **AbilityManager memory leak** — Static `_cardAbilities` dict never cleared between games. Stale card references accumulate across sessions. (`AbilityManager.cs`)
-- **Combat log shows wrong battle** — Multiple battles fire `OnCombatStart` sequentially, each clearing the log. Only the last battle is visible. (`CombatLogUI.cs`)
-- **RefreshShop bypasses coin setter** — Writes directly to `_coins` backing field, bypassing property setter event. Fragile pattern. (`Player.cs`)
+### High Priority (Multiplayer) — Fixed in Sprint 12
+- ~~**SynergyManager global state** — Per-player snapshots via `CalculateSynergies()`. Fixed.~~
+- ~~**DiscoveryUI race condition** — Per-player pending discoveries dict. Fixed.~~
+- ~~**Shop pool integrity** — Cards reserved from pool when placed in shop. Fixed.~~
+- ~~**Player 2 cannot buy cards** — Bounds check + shop sync after buy. Fixed.~~
+- ~~**Tavern upgrade cost not reflected** — `upgradeCost` synced in `NetworkPlayerState`. Fixed.~~
+- ~~**AbilityManager memory leak** — `ClearAll()` in `InitializePlayers` and `OnDestroy`. Fixed.~~
+- ~~**Combat log shows wrong battle** — Filter to local player's battle. Fixed.~~
+- ~~**RefreshShop bypasses coin setter** — Use property setter consistently. Fixed.~~
+
+### High Priority (Multiplayer) — Found in ParrelSync Test Run 2
+- **Card pool initialization race condition** — `NetworkGameSetup` coroutine resumes before `CardPoolInitializer.Start()` populates `masterCards`. Pool is empty/partial when shops first generate, causing only 2 cards in shop instead of 3. Also causes client card reconstruction failures (money deducted but card not in hand). (`NetworkGameSetup.cs`, `CardPoolInitializer.cs`, `TavernManager.cs`)
+- **Upgrade cost shows base value on client** — `GetUpgradeCost()` uses local `tierTurnCounter` which is never incremented on clients (only `RefreshShop()` increments it, and clients never call that). Client always sees base cost (6) instead of discounted cost. (`Player.cs`)
 
 ### Medium Priority
 - **Card art placeholder** - Cards showing placeholder colors, no artwork yet
