@@ -13,8 +13,12 @@
 - ~~**RefreshShop bypasses coin setter** — Use property setter consistently. Fixed.~~
 
 ### High Priority (Multiplayer) — Found in ParrelSync Test Run 2
-- **Card pool initialization race condition** — `NetworkGameSetup` coroutine resumes before `CardPoolInitializer.Start()` populates `masterCards`. Pool is empty/partial when shops first generate, causing only 2 cards in shop instead of 3. Also causes client card reconstruction failures (money deducted but card not in hand). (`NetworkGameSetup.cs`, `CardPoolInitializer.cs`, `TavernManager.cs`)
-- **Upgrade cost shows base value on client** — `GetUpgradeCost()` uses local `tierTurnCounter` which is never incremented on clients (only `RefreshShop()` increments it, and clients never call that). Client always sees base cost (6) instead of discounted cost. (`Player.cs`)
+- ~~**Card pool initialization race condition** — `EnsureCardPoolInitialized()` + `WaitUntil` in `NetworkGameSetup`. Fixed.~~
+- ~~**Upgrade cost shows base value on client** — `SyncedUpgradeCost` in `NetworkPlayerState` + `GetUpgradeCost()` checks synced value first. Fixed.~~
+
+### High Priority (Multiplayer) — Found in ParrelSync Test Run 3
+- ~~**Phase panel shows wrong text/turn** — `RPC_PhaseChanged` now calls `GameManager.SetPhaseFromNetwork()` to apply phase and turn before UI refresh. Fixed.~~
+- **Intermittent buy failure on non-host (1 occurrence)** — Non-host player paid coins but card didn't appear in hand. Likely card reconstruction timing issue. Added `LogError`-level diagnostics in `NetworkCardData.ToCard()` and `ApplyNetworkPlayerState()` to capture next occurrence. (`NetworkCardData.cs`, `GameManager.cs`)
 
 ### Medium Priority
 - **Card art placeholder** - Cards showing placeholder colors, no artwork yet
