@@ -1,5 +1,46 @@
 # Changelog
 
+## Game Audit Round 4 - February 2, 2026
+
+### Bug Fixes (7 bugs from fourth audit)
+
+**Fix 1: Cleave ability ignores configured damage value**
+- `Card.cs` hardcoded Cleave value to 0; `DealCleave()` always used full attack damage
+- Now passes `abilityValue` through; uses configured value when > 0, full attack as fallback
+- Files: `Assets/Cards/Card.cs`, `Assets/Scripts/Abilities/Abilities/OnAttackAbility.cs`
+
+**Fix 2: Combat clone abilities never cleaned up (memory leak)**
+- `Clone()` registers abilities for combat clones but they were never unregistered after combat
+- Added `allClones` tracking list and `CleanupCombatClones()` called before every return path
+- File: `Assets/Scripts/CombatManager.cs`
+
+**Fix 3: AI ignores synergy cost reduction when buying**
+- AI calculated cost as `3 + buyCostModifier` without synergy reduction, giving human players unfair advantage
+- Added `SynergyManager.GetCostReduction()` with per-player snapshot matching `Player.BuyCard()` logic
+- File: `Assets/Scripts/AI/AIController.cs`
+
+**Fix 4: Cleave and adjacent damage ignore Aegis on targets**
+- `DealCleave()` and `DealDamageToAdjacent()` dealt damage directly without checking Aegis shields
+- Both now check `hasAegis` on each adjacent target; consume shield instead of dealing damage
+- File: `Assets/Scripts/Abilities/Abilities/OnAttackAbility.cs`
+
+**Fix 5: Discovery blocked when hand at limit after triple overflow**
+- `AddDiscoveryCard()` rejected cards when hand >= 10, but golden triple can push hand to 11+
+- Removed hand limit check so discovery reward is always receivable (matches Hearthstone)
+- File: `Assets/Scripts/Player.cs`
+
+**Fix 6: Negative buyCostModifier allows free purchases**
+- `cost = 3 + buyCostModifier` had no floor; negative modifier could make cards free
+- Added `Mathf.Max(0, ...)` clamp on base cost before synergy reduction
+- File: `Assets/Scripts/Player.cs`
+
+**Fix 7: Negative sellValueModifier could cost gold when selling**
+- `value = 1 + sellValueModifier` allowed negative sell values
+- Added `Mathf.Max(0, ...)` clamp in both `SellCard()` and `SellCardFromHand()`
+- File: `Assets/Scripts/Player.cs`
+
+---
+
 ## Game Audit Round 3 - February 2, 2026
 
 ### Bug Fixes (2 bugs from third audit)

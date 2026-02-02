@@ -26,6 +26,15 @@
 - ~~**OnAttack bonus damage bypassed Aegis** — DealBonusDamage dealt separate damage. Changed to temporary attack boost. Fixed.~~
 - ~~**No death queue for deathrattles** — Deaths handled immediately. Added `ProcessDeaths()` with cascade support. Fixed.~~
 
+### Game Audit — Fixed in Audit Round 4 (February 2, 2026)
+- ~~**Cleave ignores configured damage** — Hardcoded 0 instead of abilityValue. Now uses configured value. Fixed.~~
+- ~~**Combat clone memory leak** — Clone abilities never unregistered. Added `CleanupCombatClones()`. Fixed.~~
+- ~~**AI ignores synergy cost reduction** — Added `GetCostReduction()` to AI buy logic. Fixed.~~
+- ~~**Cleave/adjacent ignores Aegis** — Added `hasAegis` check to all adjacent damage. Fixed.~~
+- ~~**Discovery blocked at hand limit** — Removed hand cap check; allows overflow like triple. Fixed.~~
+- ~~**Negative buyCostModifier** — Clamped base cost to min 0. Fixed.~~
+- ~~**Negative sellValueModifier** — Clamped sell value to min 0 in both sell methods. Fixed.~~
+
 ### Game Audit — Fixed in Audit Round 3 (February 2, 2026)
 - ~~**Synergy cost reduction dead code** — `GetCostReduction()` never called from `BuyCard()`. Wired up with per-player snapshot. Fixed.~~
 - ~~**Timer never shows "0s"** — `CeilToInt` rounded up. Added explicit zero check. Fixed.~~
