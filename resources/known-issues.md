@@ -26,6 +26,16 @@
 - ~~**OnAttack bonus damage bypassed Aegis** — DealBonusDamage dealt separate damage. Changed to temporary attack boost. Fixed.~~
 - ~~**No death queue for deathrattles** — Deaths handled immediately. Added `ProcessDeaths()` with cascade support. Fixed.~~
 
+### Game Audit — Fixed in Audit Round 5 (February 2, 2026)
+- ~~**Triple returns clones to pool** — Copies returned via `ReturnCardToPool()` instead of being consumed. Removed pool return. Fixed.~~
+- ~~**Triples don't resolve on PlayCard** — `PlayCard()` never called `CheckAndResolveTriples()`. Added call. Fixed.~~
+- ~~**Guardian detection uses legacy only** — CombatManager only checked `effectType`. Now checks both `effectType` and `abilityEffect`. Fixed.~~
+- ~~**AI Sort() mutates board silently** — Hard AI sorted board without firing events. Added `NotifyBoardChanged()`. Fixed.~~
+- ~~**Tier counter off-by-one** — Counter increments at turn start; `GetUpgradeCost()` over-discounted by 1. Subtracted 1 from elapsed. Fixed.~~
+- ~~**AbilityManager blocks multi-ability** — Registration skipped if card had any ability. Changed to per-type dedup. Fixed.~~
+- ~~**Shop UI missing synergy cost** — Displayed raw cost without synergy reduction. Added `GetCostReduction()` call. Fixed.~~
+- ~~**Discovery silent on empty pool** — Added warning log when no cards available at target tier. Fixed.~~
+
 ### Game Audit — Fixed in Audit Round 4 (February 2, 2026)
 - ~~**Cleave ignores configured damage** — Hardcoded 0 instead of abilityValue. Now uses configured value. Fixed.~~
 - ~~**Combat clone memory leak** — Clone abilities never unregistered. Added `CleanupCombatClones()`. Fixed.~~

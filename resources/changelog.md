@@ -1,5 +1,54 @@
 # Changelog
 
+## Game Audit Round 5 - February 2, 2026
+
+### Bug Fixes (9 bugs from fifth audit)
+
+**Fix 1: Triple returns clones to pool instead of consuming them**
+- Triple merge returned the 3 copies to the shared pool via `ReturnCardToPool()`, inflating card availability
+- Removed pool return; triple copies are now consumed (matches Hearthstone Battlegrounds)
+- File: `Assets/Scripts/Player.cs`
+
+**Fix 2: Triples don't resolve when playing cards from hand to board**
+- `PlayCard()` never called `CheckAndResolveTriples()`, so a card completing a triple on the board went undetected
+- Added `CheckAndResolveTriples()` call at end of `PlayCard()`
+- File: `Assets/Scripts/Player.cs`
+
+**Fix 3: Guardian/Taunt detection uses legacy system only**
+- `CombatManager` only checked `effectType == Guardian`, missing cards using the new `abilityEffect == Taunt` system
+- Updated target selection to check both legacy `effectType` and new `abilityEffect`
+- File: `Assets/Scripts/CombatManager.cs`
+
+**Fix 4: AI board Sort() mutates board without firing events**
+- Hard AI's `OptimizePositioning()` sorted board list directly without notifying UI or synergy system
+- Added `player.NotifyBoardChanged()` call after sort; also updated Guardian detection to check both ability systems
+- Files: `Assets/Scripts/AI/AIController.cs`, `Assets/Scripts/Player.cs`
+
+**Fix 5: Tier upgrade turn counter off-by-one**
+- `tierTurnCounter` increments at turn start before player acts, so `GetUpgradeCost()` over-discounted by 1
+- Subtracted 1 from elapsed turns with `Mathf.Max(0, ...)` floor
+- File: `Assets/Scripts/Player.cs`
+
+**Fix 6: AbilityManager blocks multi-ability cards**
+- `RegisterAbility()` skipped registration if the card had *any* ability, preventing cards with multiple ability types
+- Changed to per-type duplicate check using `_cardAbilities[card].Any(a => a.GetType() == ability.GetType())`
+- File: `Assets/Scripts/Abilities/AbilityManager.cs`
+
+**Fix 7: Shop UI doesn't display synergy cost reduction**
+- Shop showed raw `3 + buyCostModifier` cost, not reflecting synergy discounts the player would actually pay
+- Added `SynergyManager.GetCostReduction()` call in `CreateShopCard()` to match `Player.BuyCard()` logic
+- File: `Assets/Scripts/UI/ShopUI.cs`
+
+**Fix 8: Discovery warns on empty pool**
+- Added `LogWarning` when no discovery cards available at the target tier (pool depleted)
+- File: `Assets/Scripts/Player.cs`
+
+**Fix 9: Added Player.NotifyBoardChanged() utility**
+- New public method for external board mutations (AI sorting, future features) to sync UI and synergies
+- File: `Assets/Scripts/Player.cs`
+
+---
+
 ## Game Audit Round 4 - February 2, 2026
 
 ### Bug Fixes (7 bugs from fourth audit)
