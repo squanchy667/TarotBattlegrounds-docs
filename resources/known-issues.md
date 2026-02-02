@@ -26,6 +26,10 @@
 - ~~**OnAttack bonus damage bypassed Aegis** — DealBonusDamage dealt separate damage. Changed to temporary attack boost. Fixed.~~
 - ~~**No death queue for deathrattles** — Deaths handled immediately. Added `ProcessDeaths()` with cascade support. Fixed.~~
 
+### Game Audit — Fixed in Audit Round 7 (February 2, 2026)
+- ~~**No coin cap** — Selling/abilities could push gold above 10. Added `Mathf.Clamp` in property setter. Fixed.~~
+- ~~**BuffAllFriendly excluded self** — "All friendly" should include played card (Hearthstone standard). Added `includeSelf` param; split into All/Other variants. Fixed.~~
+
 ### Game Audit — Fixed in Audit Round 6 (February 2, 2026)
 - ~~**AI buy loop hardcoded cost** — Loop checked `coins >= 3` instead of minimum possible cost (1). Fixed.~~
 - ~~**Buy button ignores synergy cost** — Button disabled for synergy-discounted cards player could afford. Added `GetCostReduction()`. Fixed.~~

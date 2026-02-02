@@ -1,5 +1,25 @@
 # Changelog
 
+## Game Audit Round 7 - February 2, 2026
+
+### Bug Fixes (2 bugs from seventh audit)
+
+**Fix 1: No coin cap — selling/abilities could exceed 10 gold**
+- `Player.coins` property setter had no maximum enforcement
+- Added `Mathf.Clamp(value, 0, MAX_COINS)` in setter; caps all coin sources automatically
+- Added `Player.MAX_COINS = 10` constant
+- File: `Assets/Scripts/Player.cs`
+
+**Fix 2: BuffAllFriendly excluded the played card (should include self)**
+- Hearthstone "Give all friendly minions +X" includes the card itself
+- `BuffAllFriendly()` now takes `includeSelf` parameter
+- `BuffAllFriendlyAttack`/`BuffAllFriendlyHealth` include self (matches Hearthstone)
+- Added new `BuffOtherFriendlyAttack`/`BuffOtherFriendlyHealth` that exclude self ("all other friendly")
+- Updated `Card.AbilityEffectType` enum and `CreateAbility()` mapping
+- Files: `Assets/Scripts/Abilities/Abilities/BattlecryAbility.cs`, `Assets/Cards/Card.cs`
+
+---
+
 ## Game Audit Round 6 - February 2, 2026
 
 ### Bug Fixes (3 bugs from sixth audit)
