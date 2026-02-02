@@ -26,6 +26,24 @@
 - ~~**OnAttack bonus damage bypassed Aegis** — DealBonusDamage dealt separate damage. Changed to temporary attack boost. Fixed.~~
 - ~~**No death queue for deathrattles** — Deaths handled immediately. Added `ProcessDeaths()` with cascade support. Fixed.~~
 
+### Game Audit — Fixed in Audit Round 10 (February 2, 2026)
+- ~~**Shop UI costs stale after synergy change** — Costs calculated once on shop refresh, never recalculated when board changed. Added `OnBoardChanged` subscription to `ShopUI`. Fixed.~~
+- ~~**Combat damage counts dead minions** — Used `.Count` instead of `.Count(c => c.health > 0)` for damage calculation. Made defensive filter consistent with loop exit condition. Fixed.~~
+
+### Game Audit — Fixed in Consensus Round (February 2, 2026)
+- ~~**SimulateBattle single tier for both players** — Damage used same tier for both sides. Split into per-player tier params. Fixed.~~
+- ~~**Golden cards returned to pool on sell** — Not properly consumed in all sell paths. Ensured golden guard in both sell methods. Fixed.~~
+- ~~**Discovery cards not reserved from pool** — Unchosen cards never returned after selection. Added `ReturnDiscoveryCards()`. Fixed.~~
+- ~~**Shop freeze persists through manual reroll** — `_shopFrozen` not cleared before reroll. Added explicit clear. Fixed.~~
+- ~~**Card.Clone() stored buffed stats as base** — `StoreBaseStats()` captured current values. Now propagates original base stats from source card. Fixed.~~
+- ~~**Player disconnect leaks discovery cards** — Pending discovery cards lost from pool on destroy. Added `OnDestroy()` cleanup. Fixed.~~
+
+### Game Audit — Fixed in Audit Round 9 (February 2, 2026)
+- ~~**Golden flag on sell** — Not properly reset during sell flow. Fixed.~~
+- ~~**DRY cost reduction** — Cost calculation duplicated in GameUIManager instead of using centralized `GetEffectiveCost()`. Fixed.~~
+- ~~**Tier counter adjustment** — Upgrade cost reduction tracking was off. Fixed.~~
+- ~~**Excessive debug logs** — Cleaned up verbose console output. Fixed.~~
+
 ### Game Audit — Fixed in Audit Round 7 (February 2, 2026)
 - ~~**No coin cap** — Selling/abilities could push gold above 10. Added `Mathf.Clamp` in property setter. Fixed.~~
 - ~~**BuffAllFriendly excluded self** — "All friendly" should include played card (Hearthstone standard). Added `includeSelf` param; split into All/Other variants. Fixed.~~

@@ -91,13 +91,13 @@ int GetTierUpgradeCost(int tier)
 
 ## Card Pool System
 
-### Copy Counts (Per Tier)
+### Copy Counts (Per Unique Card Per Tier)
 - Tier 1: 16 copies
 - Tier 2: 15 copies
 - Tier 3: 13 copies
 - Tier 4: 11 copies
 - Tier 5: 9 copies
-- Tier 6: 6 copies
+- Tier 6: 7 copies
 
 ### Generation Logic
 ```csharp

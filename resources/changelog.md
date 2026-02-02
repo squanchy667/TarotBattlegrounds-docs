@@ -1,5 +1,86 @@
 # Changelog
 
+## Game Audit Round 10 (Consensus Round 3) - February 2, 2026
+
+### Bug Fixes (2 bugs from tenth audit — 10-agent consensus)
+
+**Fix 1: Shop UI costs don't update when board synergies change**
+- ShopUI calculated card costs once in `CreateShopCard()` using `SynergyManager.GetEffectiveCost()`, but never recalculated when the player's board changed (buy/sell)
+- When a purchase activated a synergy discount, remaining shop cards still showed the old price
+- Added `OnBoardChanged` subscription in `SubscribeToPlayer()` with handler that iterates existing shop cards and recalculates effective cost via `GetEffectiveCost()`
+- File: `Assets/Scripts/UI/ShopUI.cs`
+
+**Fix 2: Combat damage calculation uses `.Count` instead of alive filter**
+- Post-combat damage used `pBoardCopy.Count` (total list count) instead of filtering for `health > 0`
+- While `ProcessDeaths()` removes dead cards, the loop exit condition already used `.Count(c => c.health > 0)` — an inconsistency that could produce wrong damage if a card somehow remained with health <= 0
+- Changed to `pBoardCopy.Count(c => c.health > 0)` for defensive consistency
+- File: `Assets/Scripts/CombatManager.cs`
+
+---
+
+## Game Audit Consensus Round - February 2, 2026
+
+### Bug Fixes (6 bugs from 10-agent consensus)
+
+**Fix 1: SimulateBattle used single tier for both players**
+- `SimulateBattle()` took one `tavernTier` parameter, so damage was always calculated using the same tier for both sides
+- Split into separate `pTavernTier` and `aTavernTier` parameters; damage uses the winner's tier
+- Files: `Assets/Scripts/CombatManager.cs`, `Assets/Scripts/GameManager.cs`
+
+**Fix 2: Golden cards returned to pool on sell instead of being consumed**
+- `SellCard()` checked `isGolden` but still called `ReturnCardToPool()` in the non-golden branch only. However, golden cards weren't properly guarded in all sell paths
+- Ensured both `SellCard()` and `SellCardFromHand()` skip pool return for golden cards
+- File: `Assets/Scripts/Player.cs`
+
+**Fix 3: Discovery cards not reserved from pool during selection**
+- `GetDiscoveryCards()` removed cards from the pool, but unchosen cards were never returned after selection
+- Added `ReturnDiscoveryCards()` method; `AddDiscoveryCard()` now returns unchosen cards to pool
+- Files: `Assets/Scripts/Player.cs`, `Assets/Scripts/TavernManager.cs`
+
+**Fix 4: Shop freeze not cleared on manual reroll**
+- Manual reroll via `RefreshTavernShop()` didn't clear the `_shopFrozen` flag, so frozen state persisted across rerolls
+- Added `_shopFrozen = false` before reroll
+- File: `Assets/Scripts/Player.cs`
+
+**Fix 5: Card.Clone() stored buffed stats as base stats**
+- `Clone()` called `StoreBaseStats()` which stored current (possibly buffed) values as base stats
+- Changed to propagate the source card's original `_baseAttack`/`_baseHealth` when available
+- File: `Assets/Cards/Card.cs`
+
+**Fix 6: Player disconnect during discovery leaks cards from pool**
+- If a player was destroyed while discovery cards were pending, those cards were permanently lost from the shared pool
+- Added `OnDestroy()` that returns `_pendingDiscoveryCards` to pool via `ReturnDiscoveryCards()`
+- File: `Assets/Scripts/Player.cs`
+
+---
+
+## Game Audit Round 9 - February 2, 2026
+
+### Bug Fixes (5 bugs from ninth audit — 2 commits)
+
+**Fix 1: Golden flag not cleared on sell**
+- `SellCard()` didn't reset `isGolden` state properly when cards were consumed
+- File: `Assets/Scripts/Player.cs`
+
+**Fix 2: Damage calculation issues**
+- Additional edge case fixes in damage formula
+- File: `Assets/Scripts/CombatManager.cs`
+
+**Fix 3: DRY cost reduction calculation**
+- Cost reduction logic was duplicated in multiple places
+- Centralized to use `SynergyManager.GetEffectiveCost()` consistently
+- File: `Assets/Scripts/UI/GameUIManager.cs`
+
+**Fix 4: Tier turn counter adjustment**
+- Counter tracking for upgrade cost reduction was off
+- File: `Assets/Scripts/Player.cs`
+
+**Fix 5: Debug log cleanup**
+- Removed excessive debug logging that cluttered console output
+- Multiple files
+
+---
+
 ## Game Audit Round 7 - February 2, 2026
 
 ### Bug Fixes (2 bugs from seventh audit)

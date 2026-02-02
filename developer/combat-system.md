@@ -171,65 +171,32 @@ public void SimulateBattle(List<Card> playerBoard, List<Card> enemyBoard)
 
 ---
 
-### 4. Damage Calculation
+### 4. Damage Calculation (Hearthstone Battlegrounds Formula)
+
+Damage = **number of surviving minions** + **winner's tavern tier**.
 
 ```csharp
-int CalculateBoardStrength(List<Card> board)
-{
-    int strength = 0;
-    foreach (Card card in board)
-    {
-        strength += card.attack + card.health;
-    }
-    return strength;
-}
+// Filter for alive cards defensively (ProcessDeaths should have removed dead cards)
+int pAlive = pBoardCopy.Count(c => c.health > 0);
+int aAlive = aBoardCopy.Count(c => c.health > 0);
+
+int survivingTier = pAlive > 0 ? pAlive + pTavernTier :
+                   aAlive > 0 ? aAlive + aTavernTier : 0;
+
+int finalDamage = pAlive == 0 && aAlive == 0 ? 0 : survivingTier;
 ```
 
 **Example**:
-- Remaining Board: [3/2, 5/4, 1/1]
-- Strength = (3+2) + (5+4) + (1+1) = **19 damage**
+- Winner has 3 surviving minions at Tavern Tier 4
+- Damage = 3 + 4 = **7 damage**
+
+Each player's tavern tier is passed separately (`pTavernTier`, `aTavernTier`) so the winner's tier is used correctly.
 
 ---
 
 ### 5. Damage Application
 
-```csharp
-void ApplyDamage(int playerStrength, int enemyStrength)
-{
-    if (playerStrength > enemyStrength)
-    {
-        int damage = CalculateCappedDamage(playerStrength - enemyStrength);
-        enemyHealth -= damage;
-        Debug.Log($"Enemy takes {damage} damage");
-    }
-    else if (enemyStrength > playerStrength)
-    {
-        int damage = CalculateCappedDamage(enemyStrength - playerStrength);
-        playerHealth -= damage;
-        Debug.Log($"Player takes {damage} damage");
-    }
-    else
-    {
-        Debug.Log("Tie - no damage");
-    }
-}
-
-int CalculateCappedDamage(int rawDamage)
-{
-    int cap = GetDamageCap();
-    return Mathf.Min(rawDamage, cap);
-}
-
-int GetDamageCap()
-{
-    // First 3 turns: Cap at 5 damage
-    if (currentTurn <= 3) return 5;
-    
-    // After turn 3: Adjust based on highest tier in combat
-    // (Future implementation - currently returns 5)
-    return 5 + (GetHighestTierInCombat() - 1);
-}
-```
+The winner is determined by which side has surviving minions. If both boards are empty, it's a tie with 0 damage. There is no damage cap — damage scales naturally with board size and tier progression (early game ~3-5, late game 10-20+).
 
 ---
 
@@ -238,15 +205,14 @@ int GetDamageCap()
 ### Starting Health
 - **Each Player**: 40 HP
 
-### Damage Cap
-| Turn Range | Damage Cap | Reason |
-|------------|------------|--------|
-| Turns 1-3  | 5 damage   | Early game protection |
-| Turn 4+    | 5 + (tier - 1) | Scales with board power |
+### Damage Formula
+Damage = surviving minions count + winner's tavern tier. No cap — scales naturally with game progression.
 
-**Example**:
-- Turn 2 combat: Max 5 damage
-- Turn 7 combat (Tier 4 boards): Max 8 damage (5 + 3)
+| Scenario | Survivors | Tier | Damage |
+|----------|-----------|------|--------|
+| Early game (T1, 2 survivors) | 2 | 1 | 3 |
+| Mid game (T3, 3 survivors) | 3 | 3 | 6 |
+| Late game (T5, 5 survivors) | 5 | 5 | 10 |
 
 ---
 
