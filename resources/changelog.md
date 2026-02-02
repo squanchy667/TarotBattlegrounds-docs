@@ -1,5 +1,28 @@
 # Changelog
 
+## Game Audit Round 6 - February 2, 2026
+
+### Bug Fixes (3 bugs from sixth audit)
+
+**Fix 1: AI buy loop uses hardcoded cost threshold**
+- `BuyCards()` while loop checked `coins >= 3`, missing synergy-discounted cards costing 1-2 gold
+- Changed to `coins >= 1` (minimum possible cost); existing inner break handles unaffordable cards
+- File: `Assets/Scripts/AI/AIController.cs`
+
+**Fix 2: Buy button ignores synergy cost reduction**
+- `GameUIManager.UpdateButtonStates()` calculated cost as `3 + buyCostModifier` without synergy reduction
+- Button appeared disabled for cards player could afford with active synergy discount
+- Added `SynergyManager.GetCostReduction()` call matching `Player.BuyCard()` logic
+- File: `Assets/Scripts/UI/GameUIManager.cs`
+
+**Fix 3: AI Medium guardian repositioning missing events and new ability system**
+- Medium AI's guardian swap only checked legacy `effectType`, missing new `abilityEffect == Taunt`
+- Also didn't call `NotifyBoardChanged()` after swap (Hard AI path did)
+- Added both ability system checks and event notification
+- File: `Assets/Scripts/AI/AIController.cs`
+
+---
+
 ## Game Audit Round 5 - February 2, 2026
 
 ### Bug Fixes (9 bugs from fifth audit)

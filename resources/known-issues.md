@@ -26,6 +26,11 @@
 - ~~**OnAttack bonus damage bypassed Aegis** — DealBonusDamage dealt separate damage. Changed to temporary attack boost. Fixed.~~
 - ~~**No death queue for deathrattles** — Deaths handled immediately. Added `ProcessDeaths()` with cascade support. Fixed.~~
 
+### Game Audit — Fixed in Audit Round 6 (February 2, 2026)
+- ~~**AI buy loop hardcoded cost** — Loop checked `coins >= 3` instead of minimum possible cost (1). Fixed.~~
+- ~~**Buy button ignores synergy cost** — Button disabled for synergy-discounted cards player could afford. Added `GetCostReduction()`. Fixed.~~
+- ~~**AI Medium guardian missing events** — Swap didn't check new ability system or fire `NotifyBoardChanged()`. Fixed.~~
+
 ### Game Audit — Fixed in Audit Round 5 (February 2, 2026)
 - ~~**Triple returns clones to pool** — Copies returned via `ReturnCardToPool()` instead of being consumed. Removed pool return. Fixed.~~
 - ~~**Triples don't resolve on PlayCard** — `PlayCard()` never called `CheckAndResolveTriples()`. Added call. Fixed.~~
