@@ -20,6 +20,18 @@
 - ~~**Phase panel shows wrong text/turn** — `RPC_PhaseChanged` now calls `GameManager.SetPhaseFromNetwork()` to apply phase and turn before UI refresh. Fixed.~~
 - **Intermittent buy failure on non-host (1 occurrence)** — Non-host player paid coins but card didn't appear in hand. Likely card reconstruction timing issue. Added `LogError`-level diagnostics in `NetworkCardData.ToCard()` and `ApplyNetworkPlayerState()` to capture next occurrence. (`NetworkCardData.cs`, `GameManager.cs`)
 
+### Game Audit — Fixed in Audit Round 1 (February 2, 2026)
+- ~~**No matchmaking history** — GameManager used random pairing with frequent rematches. Added `recentOpponents` tracking. Fixed.~~
+- ~~**Golden card ability doubling** — `CreateGoldenVersion()` doubled abilityValue (should only double stats). Removed. Fixed.~~
+- ~~**OnAttack bonus damage bypassed Aegis** — DealBonusDamage dealt separate damage. Changed to temporary attack boost. Fixed.~~
+- ~~**No death queue for deathrattles** — Deaths handled immediately. Added `ProcessDeaths()` with cascade support. Fixed.~~
+
+### Game Audit — Fixed in Audit Round 2 (February 2, 2026)
+- ~~**OnAttack triggers before Aegis check** — Abilities fired even when attack blocked by Aegis. Moved trigger inside else branch. Fixed.~~
+- ~~**Damage cap hardcoded to 5** — `Mathf.Min(5, ...)` made late-game wins meaningless. Removed cap. Fixed.~~
+- ~~**Triple creation ignores hand limit** — Golden card added without checking hand size. Now allows temporary overflow (matching Hearthstone). Fixed.~~
+- ~~**Discovery doesn't consume pool copies** — Discovered cards not removed from pool. Added `RemoveCardFromPool()`. Fixed.~~
+
 ### Medium Priority
 - **Card art placeholder** - Cards showing placeholder colors, no artwork yet
 - **Combat has no visualization** - Combat works in background but no in-game animation

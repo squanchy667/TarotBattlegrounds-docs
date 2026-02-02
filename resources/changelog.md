@@ -1,5 +1,57 @@
 # Changelog
 
+## Game Audit Round 2 - February 2, 2026
+
+### Bug Fixes (4 bugs from second audit)
+
+**Fix 1: OnAttack triggers before Aegis check**
+- OnAttack abilities (bonus damage, cleave) fired before Aegis shield check, causing abilities to trigger even when attack was fully blocked
+- Moved `TriggerCombatAbility(OnAttack)` inside the `else` branch so it only fires when attack connects
+- File: `Assets/Scripts/CombatManager.cs`
+
+**Fix 2: Damage cap hardcoded to 5**
+- Combat damage was capped at 5 via `Mathf.Min(5, survivingTier)` in two places, making late-game victories meaningless
+- Removed the cap entirely so tier-sum damage formula scales naturally (early game ~5, late game 20-40)
+- File: `Assets/Scripts/CombatManager.cs`
+
+**Fix 3: Triple creation ignores hand limit**
+- Golden card from triple merge was added to hand without checking hand size limit (10)
+- Now allows temporary overflow matching Hearthstone Battlegrounds behavior, with debug logging. BuyCard() already blocks further purchases at the limit
+- File: `Assets/Scripts/Player.cs`
+
+**Fix 4: Discovery doesn't consume pool copies**
+- Discovered cards were cloned into hand without removing from the shared card pool, inflating card availability
+- Added `RemoveCardFromPool()` call in `AddDiscoveryCard()`, matching buy behavior
+- Files: `Assets/Scripts/Player.cs`, `Assets/Scripts/TavernManager.cs`
+
+---
+
+## Game Audit Round 1 - February 2, 2026
+
+### Bug Fixes (4 bugs from first audit)
+
+**Fix 1: No matchmaking history in GameManager**
+- GameManager used random pairing with no opponent tracking, so rematches were frequent
+- Added `recentOpponents` dictionary with smart pairing that avoids recent opponents
+- File: `Assets/Scripts/GameManager.cs`
+
+**Fix 2: Golden card ability doubling**
+- `CreateGoldenVersion()` doubled `abilityValue` in addition to stats, making golden abilities overpowered
+- Removed the abilityValue doubling; golden cards now only double attack/health (matching Hearthstone rules)
+- File: `Assets/Cards/Card.cs`
+
+**Fix 3: OnAttack bonus damage bypassed Aegis**
+- DealBonusDamage dealt separate damage that bypassed Aegis shield
+- Changed to temporarily boost attack so Aegis blocks the full combined hit, with save/restore pattern
+- Files: `Assets/Scripts/CombatManager.cs`, `Assets/Scripts/Abilities/Abilities/OnAttackAbility.cs`
+
+**Fix 4: No death queue for deathrattle ordering**
+- Deaths were handled immediately and individually, causing incorrect deathrattle ordering and missed cleave kills
+- Replaced with `ProcessDeaths()` death queue pattern: collects all deaths, resolves deathrattles in order (attacker left-to-right, then defender left-to-right), handles cascade deaths up to 10 iterations
+- File: `Assets/Scripts/CombatManager.cs`
+
+---
+
 ## Phase T: Automated Testing - January 29, 2026
 
 ### T1-T3: Test Suite Creation
@@ -22,7 +74,7 @@
   - Game length: average between 5-25 turns
   - Tribe balance: no tribe dominates >45% of winning boards
   - Tribe competitiveness: all tribes >5% win rate (none unviable)
-  - Damage cap: never exceeds 5 per combat round
+  - Damage cap: was capped at 5 per combat round (cap removed in Audit Round 2)
   - Health tracking: starts at 40, decreases during game
 
 ### T4-T5: Balance Analysis
