@@ -1,5 +1,21 @@
 # Changelog
 
+## Game Audit Round 3 - February 2, 2026
+
+### Bug Fixes (2 bugs from third audit)
+
+**Fix 1: Synergy cost reduction not applied when buying cards**
+- `SynergyManager.GetCostReduction()` existed but was never called from `BuyCard()` — dead code
+- Wired up cost reduction using per-player snapshot pattern, clamped to minimum 1 gold
+- File: `Assets/Scripts/Player.cs`
+
+**Fix 2: Timer never shows "0s" at phase end**
+- `Mathf.CeilToInt(time)` rounded 0.1s up to "1s", so timer jumped from "1s" to phase end
+- Added explicit check: when time <= 0, display "0s"
+- File: `Assets/Scripts/UI/GameUIManager.cs`
+
+---
+
 ## Game Audit Round 2 - February 2, 2026
 
 ### Bug Fixes (4 bugs from second audit)

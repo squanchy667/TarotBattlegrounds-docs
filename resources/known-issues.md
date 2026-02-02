@@ -26,6 +26,10 @@
 - ~~**OnAttack bonus damage bypassed Aegis** — DealBonusDamage dealt separate damage. Changed to temporary attack boost. Fixed.~~
 - ~~**No death queue for deathrattles** — Deaths handled immediately. Added `ProcessDeaths()` with cascade support. Fixed.~~
 
+### Game Audit — Fixed in Audit Round 3 (February 2, 2026)
+- ~~**Synergy cost reduction dead code** — `GetCostReduction()` never called from `BuyCard()`. Wired up with per-player snapshot. Fixed.~~
+- ~~**Timer never shows "0s"** — `CeilToInt` rounded up. Added explicit zero check. Fixed.~~
+
 ### Game Audit — Fixed in Audit Round 2 (February 2, 2026)
 - ~~**OnAttack triggers before Aegis check** — Abilities fired even when attack blocked by Aegis. Moved trigger inside else branch. Fixed.~~
 - ~~**Damage cap hardcoded to 5** — `Mathf.Min(5, ...)` made late-game wins meaningless. Removed cap. Fixed.~~
