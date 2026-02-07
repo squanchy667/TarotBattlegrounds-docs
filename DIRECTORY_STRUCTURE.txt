@@ -1,28 +1,46 @@
-./.gitbook/assets/README.txt
-./DIRECTORY_STRUCTURE.txt
-./PACKAGE_CONTENTS.md
-./README.md
-./SETUP_INSTRUCTIONS.md
-./SUMMARY.md
-./developer/architecture.md
-./developer/card-system.md
-./developer/coding-standards.md
-./developer/combat-system.md
-./developer/game-manager.md
-./developer/setup-guide.md
-./developer/tavern-system.md
-./learn/getting-started.md
-./learn/tarot-primer.md
-./learn/unity-basics.md
-./product/game-design/core-gameplay.md
-./product/game-design/economy.md
-./product/game-design/tarot-mechanics.md
-./product/roadmap/phase-3-combat.md
-./product/roadmap/phase-4-ui.md
-./product/roadmap/phase-5-multiplayer.md
-./resources/changelog.md
-./resources/known-issues.md
-./resources/references.md
-./resources/tech-stack.md
-./setup-docs.bat
-./setup-docs.sh
+TarotBattlegrounds-docs/
+├── README.md                          # Project overview and quick start
+├── SUMMARY.md                         # Table of contents (all doc links)
+├── PLAN.md                            # Master development plan
+├── SKINNING-GUIDE.md                  # How to create custom themes
+├── DIRECTORY_STRUCTURE.txt            # This file
+│
+├── developer/                         # Technical documentation
+│   ├── architecture.md                # System overview, singletons, events, data flow
+│   ├── setup-guide.md                 # Local dev setup, Unity config, build/deploy
+│   ├── card-system.md                 # Cards, tiers, tribes, abilities, golden/triples
+│   ├── combat-system.md               # Battle simulation, damage, death queue
+│   ├── game-manager.md                # Game loop, phases, player management
+│   ├── tavern-system.md               # Shop, shared pool, freeze, discovery, economy
+│   ├── ability-system.md              # IAbility, AbilityManager, triggers, effects
+│   ├── synergy-system.md              # SynergySnapshot, tribe bonuses, combos
+│   ├── multiplayer.md                 # Photon PUN 2, RPCs, state sync, host model
+│   ├── runtime-data.md                # RuntimeDataLoader, JSON formats, fallback
+│   ├── devzone.md                     # Web editor architecture, API, S3 layout
+│   ├── deployment.md                  # AWS S3 + CloudFront, build scripts, deploy
+│   └── coding-standards.md            # Code style and conventions
+│
+├── product/                           # Game design and roadmap
+│   ├── game-design/
+│   │   ├── core-gameplay.md           # Game concept, loop, mechanics, player counts
+│   │   ├── economy.md                 # Gold sources/sinks, cost calculation, balance
+│   │   ├── tarot-mechanics.md         # Tarot-specific design decisions
+│   │   └── tarot-battelrgounds-rules.md  # Game rules reference
+│   └── roadmap/
+│       ├── phase-3-combat.md          # Phase 3: Combat system (complete)
+│       ├── phase-4-ui.md              # Phase 4: UI system (complete)
+│       ├── phase-5-multiplayer.md     # Phase 5: Superseded by Phase M
+│       └── phase-m-multiplayer.md     # Phase M: Multiplayer implementation (complete)
+│
+├── learn/                             # Getting started guides
+│   ├── getting-started.md             # Quick overview, key concepts, project structure
+│   ├── tarot-primer.md                # Tarot card basics for non-players
+│   └── unity-basics.md                # Unity concepts for new developers
+│
+└── resources/                         # Reference materials
+    ├── tech-stack.md                  # Engine, networking, AWS, DevZone, tools
+    ├── known-issues.md                # Active bugs, fixed issues, developer notes
+    ├── changelog.md                   # Full development history
+    ├── references.md                  # External links and references
+    └── session-logs/
+        └── 2026-01-21-sprint1-ui-system.md  # Sprint 1 session log

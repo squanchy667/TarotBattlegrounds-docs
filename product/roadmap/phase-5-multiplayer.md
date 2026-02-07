@@ -1,34 +1,7 @@
-# Phase 5: Multiplayer (PLANNED)
+# Phase 5: Multiplayer
 
-**Status**: ⚪ Not Started  
-**Target Start**: Q4 2025  
-**Estimated Duration**: 4-6 weeks
+**Status**: COMPLETE (Superseded by Phase M)
 
----
+This phase was originally planned to use Mirror networking. The actual implementation used **Photon PUN 2** instead and was completed as part of Phase I/M.
 
-## Goals
-
-1. Integrate Mirror networking
-2. Implement 4-8 player lobbies
-3. Host/client architecture
-4. State synchronization
-5. Matchmaking (optional)
-
----
-
-## Technical Requirements
-
-- Mirror framework setup
-- NetworkManager configuration
-- Lobby system
-- Player synchronization
-- Combat result broadcasting
-
----
-
-## Stretch Goals
-
-- Ranked matchmaking
-- Friend invites
-- Spectator mode
-- Replay system
+See [Phase M: Multiplayer Bug Fixes](phase-m-multiplayer.md) for the full multiplayer implementation and bug fix history.

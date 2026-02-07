@@ -2,386 +2,137 @@
 
 ## Overview
 
-The Combat System simulates turn-based auto-battles between two player boards, determining winners based on remaining minion strength and applying appropriate damage to player health.
+Combat is fully automated. After the recruit phase, players are paired and their boards fight. `CombatManager` is a static class that simulates battles without mutating the original boards.
 
----
-
-## Combat Flow
+## Battle Flow
 
 ```
-┌─────────────────────────────────────────────────────────┐
-│                   Combat Phase Start                     │
-└────────────────────┬────────────────────────────────────┘
-                     │
-                     ▼
-         ┌───────────────────────┐
-         │  Clone Both Boards    │ (Preserve originals)
-         └───────────┬───────────┘
-                     │
-                     ▼
-         ┌───────────────────────┐
-         │ Determine First       │ (Random: "ofek" or "jaya")
-         │ Attacker              │
-         └───────────┬───────────┘
-                     │
-                     ▼
-         ┌───────────────────────┐
-         │   Turn-Based Loop     │
-         │   ┌───────────────┐   │
-         │   │ Attack Phase  │   │
-         │   │ - Attacker    │   │
-         │   │ - Defender    │   │
-         │   └───────┬───────┘   │
-         │           │           │
-         │           ▼           │
-         │   ┌───────────────┐   │
-         │   │ Remove Dead   │   │
-         │   │ Minions (HP≤0)│   │
-         │   └───────┬───────┘   │
-         │           │           │
-         │           ▼           │
-         │   ┌───────────────┐   │
-         │   │ Check Boards  │   │
-         │   │ Empty?        │   │
-         │   └───────┬───────┘   │
-         │           │           │
-         │      Yes  │  No       │
-         │      ↓    └──↑        │
-         └──────┼───────────────┘
-                │
-                ▼
-         ┌───────────────────────┐
-         │ Calculate Remaining   │
-         │ Board Strength        │
-         │ (Σ attack + health)   │
-         └───────────┬───────────┘
-                     │
-                     ▼
-         ┌───────────────────────┐
-         │ Apply Damage to Loser │
-         │ (Capped by Turn/Tier) │
-         └───────────┬───────────┘
-                     │
-                     ▼
-         ┌───────────────────────┐
-         │ Update Player Health  │
-         └───────────┬───────────┘
-                     │
-                     ▼
-         ┌───────────────────────┐
-         │ Determine Outcome     │
-         │ (Win/Loss/Tie)        │
-         └───────────┬───────────┘
-                     │
-                     ▼
-┌────────────────────────────────────────────────────────┐
-│                  Return to GameManager                  │
-└────────────────────────────────────────────────────────┘
+SimulateBattle(board1, board2, tier1, tier2, name1, name2)
+|
++- 1. Clone both boards (originals preserved)
++- 2. Handle empty boards (immediate win/tie)
++- 3. Trigger StartOfCombat synergies (per-player snapshots)
++- 4. Random coin flip: who attacks first
+|
++- 5. Combat Loop (alternating turns):
+|   +- Pick attacker: first alive card on attacking side
+|   +- Pick target:
+|   |   +- Guardian/Taunt card if one exists
+|   |   +- Otherwise random alive card
+|   +- Check attacker's OnAttack abilities
+|   +- Apply attack damage (or Aegis blocks)
+|   +- Apply counterattack damage (or Aegis blocks)
+|   +- Process death queue (cascade up to 10 iterations)
+|   +- Switch sides
+|
++- 6. Calculate damage: surviving cards count + winner's tavern tier
++- 7. Cleanup combat clones (unregister abilities)
 ```
 
----
+## Damage Calculation
 
-## Key Mechanics
+Per Hearthstone Battlegrounds rules:
+```
+damage = number_of_surviving_minions + winner_tavern_tier
+```
 
-### 1. Board Cloning
+If both sides are eliminated simultaneously, it's a **Tie** with 0 damage.
 
-**Why?** Preserve original board state for debugging and prevent accidental modifications.
+**Examples:**
+
+| Scenario | Survivors | Winner Tier | Damage |
+|----------|-----------|-------------|--------|
+| Early game | 2 | 1 | 3 |
+| Mid game | 3 | 3 | 6 |
+| Late game | 5 | 5 | 10 |
+
+## Special Mechanics
+
+### Guardian (Taunt)
+
+Cards with `EffectType.Guardian` or `AbilityEffectType.Taunt` must be attacked first. If multiple Guardians exist, the first one in board order is targeted.
+
+### Aegis (Divine Shield)
+
+Cards with `hasAegis = true` block the first instance of damage:
+- Attack damage blocked: Aegis consumed, no damage dealt
+- When Aegis blocks, OnAttack abilities do **not** trigger
+- Counterattack Aegis works the same way
+
+### OnAttack Abilities
+
+Triggered when a card attacks and the attack is **not** blocked by Aegis:
+- `OnAttackBonusDamage`: Temporarily adds extra attack for this hit
+- `OnAttackCleave`: Deals damage to cards adjacent to the target
+- `OnAttackBuffSelf`: Permanently increases own attack
+
+### Deathrattle
+
+Triggered when a card dies in combat. Processed via the death queue:
+- `DeathrattleBuffRandomFriendly`: Gives +X/+X to a random surviving friendly card
+- `DeathrattleDamageAllEnemies`: Deals X damage to all enemy cards
+
+### Death Queue System
+
+Deaths are processed in a deterministic order to handle cascading effects:
+
+```
+Death Queue Processing:
+1. Collect all dead cards (health <= 0)
+   - Attacker board first (left to right)
+   - Defender board second (left to right)
+2. Process each death:
+   - Log death
+   - Trigger Echo (legacy)
+   - Trigger Deathrattle abilities
+   - Remove from board
+3. Check for new deaths caused by deathrattles
+4. Repeat (up to 10 cascade iterations)
+```
+
+This ensures deterministic deathrattle order, handles cleave victims in the same batch, and processes cascade deaths correctly.
+
+## Synergy Integration
+
+Before combat begins, StartOfCombat synergies are applied to cloned boards using per-player snapshots:
 
 ```csharp
-public List<Card> CloneBoard(List<Card> original)
-{
-    List<Card> cloned = new List<Card>();
-    foreach (Card card in original)
-    {
-        // Create instance copies (not references)
-        Card copy = Instantiate(card);
-        cloned.Add(copy);
-    }
-    return cloned;
-}
+var pSnapshot = SynergyManager.Instance.CalculateSynergies(pBoardCopy);
+SynergyManager.Instance.TriggerSynergies(SynergyTrigger.StartOfCombat, pBoardCopy, null, pSnapshot);
 ```
 
----
+## Combat Events
 
-### 2. First Attacker Selection
+`CombatManager` fires events for UI visualization:
 
-**Logic**: Random selection between "ofek" and "jaya" (player names - will be generalized).
+| Event | Parameters | When |
+|-------|------------|------|
+| `OnCombatStart` | player1Name, player2Name | Battle begins |
+| `OnCombatLogEntry` | CombatLogEntry struct | Each combat action |
+| `OnCombatEnd` | winnerName, damage | Battle ends |
 
-```csharp
-string DetermineFirstAttacker()
-{
-    return Random.value > 0.5f ? "ofek" : "jaya";
-}
-```
+### CombatLogEntry Types
 
-**Balance Impact**: Slight advantage to first attacker (attacks first each turn).
+`TurnStart`, `Attack`, `Counterattack`, `CardDeath`, `AegisBlock`, `EchoTrigger`, `GuardianTaunt`, `DamageDealt`, `BattleResult`
 
----
+## Matchmaking
 
-### 3. Turn-Based Attack Loop
+`GameManager.GeneratePairwiseBattles()` generates pairings:
+- Shuffles alive players randomly
+- Gives bye to player with fewest recent fights (odd player count)
+- Prefers opponents not recently fought
+- Tracks recent opponents per player (cleared after 2 rounds)
 
-```csharp
-public void SimulateBattle(List<Card> playerBoard, List<Card> enemyBoard)
-{
-    List<Card> pBoard = CloneBoard(playerBoard);
-    List<Card> eBoard = CloneBoard(enemyBoard);
-    
-    string attacker = DetermineFirstAttacker();
-    
-    while (pBoard.Count > 0 && eBoard.Count > 0)
-    {
-        if (attacker == "ofek")
-        {
-            // Player attacks enemy
-            AttackMinion(pBoard[0], eBoard[0]);
-            if (eBoard[0].health <= 0) eBoard.RemoveAt(0);
-            
-            // Enemy counterattacks
-            if (eBoard.Count > 0 && pBoard.Count > 0)
-            {
-                AttackMinion(eBoard[0], pBoard[0]);
-                if (pBoard[0].health <= 0) pBoard.RemoveAt(0);
-            }
-        }
-        else
-        {
-            // Enemy attacks player
-            AttackMinion(eBoard[0], pBoard[0]);
-            if (pBoard[0].health <= 0) pBoard.RemoveAt(0);
-            
-            // Player counterattacks
-            if (pBoard.Count > 0 && eBoard.Count > 0)
-            {
-                AttackMinion(pBoard[0], eBoard[0]);
-                if (eBoard[0].health <= 0) eBoard.RemoveAt(0);
-            }
-        }
-        
-        // Check for board wipe
-        if (pBoard.Count == 0 || eBoard.Count == 0) break;
-    }
-    
-    // Calculate damage based on remaining board
-    int playerStrength = CalculateBoardStrength(pBoard);
-    int enemyStrength = CalculateBoardStrength(eBoard);
-    
-    ApplyDamage(playerStrength, enemyStrength);
-}
-```
+## Safety Limits
 
----
-
-### 4. Damage Calculation (Hearthstone Battlegrounds Formula)
-
-Damage = **number of surviving minions** + **winner's tavern tier**.
-
-```csharp
-// Filter for alive cards defensively (ProcessDeaths should have removed dead cards)
-int pAlive = pBoardCopy.Count(c => c.health > 0);
-int aAlive = aBoardCopy.Count(c => c.health > 0);
-
-int survivingTier = pAlive > 0 ? pAlive + pTavernTier :
-                   aAlive > 0 ? aAlive + aTavernTier : 0;
-
-int finalDamage = pAlive == 0 && aAlive == 0 ? 0 : survivingTier;
-```
-
-**Example**:
-- Winner has 3 surviving minions at Tavern Tier 4
-- Damage = 3 + 4 = **7 damage**
-
-Each player's tavern tier is passed separately (`pTavernTier`, `aTavernTier`) so the winner's tier is used correctly.
-
----
-
-### 5. Damage Application
-
-The winner is determined by which side has surviving minions. If both boards are empty, it's a tie with 0 damage. There is no damage cap — damage scales naturally with board size and tier progression (early game ~3-5, late game 10-20+).
-
----
-
-## Health System
-
-### Starting Health
-- **Each Player**: 40 HP
-
-### Damage Formula
-Damage = surviving minions count + winner's tavern tier. No cap — scales naturally with game progression.
-
-| Scenario | Survivors | Tier | Damage |
-|----------|-----------|------|--------|
-| Early game (T1, 2 survivors) | 2 | 1 | 3 |
-| Mid game (T3, 3 survivors) | 3 | 3 | 6 |
-| Late game (T5, 5 survivors) | 5 | 5 | 10 |
-
----
-
-## Win Conditions
-
-### Player Wins
-- Opponent health ≤ 0
-
-### Tie
-- Both players reduced to ≤ 0 in same turn
-- Both boards wiped with equal strength
-
-### Loss
-- Player health ≤ 0
-
----
-
-## Combat Outcomes
-
-```csharp
-public string DetermineWinner()
-{
-    if (playerHealth <= 0 && enemyHealth <= 0)
-        return "tie";
-    else if (playerHealth <= 0)
-        return "enemy";
-    else if (enemyHealth <= 0)
-        return "player";
-    else
-        return "ongoing";
-}
-```
-
----
-
-## Current Balance (Phase 3 Testing)
-
-### Test Results (50+ Runs)
-- **"Ofek" Wins**: 0% (balance issue identified)
-- **"Jaya" Wins**: 52%
-- **Ties**: 48%
-
-### Known Issues
-- First attacker advantage too strong
-- Board population imbalance (needs more cards)
-- Tribe synergies not yet implemented
-
----
-
-## Planned Enhancements
-
-### Phase 3 Completion
-- ✅ Multi-minion attack support (currently 1v1 style)
-- ✅ Taunt mechanics (priority targeting)
-- ✅ Divine Shield (absorbs first damage)
-- ✅ Tribe synergies (Pentacles +gold, Cups +heal)
-
-### Phase 4 (UI)
-- Combat animations
-- Health bar updates
-- Damage number pop-ups
-- Attack indicators
-
-### Phase 5 (Multiplayer)
-- Opponent board preview
-- Combat replay system
-- Simultaneous combat resolution
-
----
-
-## Testing Combat
-
-### Manual Test
-
-```csharp
-void TestCombat()
-{
-    // Create test boards
-    List<Card> playerBoard = new List<Card>
-    {
-        CreateCard("Ace of Pentacles", 1, 1),
-        CreateCard("Three of Swords", 3, 2)
-    };
-    
-    List<Card> enemyBoard = new List<Card>
-    {
-        CreateCard("Knight of Swords", 4, 4),
-        CreateCard("Five of Cups", 5, 5)
-    };
-    
-    // Simulate battle
-    CombatManager.SimulateBattle(playerBoard, enemyBoard);
-    
-    // Check results
-    Debug.Log($"Player HP: {playerHealth}");
-    Debug.Log($"Enemy HP: {enemyHealth}");
-}
-```
-
-### Automated Testing (100+ Runs)
-
-```csharp
-void RunCombatSimulations(int runs)
-{
-    int playerWins = 0;
-    int enemyWins = 0;
-    int ties = 0;
-    
-    for (int i = 0; i < runs; i++)
-    {
-        ResetHealth();
-        SimulateBattle(playerBoard, enemyBoard);
-        
-        string outcome = DetermineWinner();
-        if (outcome == "player") playerWins++;
-        else if (outcome == "enemy") enemyWins++;
-        else ties++;
-    }
-    
-    Debug.Log($"Results over {runs} runs:");
-    Debug.Log($"Player Wins: {playerWins} ({playerWins * 100 / runs}%)");
-    Debug.Log($"Enemy Wins: {enemyWins} ({enemyWins * 100 / runs}%)");
-    Debug.Log($"Ties: {ties} ({ties * 100 / runs}%)");
-}
-```
-
----
-
-## Debugging Tips
-
-### Enable Combat Logging
-
-```csharp
-public bool debugMode = true;
-
-void AttackMinion(Card attacker, Card defender)
-{
-    if (debugMode)
-    {
-        Debug.Log($"{attacker.cardName} ({attacker.attack}/{attacker.health}) " +
-                  $"attacks {defender.cardName} ({defender.attack}/{defender.health})");
-    }
-    
-    defender.health -= attacker.attack;
-    
-    if (debugMode)
-    {
-        Debug.Log($"{defender.cardName} now at {defender.health} HP");
-    }
-}
-```
-
-### Visualize Board State
-
-```csharp
-void LogBoardState(List<Card> board, string owner)
-{
-    Debug.Log($"{owner}'s Board:");
-    foreach (Card card in board)
-    {
-        Debug.Log($"  - {card.cardName}: {card.attack}/{card.health}");
-    }
-}
-```
-
----
+- Maximum 100 turns per battle (prevents infinite loops)
+- Maximum 10 cascade iterations per death queue
+- All combat uses cloned cards (originals never mutated)
+- Combat clones are cleaned up after battle (ability unregistration)
 
 ## Related Documentation
 
-- [Card System](card-system.md) - Card properties and stats
-- [Game Manager](game-manager.md) - Combat phase integration
-- [Combat Rules](../product/game-design/combat-rules.md) - Design reasoning
+- [Card System](card-system.md) — card stats and abilities
+- [Ability System](ability-system.md) — ability triggers and effects
+- [Synergy System](synergy-system.md) — tribe synergies in combat
+- [Game Manager](game-manager.md) — combat phase integration
