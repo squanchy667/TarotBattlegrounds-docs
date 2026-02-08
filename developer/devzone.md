@@ -97,8 +97,8 @@ tarot-devzone/
 ## S3 Data Layout
 
 ```
-s3://tarot-battlegrounds-data/
-├── live/                    # Currently active data (fetched by game)
+s3://tarot-battlegrounds-data-prod/
+├── live/                    # Currently active data (fetched by game, public-read)
 │   ├── cards.json
 │   ├── synergies.json
 │   ├── config.json
@@ -107,7 +107,7 @@ s3://tarot-battlegrounds-data/
 ├── versions/                # Snapshots for rollback
 │   ├── v001/
 │   └── v002/
-└── drafts/                  # Work-in-progress
+├── drafts/                  # Work-in-progress (private)
 ```
 
 ## DynamoDB Tables

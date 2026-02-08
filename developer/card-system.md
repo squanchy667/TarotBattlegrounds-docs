@@ -2,7 +2,7 @@
 
 ## Overview
 
-Cards are the core gameplay element. Each card is a `ScriptableObject` with stats, tribes, and abilities. The game has 30 unique cards across 6 tiers.
+Cards are the core gameplay element. Each card is a `ScriptableObject` with stats, tribes, and abilities. The game has 35 unique cards across 6 tiers (30 generated + 5 original user-created cards).
 
 ## Card ScriptableObject
 
@@ -51,9 +51,9 @@ Cards can have **multiple tribes** (dual-tribe and triple-tribe cards exist). Mu
 
 | Tier | Cards | Power Level | Pool Copies |
 |------|-------|-------------|-------------|
-| 1 | 5 cards | Basic stats, no abilities | 16 each |
-| 2 | 5 cards | Simple abilities (Battlecry, OnAttack) | 15 each |
-| 3 | 5 cards | Mid-game power, synergy enablers | 13 each |
+| 1 | 8 cards | Basic stats, simple abilities | 16 each |
+| 2 | 6 cards | Simple abilities (Battlecry, OnAttack) | 15 each |
+| 3 | 6 cards | Mid-game power, synergy enablers | 13 each |
 | 4 | 5 cards | Late-game synergies, stronger effects | 11 each |
 | 5 | 5 cards | Power spikes, dual-tribe | 9 each |
 | 6 | 5 cards | Finishers, triple-tribe | 7 each |
@@ -105,7 +105,7 @@ The shared pool is managed by `TavernManager`. Each unique card has a number of 
 ### Pool Flow
 
 ```
-TavernManager.masterCards (30 unique cards)
+TavernManager.masterCards (35 unique cards)
     | GenerateFullPool() - create copies per tier
     v
 allCards (shared pool ~355 cards)
@@ -118,7 +118,7 @@ availableCards[playerId] (per-player shop, 3-6 cards)
 
 ## CardDatabase
 
-`CardDatabase.cs` is a static class that defines all 30 built-in cards. It also supports runtime data:
+`CardDatabase.cs` is a static class that defines all 35 built-in cards (30 generated + 5 original). It also supports runtime data:
 
 ```csharp
 List<Card> cards = CardDatabase.GenerateAllCards();

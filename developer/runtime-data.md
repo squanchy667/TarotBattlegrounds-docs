@@ -32,6 +32,12 @@ public class DataConfig : ScriptableObject
 Create in Unity: `Assets > Create > Game > Data Config`
 Assign to `RuntimeDataLoader.dataConfig` in the scene.
 
+**Pre-built asset:** `Assets/Data/DataConfig.asset` ships with:
+- `dataBaseUrl`: `https://tarot-battlegrounds-data-prod.s3.amazonaws.com/live/`
+- `enableRuntimeLoading`: true
+- `requestTimeout`: 10s
+- `fallbackToBuiltIn`: true
+
 ### RuntimeDataLoader (MonoBehaviour Singleton)
 
 Fetches and parses JSON on startup:
@@ -65,7 +71,7 @@ RuntimeDataLoader.Instance.BuildSynergies()  // -> TribeSynergy[]
 3. When complete, call Initialize()
 4. Initialize() calls CardDatabase.GenerateAllCards()
    -> CardDatabase checks RuntimeDataLoader first
-   -> Falls back to built-in 30 cards if not loaded
+   -> Falls back to built-in 35 cards if not loaded
 5. Apply runtime config to TavernManager (tierCopies, shopSizes)
 6. Initialize synergies from runtime data or SynergyTestData fallback
 ```
@@ -154,7 +160,7 @@ When runtime data is loaded, various systems apply overrides:
 If runtime loading fails (network error, parse error, disabled):
 
 1. `RuntimeDataLoader.IsLoaded` is `false`
-2. `CardDatabase.GenerateAllCards()` returns built-in 30 cards
+2. `CardDatabase.GenerateAllCards()` returns built-in 35 cards
 3. `SynergyTestData` provides fallback synergy definitions
 4. All managers use their hardcoded default values
 5. Game works completely offline
@@ -167,6 +173,23 @@ Optional component for loading card art from URLs:
 - `Preload(urls)` — batch prefetch card images
 - Sprite caching to avoid re-downloads
 - Concurrent download queue (max 4 simultaneous)
+
+## Scene Setup
+
+To wire RuntimeDataLoader into the Game scene:
+
+1. Open the Game scene in Unity Editor
+2. Run `Tools > Game > Setup Runtime Data Loader`
+3. Save the scene
+
+The editor script (`Assets/Editor/RuntimeDataSetup.cs`) will:
+- Create a `RuntimeDataLoader` GameObject in the scene
+- Assign `Assets/Data/DataConfig.asset` to it
+- Set Script Execution Order: RuntimeDataLoader (-100) before CardPoolInitializer (0)
+
+## S3 Public Access
+
+The `live/` prefix on `tarot-battlegrounds-data-prod` has a public-read bucket policy so the Unity WebGL client can fetch JSON directly. CORS allows requests from the CloudFront game origin (`https://dui22oafwco41.cloudfront.net`).
 
 ## Related Documentation
 

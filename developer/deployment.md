@@ -82,8 +82,10 @@ Required for WebGL SharedArrayBuffer support:
 
 ```
 Cross-Origin-Opener-Policy: same-origin
-Cross-Origin-Embedder-Policy: require-corp
+Cross-Origin-Embedder-Policy: credentialless
 ```
+
+**Important:** `credentialless` (not `require-corp`) is required because the game fetches JSON from a cross-origin S3 bucket at runtime. `require-corp` blocks cross-origin fetches unless the response includes `Cross-Origin-Resource-Policy`, which S3 doesn't provide.
 
 ### S3 MIME Types
 
@@ -105,6 +107,20 @@ PhotonNetwork.PhotonServerSettings.AppSettings.Protocol =
     ExitGames.Client.Photon.ConnectionProtocol.WebSocketSecure;
 #endif
 ```
+
+## Runtime Data (S3)
+
+The game fetches card definitions, synergies, and balance config from S3 at startup:
+
+```
+https://tarot-battlegrounds-data-prod.s3.amazonaws.com/live/cards.json
+https://tarot-battlegrounds-data-prod.s3.amazonaws.com/live/synergies.json
+https://tarot-battlegrounds-data-prod.s3.amazonaws.com/live/config.json
+```
+
+The `live/` prefix has a public-read bucket policy. CORS allows the game's CloudFront origin. If S3 is unreachable, the game falls back to its built-in 35-card pool.
+
+Edits made in the DevZone web editor and published to live are picked up by the game on next page load.
 
 ## Live URL
 

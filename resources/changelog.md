@@ -1,5 +1,36 @@
 # Changelog
 
+## Wire DevZone to Live Game + 5 Original Cards - February 7, 2026
+
+### New Features
+
+**Runtime Data Loading Wired to Game Scene**
+- Created `Assets/Data/DataConfig.asset` ScriptableObject pointing to S3 live data URL
+- Created `Assets/Editor/RuntimeDataSetup.cs` editor script (`Tools > Game > Setup Runtime Data Loader`)
+- RuntimeDataLoader now active in Game scene with execution order -100 (before CardPoolInitializer)
+- Game fetches `cards.json`, `synergies.json`, `config.json` from S3 at startup
+- Falls back to built-in 35-card pool if S3 is unreachable
+
+**5 Original Cards Added to Card Pool (30 -> 35 cards)**
+- Spark of Inspiration (T1, 1/2 Wands) — Battlecry: +1 Attack to adjacent minions
+- Intuitive Novice (T1, 2/2 Cups) — Starts with Aegis
+- Impulsive Apprentice (T1, 2/1 Wands) — Vanilla attacker
+- Flame Dancer (T2, 3/3 Wands) — Battlecry: +1 Attack to all friendly minions
+- Blazing Knight (T3, 4/3 Wands) — OnAttack: +2 Attack
+- Cards added to both `CardDatabase.cs` (built-in fallback) and DevZone `cards.json`
+
+**S3 Public Access for Game Data**
+- Enabled public-read bucket policy on `tarot-battlegrounds-data-prod/live/*`
+- CORS configured for CloudFront game origin
+- Updated SAM template (`aws/template.yaml`) with `GameDataBucketPolicy` resource
+
+### DevZone-to-Game Pipeline Now Live
+- Edit cards/synergies/balance in DevZone web editor
+- Publish to live via one-click deploy
+- Game loads updated data on next startup (no rebuild needed)
+
+---
+
 ## Game Audit Round 10 (Consensus Round 3) - February 2, 2026
 
 ### Bug Fixes (2 bugs from tenth audit — 10-agent consensus)
