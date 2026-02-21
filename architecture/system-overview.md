@@ -1,4 +1,4 @@
-# Architecture Overview
+# System Overview
 
 ## System Architecture
 
@@ -83,69 +83,6 @@ int bonus = SynergyManager.Instance.GetSellBonus(card, snapshot);
 
 The deprecated global-state methods (`UpdateTribeCounts`, `GetTribeCount`, etc.) are marked `[Obsolete]` with hard errors.
 
-## Data Flow
-
-### Game Startup
-
-```
-1. RuntimeDataLoader.Start()
-   └─ Fetches cards.json, synergies.json, config.json from S3 (if configured)
-
-2. CardPoolInitializer.Start()
-   ├─ Waits for RuntimeDataLoader if needed
-   ├─ Calls CardDatabase.GenerateAllCards()
-   │   └─ Uses runtime data if loaded, else built-in 30 cards
-   ├─ Assigns cards to TavernManager.masterCards
-   ├─ Applies runtime config (tierCopies, shopSizes)
-   └─ Initializes SynergyManager
-
-3. GameManager.Start()
-   ├─ Reads GameConfig (player count, AI difficulty, game mode)
-   ├─ Applies runtime config (recruitTimer, startingHealth)
-   ├─ Spawns player objects (EnsurePlayerCount)
-   ├─ Initializes players and AI controllers
-   └─ Starts GameLoop coroutine (offline) or waits for network setup (online)
-```
-
-### Game Loop (Host-Authoritative)
-
-```
-GameLoop:
-  while players alive:
-    1. RecruitPhase (timed)
-       ├─ Grant gold (min(3 + turn-1, 10))
-       ├─ Reduce upgrade costs by 1
-       ├─ Refresh shops for alive players
-       ├─ AI executes turns immediately
-       ├─ Human player acts (buy/sell/play/reroll/upgrade/freeze)
-       └─ Ends when timer expires or all players ready
-
-    2. CombatPhase
-       ├─ Generate pairwise matchups (avoid recent opponents)
-       ├─ SimulateBattle for each pair
-       │   ├─ Clone boards
-       │   ├─ Trigger StartOfCombat synergies
-       │   ├─ Alternating attacks with abilities
-       │   └─ Process deaths (death queue with cascades)
-       ├─ Apply damage to losers
-       ├─ Track eliminations
-       └─ Check for game over (1 or 0 players remaining)
-```
-
-### Multiplayer Architecture
-
-```
-Host (MasterClient)                    Clients
-─────────────────                      ───────
-Runs full game logic                   Receives state via RPCs
-GameLoop coroutine                     No game loop
-AI controllers for bots                Sends actions to host
-Broadcasts state changes               Applies network state
-Authoritative decisions                Renders received state
-```
-
-See [Multiplayer Architecture](multiplayer.md) for full details.
-
 ## File Organization
 
 ```
@@ -172,3 +109,10 @@ Assets/Scripts/
 3. **Host-authoritative multiplayer**: Only the host runs game logic. Clients send actions and receive state broadcasts.
 4. **Runtime data fallback**: If JSON fetch fails, the game falls back to built-in `CardDatabase` definitions. The game always works offline.
 5. **Event-driven UI**: No polling. UI components subscribe to player events and refresh only when state changes.
+
+## Related Documentation
+
+- [Data Flow](data-flow.md) — startup sequence, game loop, multiplayer sync
+- [Game Manager](../developer/game-manager.md) — game loop details
+- [Multiplayer](../developer/multiplayer.md) — networking architecture
+- [Card System](../developer/card-system.md) — card data model

@@ -2,12 +2,20 @@
 
 * [Overview](README.md)
 * [Master Plan](PLAN.md)
+* [Task Board](TASK_BOARD.md)
+* [Development Agents](development-agents.md)
 * [Skinning Guide](SKINNING-GUIDE.md)
+
+## Architecture
+
+* [System Overview](architecture/system-overview.md)
+* [Data Flow](architecture/data-flow.md)
 
 ## Developer
 
-* [Architecture](developer/architecture.md)
 * [Setup Guide](developer/setup-guide.md)
+* [Coding Standards](developer/coding-standards.md)
+* [Game Systems](developer/game-systems.md)
 * [Card System](developer/card-system.md)
 * [Combat System](developer/combat-system.md)
 * [Game Manager](developer/game-manager.md)
@@ -18,16 +26,19 @@
 * [Runtime Data Loading](developer/runtime-data.md)
 * [DevZone Editor](developer/devzone.md)
 * [Deployment Guide](developer/deployment.md)
-* [Coding Standards](developer/coding-standards.md)
 
 ## Product
 
+* [Features](product/features.md)
+* [Roadmap](product/roadmap.md)
 * [Core Gameplay](product/game-design/core-gameplay.md)
 * [Economy](product/game-design/economy.md)
 * [Tarot Mechanics](product/game-design/tarot-mechanics.md)
-* [Phase 3: Combat](product/roadmap/phase-3-combat.md)
-* [Phase 4: UI](product/roadmap/phase-4-ui.md)
-* [Phase M: Multiplayer](product/roadmap/phase-m-multiplayer.md)
+* [Rules Sheet](product/game-design/tarot-battelrgounds-rules.md)
+
+## Testing
+
+* [Test Plan](testing/test-plan.md)
 
 ## Learn
 
@@ -41,4 +52,7 @@
 * [Known Issues](resources/known-issues.md)
 * [Changelog](resources/changelog.md)
 * [References](resources/references.md)
-* [Session Logs](resources/session-logs/)
+
+## Tasks
+
+* [Phase I: AWS Online Multiplayer](tasks/phase-I/README.md)

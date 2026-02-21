@@ -25,24 +25,27 @@ This documentation serves as a centralized knowledge base for the Tarot Battlegr
 
 ## Documentation
 
-- **[Developer](developer/)** — Technical documentation, architecture, system guides
-- **[Product](product/)** — Game design, economy, roadmap
-- **[Learn](learn/)** — Getting started guides
-- **[Resources](resources/)** — Tech stack, changelog, known issues
+- **[Architecture](architecture/system-overview.md)** — System overview, data flow, design patterns
+- **[Developer](developer/game-systems.md)** — Technical documentation, system guides, setup
+- **[Product](product/features.md)** — Features, game design, roadmap
+- **[Testing](testing/test-plan.md)** — Test plan and strategies
+- **[Learn](learn/getting-started.md)** — Getting started guides
+- **[Resources](resources/tech-stack.md)** — Tech stack, changelog, known issues
 
 ## Quick Start
 
 ### For Agents
-1. [Architecture Overview](developer/architecture.md)
-2. [Multiplayer Architecture](developer/multiplayer.md)
-3. [DevZone Editor](developer/devzone.md)
-4. [Known Issues](resources/known-issues.md)
+1. [System Overview](architecture/system-overview.md)
+2. [Game Systems](developer/game-systems.md)
+3. [Multiplayer Architecture](developer/multiplayer.md)
+4. [Task Board](TASK_BOARD.md)
+5. [Known Issues](resources/known-issues.md)
 
 ### For Developers
 1. [Getting Started](learn/getting-started.md)
 2. [Setup Guide](developer/setup-guide.md)
-3. [Deployment Guide](developer/deployment.md)
-4. [Coding Standards](developer/coding-standards.md)
+3. [Coding Standards](developer/coding-standards.md)
+4. [Deployment Guide](developer/deployment.md)
 
 ## Current Status
 
@@ -101,4 +104,4 @@ Key events: `OnHandChanged`, `OnBoardChanged`, `OnCoinsChanged`, `OnTierChanged`
 
 ---
 
-Last Updated: February 7, 2026
+Last Updated: February 21, 2026

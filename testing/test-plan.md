@@ -224,7 +224,15 @@ This document outlines all tests that should be validated before making the game
 
 ## 8. Automated Test Suite
 
-### 8.1 AI vs AI Battle Test
+### 8.1 Existing Test Files
+- `SynergyTests.cs` — 35+ NUnit tests for tribe counting, thresholds, combos, effects
+- `AIBattleTests.cs` — 15+ NUnit tests for game completion, balance, difficulty scaling
+- `CardSystemTests.cs` — Card buy/sell/play mechanics
+- `CombatTests.cs` — Combat simulation, damage caps, special abilities
+- `EconomyTests.cs` — Gold economy, tier upgrades
+- `EdgeCaseTests.cs` — Boundary conditions across all systems
+
+### 8.2 AI vs AI Battle Test
 ```csharp
 // Proposed test structure
 public class AIBattleTest
@@ -247,7 +255,7 @@ public class AIBattleTest
 }
 ```
 
-### 8.2 Expected Log Patterns
+### 8.3 Expected Log Patterns
 ```
 // Synergy activation
 [SynergyManager] Player X: Tribe tier active: N members, threshold M
