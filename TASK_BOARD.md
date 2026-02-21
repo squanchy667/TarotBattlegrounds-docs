@@ -25,14 +25,14 @@ BLOCKED ────────────────────────
 | T | Automated Testing | 7 | 7 | 100% |
 | P | Polish Pass | 7 | 7 | 100% |
 | M | Multiplayer Bug Fixes | 8 | 8 | 100% |
-| I | Online Infrastructure | 10 | 0 | 0% |
+| I | Online Infrastructure | 7 | 0 | 0% |
 | II | New Abilities & Hero Powers | 18 | 0 | 0% |
 | III | Card Pool to 100+ | 16 | 0 | 0% |
 | IV | Combat Animation & VFX | 20 | 0 | 0% |
 | V | UI Overhaul | 18 | 0 | 0% |
 | VI | Ranked System | 15 | 0 | 0% |
 | VII | 8-Player Scale & Polish | 20 | 0 | 0% |
-| **Total** | | **195** | **78** | **40%** |
+| **Total** | | **192** | **78** | **41%** |
 
 ## Milestones
 
@@ -54,7 +54,7 @@ Phases A-M (78/78 DONE)
         │
         ▼
    ┌─────────┐
-   │ Phase I  │  Online Infrastructure (T001-T010)
+   │ Phase I  │  Online Infrastructure (T001-T007)
    └────┬─────┘
         │
         ├──────────────────────────────────────┐
@@ -85,20 +85,19 @@ Phases A-M (78/78 DONE)
 
 ---
 
-## Phase I: Online Infrastructure (T001-T010)
+## Phase I: Online Infrastructure (T001-T007)
+
+> Extends existing DevZone AWS stack (SAM template, DynamoDB, Lambda, JWT auth). No Cognito needed.
 
 | ID | Task | Priority | Status | Depends On | Blocks |
 |----|------|----------|--------|------------|--------|
-| T001 | Set up Cognito user pool + identity provider | HIGH | PENDING | — | — |
-| T002 | Create DynamoDB player profiles table | HIGH | PENDING | — | T003 |
-| T003 | Lambda auth endpoints (register, login, verify) | HIGH | PENDING | T001, T002 | T004 |
-| T004 | Unity CognitoAuthManager integration | HIGH | PENDING | T003 | T005, T006, T008 |
-| T005 | Auth UI flow (login, register, guest mode) | HIGH | PENDING | T004 | T010 |
-| T006 | Matchmaking queue (Lambda + DynamoDB) | HIGH | PENDING | T003 | T007 |
-| T007 | Unity MatchmakingManager + queue UI | HIGH | PENDING | T006 | T010 |
-| T008 | 4-player Photon lobby with auth tokens | HIGH | PENDING | T004 | T009, T010 |
-| T009 | Reconnection handling (rejoin within 60s) | MEDIUM | PENDING | T008 | T010 |
-| T010 | Integration testing + live playtest | HIGH | PENDING | T005, T007, T008, T009 | — |
+| T001 | Add PlayersTable to SAM template + deploy | HIGH | PENDING | — | T002 |
+| T002 | Game auth endpoints (register, login, guest, profile) | HIGH | PENDING | T001 | T003, T004 |
+| T003 | Unity GameAuthManager + login/register/guest UI | HIGH | PENDING | T002 | T005, T006 |
+| T004 | Matchmaking queue endpoint (DynamoDB + Lambda) | HIGH | PENDING | T002 | T005 |
+| T005 | Unity MatchmakingManager + queue UI | HIGH | PENDING | T003, T004 | T006, T007 |
+| T006 | Wire Photon lobbies with player identity + reconnection | HIGH | PENDING | T003 | T007 |
+| T007 | Integration testing + live playtest via CloudFront | HIGH | PENDING | T005, T006 | — |
 
 ---
 

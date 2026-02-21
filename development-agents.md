@@ -122,15 +122,15 @@ The **tarot-orchestrator** continues to handle the audit/test/fix cycle within e
 
 ## Batch Execution Strategy
 
-### Phase I: Online Infrastructure (T001-T010)
+### Phase I: Online Infrastructure (T001-T007)
+
+> Extends existing DevZone AWS stack (SAM template, DynamoDB, Lambda, JWT auth). No Cognito needed.
 
 | Batch | Agents | Tasks |
 |-------|--------|-------|
-| 1 | network-engineer | T001-T002: Cognito + DynamoDB setup |
-| 2 | network-engineer | T003-T004: Lambda auth + Unity integration |
-| 3 | network-engineer, ui-engineer | T005-T007: Auth UI, matchmaking queue + UI |
-| 4 | network-engineer | T008-T009: Photon lobby + reconnection |
-| 5 | tarot-test-agent, tester | T010: Integration testing + playtest |
+| 1 | network-engineer | T001-T002: PlayersTable + game auth endpoints |
+| 2 | unity-game-developer, network-engineer | T003-T005: Unity auth + matchmaking |
+| 3 | unity-game-developer, tarot-test-agent | T006-T007: Photon integration + testing |
 
 ### Phase II: New Abilities & Hero Powers (T101-T118)
 
