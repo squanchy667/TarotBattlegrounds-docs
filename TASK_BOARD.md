@@ -26,13 +26,13 @@ BLOCKED ────────────────────────
 | P | Polish Pass | 7 | 7 | 100% |
 | M | Multiplayer Bug Fixes | 8 | 8 | 100% |
 | I | Online Infrastructure | 7 | 0 | 0% |
-| II | New Abilities & Hero Powers | 18 | 0 | 0% |
-| III | Card Pool to 100+ | 16 | 0 | 0% |
-| IV | Combat Animation & VFX | 20 | 0 | 0% |
+| II | New Abilities & Hero Powers | 18 | 18 | 100% |
+| III | Card Pool to 100+ | 16 | 16 | 100% |
+| IV | Combat Animation & VFX | 20 | 20 | 100% |
 | V | UI Overhaul | 18 | 0 | 0% |
 | VI | Ranked System | 15 | 0 | 0% |
 | VII | 8-Player Scale & Polish | 20 | 0 | 0% |
-| **Total** | | **192** | **78** | **41%** |
+| **Total** | | **192** | **132** | **69%** |
 
 ## Milestones
 
@@ -105,24 +105,24 @@ Phases A-M (78/78 DONE)
 
 | ID | Task | Priority | Status | Depends On | Blocks |
 |----|------|----------|--------|------------|--------|
-| T101 | Add OnAllyDeath trigger + IAbility subclass | HIGH | PENDING | — | T105, T108, T117 |
-| T102 | Add OnAllySummoned trigger + IAbility subclass | HIGH | PENDING | — | T108, T117 |
-| T103 | Add OnSell trigger + IAbility subclass | MEDIUM | PENDING | — | T117 |
-| T104 | Add Aura trigger (continuous buff) + IAbility subclass | HIGH | PENDING | — | T111, T117 |
-| T105 | Implement Reborn effect (revive with 1 HP) | HIGH | PENDING | T101 | T117 |
-| T106 | Implement Windfury effect (attack twice) | HIGH | PENDING | — | T117 |
-| T107 | Implement Venomous effect (instant kill) | HIGH | PENDING | — | T117 |
-| T108 | Implement SummonToken effect (create token on trigger) | HIGH | PENDING | T101, T102 | T117 |
-| T109 | Implement StealBuff effect (steal enemy buff) | MEDIUM | PENDING | — | T117 |
-| T110 | Implement GainArmor effect (damage shield) | MEDIUM | PENDING | — | T117 |
-| T111 | Implement BuffAllTribes effect (buff all of a tribe) | MEDIUM | PENDING | T104 | T117 |
-| T112 | Implement RandomTransform effect (transform into random card) | LOW | PENDING | — | T117 |
-| T113 | HeroPower base class + HeroPowerManager singleton | HIGH | PENDING | — | T114, T115 |
-| T114 | HeroPowerDatabase (12 hero powers) | HIGH | PENDING | T113 | T115 |
-| T115 | Hero power recruit phase integration | HIGH | PENDING | T113, T114 | T116 |
-| T116 | Hero power UI (button, cooldown, selection) | HIGH | PENDING | T115 | T118 |
-| T117 | CombatManager integration (new triggers + effects) | HIGH | PENDING | T101-T112 | T118 |
-| T118 | DevZone enum sync (new abilities + hero powers) | HIGH | PENDING | T117 | — |
+| T101 | Add OnAllyDeath trigger + IAbility subclass | HIGH | DONE | — | T105, T108, T117 |
+| T102 | Add OnAllySummoned trigger + IAbility subclass | HIGH | DONE | — | T108, T117 |
+| T103 | Add OnSell trigger + IAbility subclass | MEDIUM | DONE | — | T117 |
+| T104 | Add Aura trigger (continuous buff) + IAbility subclass | HIGH | DONE | — | T111, T117 |
+| T105 | Implement Reborn effect (revive with 1 HP) | HIGH | DONE | T101 | T117 |
+| T106 | Implement Windfury effect (attack twice) | HIGH | DONE | — | T117 |
+| T107 | Implement Venomous effect (instant kill) | HIGH | DONE | — | T117 |
+| T108 | Implement SummonToken effect (create token on trigger) | HIGH | DONE | T101, T102 | T117 |
+| T109 | Implement StealBuff effect (steal enemy buff) | MEDIUM | DONE | — | T117 |
+| T110 | Implement GainArmor effect (damage shield) | MEDIUM | DONE | — | T117 |
+| T111 | Implement BuffAllTribes effect (buff all of a tribe) | MEDIUM | DONE | T104 | T117 |
+| T112 | Implement RandomTransform effect (transform into random card) | LOW | DONE | — | T117 |
+| T113 | HeroPower base class + HeroPowerManager singleton | HIGH | DONE | — | T114, T115 |
+| T114 | HeroPowerDatabase (12 hero powers) | HIGH | DONE | T113 | T115 |
+| T115 | Hero power recruit phase integration | HIGH | DONE | T113, T114 | T116 |
+| T116 | Hero power UI (button, cooldown, selection) | HIGH | DONE | T115 | T118 |
+| T117 | CombatManager integration (new triggers + effects) | HIGH | DONE | T101-T112 | T118 |
+| T118 | DevZone enum sync (new abilities + hero powers) | HIGH | DONE | T117 | — |
 
 ---
 
@@ -132,22 +132,22 @@ Phases A-M (78/78 DONE)
 
 | ID | Task | Priority | Status | Depends On | Blocks |
 |----|------|----------|--------|------------|--------|
-| T201 | Add Stars tribe to TribeType enum (Unity + DevZone) | HIGH | PENDING | Phase II | T203, T209 |
-| T202 | Add Coins tribe to TribeType enum (Unity + DevZone) | HIGH | PENDING | Phase II | T204, T210 |
-| T203 | Design 10 Stars cards (tier 1-3) | HIGH | PENDING | T201 | T209, T214 |
-| T204 | Design 10 Coins cards (tier 1-3) | HIGH | PENDING | T202 | T210, T214 |
-| T205 | Design 15 Swords expansion cards (tier 1-5) | HIGH | PENDING | — | T214 |
-| T206 | Design 15 Cups expansion cards (tier 1-5) | HIGH | PENDING | — | T214 |
-| T207 | Design 10 Pentacles expansion cards (tier 1-4) | MEDIUM | PENDING | — | T214 |
-| T208 | Design 5 Wands expansion cards (tier 2-5) | MEDIUM | PENDING | — | T214 |
-| T209 | Stars synergy tiers (2/4/6) | HIGH | PENDING | T203 | T211, T213 |
-| T210 | Coins synergy tiers (2/4/6) | HIGH | PENDING | T204 | T212, T213 |
-| T211 | Cross-tribe combo: Stars + Swords | MEDIUM | PENDING | T209 | T213 |
-| T212 | Cross-tribe combo: Coins + Pentacles | MEDIUM | PENDING | T210 | T213 |
-| T213 | Rebalance existing tribe synergies for 6-tribe meta | HIGH | PENDING | T209, T210 | T215 |
-| T214 | Update card tier distribution (ensure smooth curve) | MEDIUM | PENDING | T203-T208 | T215 |
-| T215 | Update AI card evaluation for new cards/abilities | HIGH | PENDING | T213 | T216 |
-| T216 | 100-game AI balance pass | HIGH | PENDING | T215 | — |
+| T201 | Add Stars tribe to TribeType enum (Unity + DevZone) | HIGH | DONE | Phase II | T203, T209 |
+| T202 | Add Coins tribe to TribeType enum (Unity + DevZone) | HIGH | DONE | Phase II | T204, T210 |
+| T203 | Design 10 Stars cards (tier 1-3) | HIGH | DONE | T201 | T209, T214 |
+| T204 | Design 10 Coins cards (tier 1-3) | HIGH | DONE | T202 | T210, T214 |
+| T205 | Design 15 Swords expansion cards (tier 1-5) | HIGH | DONE | — | T214 |
+| T206 | Design 15 Cups expansion cards (tier 1-5) | HIGH | DONE | — | T214 |
+| T207 | Design 10 Pentacles expansion cards (tier 1-4) | MEDIUM | DONE | — | T214 |
+| T208 | Design 5 Wands expansion cards (tier 2-5) | MEDIUM | DONE | — | T214 |
+| T209 | Stars synergy tiers (2/4/6) | HIGH | DONE | T203 | T211, T213 |
+| T210 | Coins synergy tiers (2/4/6) | HIGH | DONE | T204 | T212, T213 |
+| T211 | Cross-tribe combo: Stars + Swords | MEDIUM | DONE | T209 | T213 |
+| T212 | Cross-tribe combo: Coins + Pentacles | MEDIUM | DONE | T210 | T213 |
+| T213 | Rebalance existing tribe synergies for 6-tribe meta | HIGH | DONE | T209, T210 | T215 |
+| T214 | Update card tier distribution (ensure smooth curve) | MEDIUM | DONE | T203-T208 | T215 |
+| T215 | Update AI card evaluation for new cards/abilities | HIGH | DONE | T213 | T216 |
+| T216 | 100-game AI balance pass | HIGH | DONE | T215 | — |
 
 ---
 
@@ -155,26 +155,26 @@ Phases A-M (78/78 DONE)
 
 | ID | Task | Priority | Status | Depends On | Blocks |
 |----|------|----------|--------|------------|--------|
-| T301 | CombatReplay data structure (actions, events, results) | HIGH | PENDING | — | T302, T303 |
-| T302 | CombatManager replay recording (alongside instant sim) | HIGH | PENDING | T301 | T304 |
-| T303 | Replay serialization for network broadcast | MEDIUM | PENDING | T301 | T318 |
-| T304 | CombatAnimator coroutine-based playback | HIGH | PENDING | T302 | T305, T316 |
-| T305 | CombatCardVisual (per-card visual state + animations) | HIGH | PENDING | T304 | T306, T307 |
-| T306 | Attack animation (lunge + impact) | HIGH | PENDING | T305 | T316 |
-| T307 | Death animation (fade + dissolve) | HIGH | PENDING | T305 | T316 |
-| T308 | VFXManager with particle pooling | HIGH | PENDING | — | T309, T310, T311, T316 |
-| T309 | Attack VFX (swoosh trail, impact burst) | MEDIUM | PENDING | T308 | T319 |
-| T310 | Ability VFX (per-ability-type particles) | MEDIUM | PENDING | T308 | T319 |
-| T311 | Death VFX (soul release, card shatter) | MEDIUM | PENDING | T308 | T319 |
-| T312 | SFXManager with AudioSource pooling | HIGH | PENDING | — | T313 |
-| T313 | SFXConfig ScriptableObject (event-to-clip mapping) | HIGH | PENDING | T312 | T314 |
-| T314 | Combat SFX integration (attack, damage, death clips) | MEDIUM | PENDING | T313 | T319 |
-| T315 | MusicManager (menu, recruit, combat tracks, crossfade) | MEDIUM | PENDING | — | — |
-| T316 | UI integration (combat phase shows animated replay) | HIGH | PENDING | T304, T308 | T317, T320 |
-| T317 | Skip button + speed controls for replay | MEDIUM | PENDING | T316 | — |
-| T318 | Network replay broadcast (host → clients) | HIGH | PENDING | T303 | — |
-| T319 | Ability trigger VFX/SFX in replay | MEDIUM | PENDING | T310, T314 | — |
-| T320 | Performance profiling (particle count, frame budget) | HIGH | PENDING | T316 | — |
+| T301 | CombatReplay data structure (actions, events, results) | HIGH | DONE | — | T302, T303 |
+| T302 | CombatManager replay recording (alongside instant sim) | HIGH | DONE | T301 | T304 |
+| T303 | Replay serialization for network broadcast | MEDIUM | DONE | T301 | T318 |
+| T304 | CombatAnimator coroutine-based playback | HIGH | DONE | T302 | T305, T316 |
+| T305 | CombatCardVisual (per-card visual state + animations) | HIGH | DONE | T304 | T306, T307 |
+| T306 | Attack animation (lunge + impact) | HIGH | DONE | T305 | T316 |
+| T307 | Death animation (fade + dissolve) | HIGH | DONE | T305 | T316 |
+| T308 | VFXManager with particle pooling | HIGH | DONE | — | T309, T310, T311, T316 |
+| T309 | Attack VFX (swoosh trail, impact burst) | MEDIUM | DONE | T308 | T319 |
+| T310 | Ability VFX (per-ability-type particles) | MEDIUM | DONE | T308 | T319 |
+| T311 | Death VFX (soul release, card shatter) | MEDIUM | DONE | T308 | T319 |
+| T312 | SFXManager with AudioSource pooling | HIGH | DONE | — | T313 |
+| T313 | SFXConfig ScriptableObject (event-to-clip mapping) | HIGH | DONE | T312 | T314 |
+| T314 | Combat SFX integration (attack, damage, death clips) | MEDIUM | DONE | T313 | T319 |
+| T315 | MusicManager (menu, recruit, combat tracks, crossfade) | MEDIUM | DONE | — | — |
+| T316 | UI integration (combat phase shows animated replay) | HIGH | DONE | T304, T308 | T317, T320 |
+| T317 | Skip button + speed controls for replay | MEDIUM | DONE | T316 | — |
+| T318 | Network replay broadcast (host → clients) | HIGH | DONE | T303 | — |
+| T319 | Ability trigger VFX/SFX in replay | MEDIUM | DONE | T310, T314 | — |
+| T320 | Performance profiling (particle count, frame budget) | HIGH | DONE | T316 | — |
 
 ---
 
