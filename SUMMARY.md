@@ -26,6 +26,9 @@
 * [Runtime Data Loading](developer/runtime-data.md)
 * [DevZone Editor](developer/devzone.md)
 * [Deployment Guide](developer/deployment.md)
+* [Hero Power System](developer/hero-powers.md)
+* [Combat Animation](developer/combat-animation.md)
+* [Ranked System](developer/ranked-system.md)
 
 ## Product
 
@@ -55,4 +58,10 @@
 
 ## Tasks
 
-* [Phase I: AWS Online Multiplayer](tasks/phase-I/README.md)
+* [Phase I: Online Infrastructure](tasks/phase-I/README.md)
+* [Phase II: New Abilities & Hero Powers](tasks/phase-II/README.md)
+* [Phase III: Card Pool to 100+](tasks/phase-III/README.md)
+* [Phase IV: Combat Animation & VFX](tasks/phase-IV/README.md)
+* [Phase V: UI Overhaul](tasks/phase-V/README.md)
+* [Phase VI: Ranked System](tasks/phase-VI/README.md)
+* [Phase VII: 8-Player Scale & Polish](tasks/phase-VII/README.md)

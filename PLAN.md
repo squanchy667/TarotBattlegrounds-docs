@@ -577,3 +577,105 @@ Example: B3: Implement Battlecry ability
 ---
 
 *This document is maintained by the development team and AI agents. Always pull latest before starting work.*
+
+---
+
+## Major Upgrade: 7-Phase Expansion
+
+> **Started**: February 2026
+> **Goal**: Content expansion (100+ cards, hero powers, new abilities), production polish (combat animations, VFX, sound, UI overhaul), and online infrastructure (matchmaking, ranked ladder, 2-8 players)
+
+### What's Already Done vs What's Needed
+
+| System | Current State | Target State |
+|--------|---------------|--------------|
+| Card Pool | ~30 cards, 4 tribes | 100+ cards, 6 tribes (+ Stars, Coins) |
+| Abilities | 4 triggers (Battlecry, Deathrattle, OnAttack, OnDamaged) | 8 triggers (+ OnAllyDeath, OnAllySummoned, OnSell, Aura) |
+| Effects | Basic (damage, buff, taunt) | 12+ (+ Reborn, Windfury, Venomous, SummonToken, StealBuff, GainArmor, BuffAllTribes, RandomTransform) |
+| Hero Powers | None | 12 hero powers with cooldowns, recruit-phase integration |
+| Combat Display | Instant simulation, text log | Animated replay with VFX, SFX, skip/speed controls |
+| VFX/SFX | None | VFXManager (particle pooling), SFXManager (AudioSource pooling), MusicManager |
+| UI | Functional placeholder | Card frames, hover zoom, drag-drop, collection viewer, settings, main menu |
+| Online | Photon LAN (ParrelSync) | Cognito auth, matchmaking queue, 4-player Photon lobbies |
+| Ranked | None | MMR (Elo), Bronze-Legend tiers, seasons, leaderboards |
+| Player Count | 4 (local) | 2-8 (online), with ghost opponents and spectator mode |
+| Network Optimization | Basic Photon RPCs | DeltaStateCompressor, message batching, bandwidth profiling |
+| Content Pipeline | Manual ScriptableObjects | DevZone CRUD → S3 → RuntimeDataLoader |
+| Testing | 50+ NUnit tests | Extended suites for new abilities, hero powers, 6-tribe balance, 8-player scenarios |
+
+### Phase Structure
+
+| Phase | Theme | Tasks | Dependencies | Key Deliverables |
+|-------|-------|-------|-------------|------------------|
+| **I** | Online Infrastructure | T001-T010 (10) | Phases A-M done | Cognito auth, matchmaking, Photon lobbies, reconnection |
+| **II** | New Abilities & Hero Powers | T101-T118 (18) | — | 4 new triggers, 8 new effects, 12 hero powers |
+| **III** | Card Pool to 100+ | T201-T216 (16) | Phase II | Stars + Coins tribes, 65 new cards, 6-tribe rebalance |
+| **IV** | Combat Animation & VFX | T301-T320 (20) | — | CombatReplay, CombatAnimator, VFX/SFX managers |
+| **V** | UI Overhaul | T401-T418 (18) | Phase IV | Card frames, drag-drop, hover zoom, collection viewer |
+| **VI** | Ranked System | T501-T515 (15) | Phase I | MMR ladder, seasons, leaderboards, match history |
+| **VII** | 8-Player Scale & Polish | T601-T620 (20) | Phases I, III, IV | 8-player rooms, ghost opponents, delta compression, final balance |
+
+**Total new tasks: 117** (bringing project total to 195)
+
+**Parallel tracks:**
+- Track A: I → II → III → VI (online → content → ranked)
+- Track B: I → IV → V → VII (online → animation → UI → scale)
+- Phase VII is the convergence point requiring I, III, and IV complete
+
+### Key Technical Decisions
+
+1. **Combat Replay** (not real-time animation) — keep `SimulateBattle()` instant, record `CombatReplay` data structure, play back via `CombatAnimator` coroutines. This preserves deterministic combat while adding visual polish.
+
+2. **Hero Powers as Distinct System** — player-level (not card-level), cooldown-gated, recruit-phase-only, separate from the ability system. `HeroPower` base class + `HeroPowerManager` singleton + `HeroPowerDatabase` ScriptableObject.
+
+3. **DevZone as Primary Content Pipeline** — new cards authored via DevZone CRUD → published to S3 → loaded at runtime via `RuntimeDataLoader`. The `devzone-sync-engineer` keeps Unity and DevZone enums in sync.
+
+4. **New Tribes** — Stars (Celestial/Control theme, synergy: shield + foresight) and Coins (Currency/Scaling theme, synergy: gold generation + stat scaling). Both integrate into existing 2/4/6 threshold system with cross-tribe combos.
+
+5. **Network Delta Compression** — `DeltaStateCompressor` sends only changed fields per frame, critical for 8-player scaling where full state broadcast would exceed bandwidth budget.
+
+6. **Dual-Repo Sync** — `devzone-sync-engineer` keeps Unity C# enums (`TribeType`, `AbilityTrigger`, `HeroPowerType`) in sync with DevZone TypeScript enums. Runs as a quality gate after content phases.
+
+### Agent Roster (26 Total)
+
+| Category | Existing (15) | New (11) |
+|----------|--------------|----------|
+| **Orchestration** | tarot-orchestrator | upgrade-orchestrator |
+| **Implementation** | unity-game-developer | — |
+| **Content Design** | game-designer | card-content-designer (opus) |
+| **Systems Engineering** | — | ability-engineer, hero-power-engineer, combat-vfx-engineer, sfx-engineer (haiku), ui-engineer |
+| **Infrastructure** | — | network-engineer, ranked-backend-engineer |
+| **Integration** | — | devzone-sync-engineer |
+| **Quality Assurance** | tarot-game-auditor, game-auditor, tarot-test-agent, tester, debugger, fixer | balance-auditor (opus) |
+| **Diagnostics** | log-analyzer | — |
+| **Deployment** | deploy-orchestrator, aws-webgl-deployer, deploy-validator, unity-webgl-builder, ssl-dns-agent | — |
+
+See [development-agents.md](development-agents.md) for full agent details, batch assignments, and model routing.
+
+### Quality Gates
+
+Between each phase, all gates must pass before advancing:
+
+1. **tarot-game-auditor** — Rules compliance audit, score >= 7.0/10
+2. **tarot-test-agent** — NUnit test suite passes, 0 regressions
+3. **balance-auditor** — No tribe win rate > 45%, meta health check (active in Phases II, III, VI, VII)
+4. **DevZone publish verification** — All new cards/abilities/hero powers published and loadable via RuntimeDataLoader
+
+### Deliverables Summary
+
+| Metric | Current | After Upgrade |
+|--------|---------|---------------|
+| Cards | ~30 | 100+ |
+| Tribes | 4 (Pentacles, Cups, Swords, Wands) | 6 (+ Stars, Coins) |
+| Ability Triggers | 4 | 8 |
+| Ability Effects | ~5 | 12+ |
+| Hero Powers | 0 | 12 |
+| Combat Display | Instant + text log | Animated replay + VFX + SFX |
+| Player Count | 4 (local) | 2-8 (online) |
+| Auth | None | Cognito (register, login, guest) |
+| Matchmaking | None | Queue-based with MMR range |
+| Ranked | None | Elo MMR, Bronze-Legend, seasons |
+| Agents | 15 | 26 |
+| Commands | 4 | 10 |
+| Total Tasks | 92 | 195 |
+| NUnit Tests | 50+ | 150+ (estimated) |
