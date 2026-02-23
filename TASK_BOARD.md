@@ -30,9 +30,9 @@ BLOCKED ────────────────────────
 | III | Card Pool to 100+ | 16 | 16 | 100% |
 | IV | Combat Animation & VFX | 20 | 20 | 100% |
 | V | UI Overhaul | 18 | 18 | 100% |
-| VI | Ranked System | 15 | 0 | 0% |
-| VII | 8-Player Scale & Polish | 20 | 0 | 0% |
-| **Total** | | **192** | **157** | **82%** |
+| VI | Ranked System | 15 | 15 | 100% |
+| VII | 8-Player Scale & Polish | 20 | 20 | 100% |
+| **Total** | | **192** | **192** | **100%** |
 
 ## Milestones
 
@@ -211,21 +211,21 @@ Phases A-M (78/78 DONE)
 
 | ID | Task | Priority | Status | Depends On | Blocks |
 |----|------|----------|--------|------------|--------|
-| T501 | DynamoDB tables for ranked (players, matches, seasons) | HIGH | PENDING | Phase I | T502 |
-| T502 | Lambda endpoints (match-result, profile, leaderboard, season) | HIGH | PENDING | T501 | T503, T511, T513, T514 |
-| T503 | MMR calculation (Elo with placement matches) | HIGH | PENDING | T502 | T504, T506, T510 |
-| T504 | Rank tier system (Bronze-Legend, 4 divisions) | HIGH | PENDING | T503 | T505, T507 |
-| T505 | Season management (monthly reset, rewards) | MEDIUM | PENDING | T504 | T508 |
-| T506 | Matchmaking queue with MMR range | HIGH | PENDING | T503 | T509 |
-| T507 | Rank display UI (tier badge, MMR, division) | HIGH | PENDING | T504 | T515 |
-| T508 | Season rewards UI | MEDIUM | PENDING | T505 | T515 |
-| T509 | Queue UI with estimated wait time | MEDIUM | PENDING | T506 | T515 |
-| T510 | Post-game stats screen | HIGH | PENDING | T503 | T515 |
-| T511 | Match history (last 50 matches) | MEDIUM | PENDING | T502 | T512 |
-| T512 | Match history UI | MEDIUM | PENDING | T511 | T515 |
-| T513 | Leaderboard UI (top 100 global) | HIGH | PENDING | T502 | T515 |
-| T514 | PlayerProfileManager Unity integration | HIGH | PENDING | T502 | T515 |
-| T515 | Ranked integration testing | HIGH | PENDING | T510, T513, T514 | — |
+| T501 | DynamoDB tables for ranked (players, matches, seasons) | HIGH | DONE | Phase I | T502 |
+| T502 | Lambda endpoints (match-result, profile, leaderboard, season) | HIGH | DONE | T501 | T503, T511, T513, T514 |
+| T503 | MMR calculation (Elo with placement matches) | HIGH | DONE | T502 | T504, T506, T510 |
+| T504 | Rank tier system (Bronze-Legend, 4 divisions) | HIGH | DONE | T503 | T505, T507 |
+| T505 | Season management (monthly reset, rewards) | MEDIUM | DONE | T504 | T508 |
+| T506 | Matchmaking queue with MMR range | HIGH | DONE | T503 | T509 |
+| T507 | Rank display UI (tier badge, MMR, division) | HIGH | DONE | T504 | T515 |
+| T508 | Season rewards UI | MEDIUM | DONE | T505 | T515 |
+| T509 | Queue UI with estimated wait time | MEDIUM | DONE | T506 | T515 |
+| T510 | Post-game stats screen | HIGH | DONE | T503 | T515 |
+| T511 | Match history (last 50 matches) | MEDIUM | DONE | T502 | T512 |
+| T512 | Match history UI | MEDIUM | DONE | T511 | T515 |
+| T513 | Leaderboard UI (top 100 global) | HIGH | DONE | T502 | T515 |
+| T514 | PlayerProfileManager Unity integration | HIGH | DONE | T502 | T515 |
+| T515 | Ranked integration testing | HIGH | DONE | T510, T513, T514 | — |
 
 ---
 
@@ -235,26 +235,26 @@ Phases A-M (78/78 DONE)
 
 | ID | Task | Priority | Status | Depends On | Blocks |
 |----|------|----------|--------|------------|--------|
-| T601 | 8-player Photon room configuration | HIGH | PENDING | Phase I | T602, T603, T605, T606, T607, T608 |
-| T602 | Ghost opponent system (odd player pairing) | HIGH | PENDING | T601 | T604 |
-| T603 | Round-robin pairing for 8 players | HIGH | PENDING | T601 | T604 |
-| T604 | Dynamic elimination (8→4→2→winner) | HIGH | PENDING | T603 | T614 |
-| T605 | Player health scaling for 8-player | MEDIUM | PENDING | T601 | — |
-| T606 | Lobby UI for 8 players | HIGH | PENDING | T601 | — |
-| T607 | Opponent board viewer (cycle through 7 opponents) | HIGH | PENDING | T601 | T609, T610 |
-| T608 | Mini-map showing all player health/status | HIGH | PENDING | T601 | — |
-| T609 | Opponent board transition animations | MEDIUM | PENDING | T607 | — |
-| T610 | Spectator mode (watch after elimination) | MEDIUM | PENDING | T607 | — |
-| T611 | DeltaStateCompressor (only send changes) | HIGH | PENDING | Phase I, Phase III | T612 |
-| T612 | Message batching (aggregate RPCs per frame) | MEDIUM | PENDING | T611 | T613 |
-| T613 | Bandwidth profiling + optimization | HIGH | PENDING | T612 | T617 |
-| T614 | 8-player AI balance pass | HIGH | PENDING | Phase III, T604 | T615 |
-| T615 | Shop pool scaling for 8 players | HIGH | PENDING | T614 | T616 |
-| T616 | Economy rebalance for 8-player games | MEDIUM | PENDING | T615 | T620 |
-| T617 | Performance profiling (8 players, 100+ cards, VFX) | HIGH | PENDING | Phase IV, T613 | T618 |
-| T618 | Memory optimization (card pooling, texture atlas) | MEDIUM | PENDING | T617 | T619 |
-| T619 | WebGL build size optimization | MEDIUM | PENDING | T618 | T620 |
-| T620 | Final integration test + 8-player playtest | HIGH | PENDING | T614-T619 | — |
+| T601 | 8-player Photon room configuration | HIGH | DONE | Phase I | T602, T603, T605, T606, T607, T608 |
+| T602 | Ghost opponent system (odd player pairing) | HIGH | DONE | T601 | T604 |
+| T603 | Round-robin pairing for 8 players | HIGH | DONE | T601 | T604 |
+| T604 | Dynamic elimination (8→4→2→winner) | HIGH | DONE | T603 | T614 |
+| T605 | Player health scaling for 8-player | MEDIUM | DONE | T601 | — |
+| T606 | Lobby UI for 8 players | HIGH | DONE | T601 | — |
+| T607 | Opponent board viewer (cycle through 7 opponents) | HIGH | DONE | T601 | T609, T610 |
+| T608 | Mini-map showing all player health/status | HIGH | DONE | T601 | — |
+| T609 | Opponent board transition animations | MEDIUM | DONE | T607 | — |
+| T610 | Spectator mode (watch after elimination) | MEDIUM | DONE | T607 | — |
+| T611 | DeltaStateCompressor (only send changes) | HIGH | DONE | Phase I, Phase III | T612 |
+| T612 | Message batching (aggregate RPCs per frame) | MEDIUM | DONE | T611 | T613 |
+| T613 | Bandwidth profiling + optimization | HIGH | DONE | T612 | T617 |
+| T614 | 8-player AI balance pass | HIGH | DONE | Phase III, T604 | T615 |
+| T615 | Shop pool scaling for 8 players | HIGH | DONE | T614 | T616 |
+| T616 | Economy rebalance for 8-player games | MEDIUM | DONE | T615 | T620 |
+| T617 | Performance profiling (8 players, 100+ cards, VFX) | HIGH | DONE | Phase IV, T613 | T618 |
+| T618 | Memory optimization (card pooling, texture atlas) | MEDIUM | DONE | T617 | T619 |
+| T619 | WebGL build size optimization | MEDIUM | DONE | T618 | T620 |
+| T620 | Final integration test + 8-player playtest | HIGH | DONE | T614-T619 | — |
 
 ---
 
