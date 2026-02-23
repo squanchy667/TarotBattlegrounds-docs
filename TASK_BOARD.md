@@ -29,10 +29,10 @@ BLOCKED ────────────────────────
 | II | New Abilities & Hero Powers | 18 | 18 | 100% |
 | III | Card Pool to 100+ | 16 | 16 | 100% |
 | IV | Combat Animation & VFX | 20 | 20 | 100% |
-| V | UI Overhaul | 18 | 0 | 0% |
+| V | UI Overhaul | 18 | 18 | 100% |
 | VI | Ranked System | 15 | 0 | 0% |
 | VII | 8-Player Scale & Polish | 20 | 0 | 0% |
-| **Total** | | **192** | **132** | **69%** |
+| **Total** | | **192** | **150** | **78%** |
 
 ## Milestones
 
@@ -184,24 +184,24 @@ Phases A-M (78/78 DONE)
 
 | ID | Task | Priority | Status | Depends On | Blocks |
 |----|------|----------|--------|------------|--------|
-| T401 | Card art pipeline setup (S3 + DevZone upload) | HIGH | PENDING | Phase IV | — |
-| T402 | Card frame system (rarity borders) | HIGH | PENDING | — | T403, T404 |
-| T403 | Tribe-colored card backgrounds | MEDIUM | PENDING | T402 | — |
-| T404 | Golden card overlay for triples | MEDIUM | PENDING | T402 | — |
-| T405 | Hover zoom (enlarged preview with full stats) | HIGH | PENDING | — | T406 |
-| T406 | Card tooltip redesign (abilities, synergies, lore) | MEDIUM | PENDING | T405 | — |
-| T407 | DragDropManager (core drag system) | HIGH | PENDING | — | T408, T409, T410 |
-| T408 | Drag from shop to hand | HIGH | PENDING | T407 | — |
-| T409 | Drag from hand to board | HIGH | PENDING | T407 | — |
-| T410 | Board reorder via drag | HIGH | PENDING | T407 | — |
-| T411 | Recruit timer animated countdown | MEDIUM | PENDING | — | — |
-| T412 | Shop refresh animation | LOW | PENDING | — | — |
-| T413 | Tier-up celebration effect | LOW | PENDING | — | — |
-| T414 | Opponent board viewer (read-only peek) | HIGH | PENDING | Phase IV | — |
-| T415 | Game over screen redesign (stats, animations) | HIGH | PENDING | — | — |
-| T416 | Main menu redesign (Play, Collection, Settings, Profile) | HIGH | PENDING | — | T417, T418 |
-| T417 | Collection viewer (all cards, filter by tribe/tier) | MEDIUM | PENDING | T416 | — |
-| T418 | Settings menu (audio, graphics, controls) | LOW | PENDING | T416 | — |
+| T401 | Card art pipeline setup (S3 + DevZone upload) | HIGH | DONE | Phase IV | — |
+| T402 | Card frame system (rarity borders) | HIGH | DONE | — | T403, T404 |
+| T403 | Tribe-colored card backgrounds | MEDIUM | DONE | T402 | — |
+| T404 | Golden card overlay for triples | MEDIUM | DONE | T402 | — |
+| T405 | Hover zoom (enlarged preview with full stats) | HIGH | DONE | — | T406 |
+| T406 | Card tooltip redesign (abilities, synergies, lore) | MEDIUM | DONE | T405 | — |
+| T407 | DragDropManager (core drag system) | HIGH | DONE | — | T408, T409, T410 |
+| T408 | Drag from shop to hand | HIGH | DONE | T407 | — |
+| T409 | Drag from hand to board | HIGH | DONE | T407 | — |
+| T410 | Board reorder via drag | HIGH | DONE | T407 | — |
+| T411 | Recruit timer animated countdown | MEDIUM | DONE | — | — |
+| T412 | Shop refresh animation | LOW | DONE | — | — |
+| T413 | Tier-up celebration effect | LOW | DONE | — | — |
+| T414 | Opponent board viewer (read-only peek) | HIGH | DONE | Phase IV | — |
+| T415 | Game over screen redesign (stats, animations) | HIGH | DONE | — | — |
+| T416 | Main menu redesign (Play, Collection, Settings, Profile) | HIGH | DONE | — | T417, T418 |
+| T417 | Collection viewer (all cards, filter by tribe/tier) | MEDIUM | DONE | T416 | — |
+| T418 | Settings menu (audio, graphics, controls) | LOW | DONE | T416 | — |
 
 ---
 
