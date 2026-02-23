@@ -82,6 +82,35 @@
 - ~~**Triple creation ignores hand limit** — Golden card added without checking hand size. Now allows temporary overflow (matching Hearthstone). Fixed.~~
 - ~~**Discovery doesn't consume pool copies** — Discovered cards not removed from pool. Added `RemoveCardFromPool()`. Fixed.~~
 
+### Production Audit — Fixed (February 23, 2026)
+- ~~**C5: Attack order always picks leftmost** — CombatManager.FirstOrDefault selected leftmost alive card every turn. Added attack pointer cycling per side. Fixed.~~
+- ~~**C6: Synergy tiers don't stack** — Only highest tier fired. Changed SynergySnapshot to store List<SynergyTier> per tribe so all met thresholds fire. Fixed.~~
+- ~~**C7: Double cleave bug** — Cards with OnAttackCleave ability AND hasCleave synergy flag fired cleave twice. Added guard to skip synergy cleave if ability cleave exists. Fixed.~~
+- ~~**C8: Aura target tribe not set** — AuraBuffTribematesAttack created without TargetTribe, buffing all friendlies. Now passes card's primary tribe. Fixed.~~
+- ~~**C2: COEP header wrong** — deploy-webgl.sh had `require-corp`, changed to `credentialless`. Fixed.~~
+- ~~**H3: Guardian targeting deterministic** — FirstOrDefault picked leftmost guardian. Changed to random selection among all guardians. Fixed.~~
+- ~~**H9: Combo gold fires per-card** — BonusGold combo effect iterated all board cards. Now fires once for gold effects. Fixed.~~
+- ~~**H2: Tavern upgrade costs wrong** — Tiers 4/5/6 all cost 11. Changed to 9/10/11. Fixed.~~
+- ~~**H1: Token summon clone tracking** — Tokens summoned mid-combat not tracked in allClones. Now passed through ProcessDeaths. Fixed.~~
+- ~~**H10: Board card lookup by name** — Used cardName+tier instead of reference. Changed to IndexOf. Fixed.~~
+- ~~**H7: Stars/Coins missing from ThemeConfig** — Hardcoded 4 tribes, now 6. Fixed.~~
+- ~~**H4: Host disconnect kills game** — OnMasterClientSwitched now handles graceful migration. New master assumes game loop, eliminates DC'd players, broadcasts snapshot. Fixed.~~
+- ~~**H5: Hero powers not broadcast** — heroPowerId + usedThisTurn added to NetworkPlayerState. Fixed.~~
+- ~~**H6: hasCleave not synced** — hasCleave + hasReborn added to NetworkCardData. Fixed.~~
+- ~~**H8: RankedManager.SubmitMatchResult never called** — Wired into TriggerGameOver with placement data. Fixed.~~
+- ~~**H11: Shop pool not scaled for 8 players** — TavernManager now calls EightPlayerManager.GetShopPoolMultiplier. Fixed.~~
+- ~~**H12: No hero power selection for humans** — OnHeroPowerSelectionNeeded event fires 3 choices with callback. Falls back to auto-assign. Fixed.~~
+- ~~**M1: goldPerTurnBase field mismatch** — goldPerTurn mapped to _startingGold in Player. Fixed.~~
+- ~~**M2: Config fields silently ignored** — startingGold, maxGold wired into Player gold calculation. Fixed.~~
+- ~~**M4: Damage cap test contradicts code** — Test updated to check damage >= 1 instead of <= 5. Fixed.~~
+- ~~**M7: Photon region hardcoded** — PhotonConnector clears FixedRegion at connect. Fixed.~~
+- ~~**M10: Stale matchId in PlayerPrefs** — Cleaned up on idle/error state transitions. Fixed.~~
+- **C1: Lobby scene GUID broken** — Zero GUID in EditorBuildSettings.asset. Must fix in Unity Editor. OPEN.
+- **C3: API Gateway CORS not configured** — SAM template needs Cors section on HttpApi. OPEN.
+- **C4: DataConfig apiBaseUrl blank** — Must set API URL in Unity Inspector. OPEN.
+
+See [PRODUCTION-FIX-PLAN.md](/PRODUCTION-FIX-PLAN.md) for full fix plan.
+
 ### Balance Tuning (from Phase VII Quality Gate — February 23, 2026)
 Balance auditor score: 6.5/10. The following tuning recommendations are logged for follow-up:
 
