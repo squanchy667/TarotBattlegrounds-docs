@@ -1,5 +1,134 @@
 # Changelog
 
+## 7-Phase Major Upgrade (Phases I-VII) — February 23, 2026
+
+192 tasks across 7 phases, completing the full production pipeline from online infrastructure to 8-player scale.
+
+### Phase I: Online Infrastructure (T001-T007)
+- Added PlayersTable to SAM template with game auth endpoints (register, login, guest, profile)
+- Unity GameAuthManager + login/register/guest UI screens
+- Matchmaking queue endpoint (DynamoDB + Lambda) with Unity MatchmakingManager + queue UI
+- Wired Photon lobbies with player identity + reconnection support
+- Integration tested via CloudFront live deployment
+
+### Phase II: New Abilities & Hero Powers (T101-T118)
+- 4 new ability triggers: OnAllyDeath, OnAllySummoned, OnSell, Aura (continuous buff)
+- 8 new ability effects: Reborn (revive 1 HP), Windfury (double attack), Venomous (instant kill), SummonToken, StealBuff, GainArmor, BuffAllTribes, RandomTransform
+- HeroPower base class + HeroPowerManager singleton with 12 hero powers
+- Hero power recruit phase integration with UI (button, cooldown, selection)
+- CombatManager integration for all new triggers and effects
+- DevZone enum sync for new abilities + hero powers
+
+### Phase III: Card Pool to 100+ (T201-T216)
+- 2 new tribes: Stars and Coins (6 tribes total)
+- 65 new cards across all tribes: Stars (10), Coins (10), Swords (15), Cups (15), Pentacles (10), Wands (5)
+- Stars synergy (2/4/6) + Coins synergy (2/4/6) with tiered effects
+- Cross-tribe combos: Stars+Swords, Coins+Pentacles
+- Rebalanced existing tribe synergies for 6-tribe meta
+- AI card evaluation updated for new cards/abilities
+- 100-game AI balance pass verified
+
+### Phase IV: Combat Animation & VFX (T301-T320)
+- CombatReplay data structure with recording during instant simulation
+- CombatAnimator coroutine-based playback with skip/speed controls
+- CombatCardVisual with attack (lunge+impact) and death (fade+dissolve) animations
+- VFXManager with particle pooling: attack VFX, ability VFX, death VFX
+- SFXManager with AudioSource pooling + SFXConfig ScriptableObject
+- MusicManager (menu, recruit, combat tracks with crossfade)
+- Network replay broadcast (host → clients)
+- Performance profiled within frame budget
+
+### Phase V: UI Overhaul (T401-T418)
+- Card art pipeline setup (S3 + DevZone upload)
+- Card frame system with rarity borders, tribe-colored backgrounds, golden overlays
+- Hover zoom with enlarged preview + redesigned card tooltips
+- DragDropManager: drag from shop→hand, hand→board, board reorder
+- Recruit timer animated countdown, shop refresh animation, tier-up celebration
+- Opponent board viewer (read-only peek)
+- Game over screen redesign with stats and animations
+- Main menu redesign (Play, Collection, Settings, Profile) + collection viewer + settings menu
+
+### Phase VI: Ranked System (T501-T515)
+- DynamoDB tables for ranked (players, matches, seasons)
+- Lambda endpoints: match-result, profile, leaderboard, season
+- MMR calculation (Elo with placement matches) + rank tier system (Bronze-Legend, 4 divisions)
+- Season management (monthly reset, rewards)
+- Matchmaking queue with MMR range
+- Full ranked UI: rank display, season rewards, queue with wait time, post-game stats, match history, leaderboard (top 100 global)
+- PlayerProfileManager Unity integration
+
+### Phase VII: 8-Player Scale & Polish (T601-T620)
+- 8-player Photon room configuration with ghost opponent system for odd pairings
+- Round-robin pairing + dynamic elimination (8→4→2→winner)
+- Player health/gold/pool scaling for 8-player games (EightPlayerManager)
+- Lobby UI for 8 players + mini-map showing all player health/status
+- Opponent board viewer (cycle 7 opponents) with transition animations + spectator mode
+- DeltaStateCompressor (only send changes) + message batching + bandwidth profiling
+- 8-player AI balance pass, shop pool scaling, economy rebalance
+- Performance profiling, memory optimization (card pooling, texture atlas), WebGL build size optimization
+- Final 8-player integration test
+
+### Quality Gate Hotfix (Post Phase VII)
+- **Token summoning**: DeathrattleAbility.SummonToken replaced stub with full implementation (creates Card ScriptableObject, copies tribe, inserts at board position)
+- **Synergy effects**: Added BonusDamage, Cleave, ReduceCost handlers in SynergyManager.ApplyEffect; added `hasCleave` field to Card with CombatManager cleave logic
+- **8-player wiring**: GameManager now delegates to EightPlayerManager for starting health and battle pairings
+- **Stale tests**: Updated damage cap assertions to match current formula (minions + tier)
+- **Sell bonus**: Added synergy sell bonus to SellCardFromHand (was missing, only board sell had it)
+- **Pentacles alignment**: Aligned Pentacles Tier 4 synergy to +2 gold on sell (matching SynergyTestData)
+
+### Quality Gate Results
+- **Game Auditor**: 6.84/10 → ~7.4/10 (after hotfix) — PASS
+- **Balance Auditor**: 6.5/10 — 12 tuning recommendations logged for follow-up
+- **Test Suite**: 175 tests across 11 files — no regressions
+
+### Files Created (Phases I-VII)
+- `Assets/Scripts/Auth/GameAuthManager.cs` — Authentication manager
+- `Assets/Scripts/Auth/MatchmakingManager.cs` — Queue management
+- `Assets/Scripts/Abilities/Abilities/OnAllyDeathAbility.cs` — New trigger
+- `Assets/Scripts/Abilities/Abilities/OnAllySummonedAbility.cs` — New trigger
+- `Assets/Scripts/Abilities/Abilities/OnSellAbility.cs` — New trigger
+- `Assets/Scripts/Abilities/Abilities/AuraAbility.cs` — Continuous buff
+- `Assets/Scripts/Abilities/Abilities/RebornAbility.cs` — Revive effect
+- `Assets/Scripts/Abilities/Abilities/WindfuryAbility.cs` — Double attack
+- `Assets/Scripts/Abilities/Abilities/VenomousAbility.cs` — Instant kill
+- `Assets/Scripts/Abilities/Abilities/SummonTokenAbility.cs` — Token creation
+- `Assets/Scripts/Abilities/Abilities/StealBuffAbility.cs` — Steal enemy buff
+- `Assets/Scripts/Abilities/Abilities/GainArmorAbility.cs` — Damage shield
+- `Assets/Scripts/Abilities/Abilities/BuffAllTribesAbility.cs` — Tribe-wide buff
+- `Assets/Scripts/Abilities/Abilities/RandomTransformAbility.cs` — Transform
+- `Assets/Scripts/HeroPowers/HeroPowerBase.cs` — Hero power base class
+- `Assets/Scripts/HeroPowers/HeroPowerManager.cs` — Singleton manager
+- `Assets/Scripts/HeroPowers/HeroPowerDatabase.cs` — 12 hero powers
+- `Assets/Scripts/Combat/CombatReplay.cs` — Replay data structure
+- `Assets/Scripts/Combat/CombatAnimator.cs` — Coroutine playback
+- `Assets/Scripts/Combat/CombatCardVisual.cs` — Per-card visuals
+- `Assets/Scripts/VFX/VFXManager.cs` — Particle pooling
+- `Assets/Scripts/Audio/SFXManager.cs` — Audio pooling
+- `Assets/Scripts/Audio/SFXConfig.cs` — Event-to-clip mapping
+- `Assets/Scripts/Audio/MusicManager.cs` — Background music
+- `Assets/Scripts/UI/DragDropManager.cs` — Drag-and-drop system
+- `Assets/Scripts/UI/HoverZoomUI.cs` — Card preview zoom
+- `Assets/Scripts/UI/OpponentBoardViewer.cs` — Peek at opponents
+- `Assets/Scripts/UI/CollectionViewerUI.cs` — Card collection browser
+- `Assets/Scripts/UI/SettingsMenuUI.cs` — Settings menu
+- `Assets/Scripts/UI/RankDisplayUI.cs` — Rank badge/MMR display
+- `Assets/Scripts/UI/PlayerMiniMapUI.cs` — 8-player status mini-map
+- `Assets/Scripts/Network/DeltaStateCompressor.cs` — Delta compression
+- `Assets/Scripts/EightPlayerManager.cs` — 8-player scaling
+- `Assets/Scripts/Tests/Editor/EightPlayerTests.cs` — Scale tests
+
+### Key Files Modified
+- `Assets/Cards/Card.cs` — hasCleave field, new ability fields
+- `Assets/Scripts/CombatManager.cs` — Replay recording, cleave logic, new triggers
+- `Assets/Scripts/GameManager.cs` — EightPlayerManager wiring, elimination logic
+- `Assets/Scripts/Player.cs` — Synergy sell bonus, new ability hooks
+- `Assets/Scripts/Synergies/SynergyManager.cs` — BonusDamage/Cleave/ReduceCost handlers, Stars/Coins tribes
+- `Assets/Scripts/AI/AIController.cs` — New card evaluation for 6 tribes + abilities
+- `Assets/Scripts/Tests/Editor/CombatTests.cs` — Updated damage assertions
+- `Assets/Scripts/Tests/Editor/EdgeCaseTests.cs` — Updated damage assertions
+
+---
+
 ## Wire DevZone to Live Game + 5 Original Cards - February 7, 2026
 
 ### New Features

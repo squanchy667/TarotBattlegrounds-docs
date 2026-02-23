@@ -82,9 +82,29 @@
 - ~~**Triple creation ignores hand limit** — Golden card added without checking hand size. Now allows temporary overflow (matching Hearthstone). Fixed.~~
 - ~~**Discovery doesn't consume pool copies** — Discovered cards not removed from pool. Added `RemoveCardFromPool()`. Fixed.~~
 
+### Balance Tuning (from Phase VII Quality Gate — February 23, 2026)
+Balance auditor score: 6.5/10. The following tuning recommendations are logged for follow-up:
+
+**Hero Power Outliers:**
+- **Midas Touch** — too strong in economy; consider reducing gold gain from 2→1 or adding cooldown
+- **The Tactician** — reposition + buff combo too versatile; consider removing the +1/+1 buff component
+- **Arcane Bolt** — description says "2 damage to random enemy" but actual value may drift; verify consistency
+
+**Tribe Representation:**
+- **Stars** — under-represented in winning boards; needs stronger tier 2-3 cards or synergy value bump
+- **Coins** — under-represented; economy synergy not impactful enough vs combat tribes
+- **Swords** — slightly over-represented; consider trimming tier 1-2 stat lines by 1 attack
+
+**Card Pool:**
+- **Razor Scout** (T3, Swords) — too efficient for tier 3; consider moving to T2 with stat reduction
+- Stars and Coins each need 2-3 more cards at tier 4-5 to compete in late game
+- Multi-tribe cards skew toward Swords/Wands; add 2-3 Stars/Coins multi-tribe options
+
+**Economy:**
+- Sell bonus from Pentacles synergy (+2 gold) stacks too efficiently with Midas Touch hero power
+- 8-player gold scaling may need adjustment at turns 8-12 (too many rerolls available)
+
 ### Medium Priority
-- **Card art placeholder** - Cards showing placeholder colors, no artwork yet
-- **Combat has no visualization** - Combat works in background but no in-game animation
 - **Scene wiring needed for Phase P** - The following must be added manually in Unity Inspector:
   - **End Turn button**: Add UI Button to Canvas → assign to `GameUIManager.endTurnButton`
   - **Freeze Shop button**: Add UI Button to Canvas → assign to `GameUIManager.freezeShopButton`
