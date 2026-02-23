@@ -589,25 +589,25 @@ Example: B3: Implement Battlecry ability
 
 | System | Current State | Target State |
 |--------|---------------|--------------|
-| Card Pool | ~30 cards, 4 tribes | 100+ cards, 6 tribes (+ Stars, Coins) |
-| Abilities | 4 triggers (Battlecry, Deathrattle, OnAttack, OnDamaged) | 8 triggers (+ OnAllyDeath, OnAllySummoned, OnSell, Aura) |
-| Effects | Basic (damage, buff, taunt) | 12+ (+ Reborn, Windfury, Venomous, SummonToken, StealBuff, GainArmor, BuffAllTribes, RandomTransform) |
+| Card Pool | 35 cards, 4 tribes | 100+ cards, 6 tribes (+ Stars, Coins) |
+| Abilities | 10 triggers (incl. OnAllyDeath, OnAllySummoned, OnSell, Aura) | All triggers wired into CombatManager + Player |
+| Effects | 22 effect types (incl. Phase II: OnAllyDeath, OnSell, Aura buffs) | 12+ new (Reborn, Windfury, Venomous, SummonToken, StealBuff, GainArmor, BuffAllTribes, RandomTransform) |
 | Hero Powers | None | 12 hero powers with cooldowns, recruit-phase integration |
 | Combat Display | Instant simulation, text log | Animated replay with VFX, SFX, skip/speed controls |
 | VFX/SFX | None | VFXManager (particle pooling), SFXManager (AudioSource pooling), MusicManager |
 | UI | Functional placeholder | Card frames, hover zoom, drag-drop, collection viewer, settings, main menu |
-| Online | Photon LAN (ParrelSync) | Cognito auth, matchmaking queue, 4-player Photon lobbies |
+| Online | Photon PUN 2 (WebGL WSS, deployed on S3+CloudFront) | DevZone auth, matchmaking queue, identity-wired Photon lobbies |
 | Ranked | None | MMR (Elo), Bronze-Legend tiers, seasons, leaderboards |
 | Player Count | 4 (local) | 2-8 (online), with ghost opponents and spectator mode |
 | Network Optimization | Basic Photon RPCs | DeltaStateCompressor, message batching, bandwidth profiling |
 | Content Pipeline | Manual ScriptableObjects | DevZone CRUD → S3 → RuntimeDataLoader |
-| Testing | 50+ NUnit tests | Extended suites for new abilities, hero powers, 6-tribe balance, 8-player scenarios |
+| Testing | 133 NUnit tests (8 suites) | Extended suites for new abilities, hero powers, 6-tribe balance, 8-player scenarios |
 
 ### Phase Structure
 
 | Phase | Theme | Tasks | Dependencies | Key Deliverables |
 |-------|-------|-------|-------------|------------------|
-| **I** | Online Infrastructure | T001-T010 (10) | Phases A-M done | Cognito auth, matchmaking, Photon lobbies, reconnection |
+| **I** | Online Infrastructure | T001-T007 (7) | Phases A-M done | DevZone auth endpoints, matchmaking, Photon identity, reconnection |
 | **II** | New Abilities & Hero Powers | T101-T118 (18) | — | 4 new triggers, 8 new effects, 12 hero powers |
 | **III** | Card Pool to 100+ | T201-T216 (16) | Phase II | Stars + Coins tribes, 65 new cards, 6-tribe rebalance |
 | **IV** | Combat Animation & VFX | T301-T320 (20) | — | CombatReplay, CombatAnimator, VFX/SFX managers |
@@ -615,7 +615,7 @@ Example: B3: Implement Battlecry ability
 | **VI** | Ranked System | T501-T515 (15) | Phase I | MMR ladder, seasons, leaderboards, match history |
 | **VII** | 8-Player Scale & Polish | T601-T620 (20) | Phases I, III, IV | 8-player rooms, ghost opponents, delta compression, final balance |
 
-**Total new tasks: 117** (bringing project total to 195)
+**Total new tasks: 114** (bringing project total to 192)
 
 **Parallel tracks:**
 - Track A: I → II → III → VI (online → content → ranked)
@@ -665,17 +665,17 @@ Between each phase, all gates must pass before advancing:
 
 | Metric | Current | After Upgrade |
 |--------|---------|---------------|
-| Cards | ~30 | 100+ |
+| Cards | 35 | 100+ |
 | Tribes | 4 (Pentacles, Cups, Swords, Wands) | 6 (+ Stars, Coins) |
-| Ability Triggers | 4 | 8 |
-| Ability Effects | ~5 | 12+ |
+| Ability Triggers | 10 (incl. Phase II) | All triggers wired |
+| Ability Effects | 22 (incl. Phase II) | 30+ with new effects |
 | Hero Powers | 0 | 12 |
 | Combat Display | Instant + text log | Animated replay + VFX + SFX |
 | Player Count | 4 (local) | 2-8 (online) |
-| Auth | None | Cognito (register, login, guest) |
+| Auth | None | DevZone JWT (register, login, guest) |
 | Matchmaking | None | Queue-based with MMR range |
 | Ranked | None | Elo MMR, Bronze-Legend, seasons |
 | Agents | 15 | 26 |
 | Commands | 4 | 10 |
-| Total Tasks | 92 | 195 |
-| NUnit Tests | 50+ | 150+ (estimated) |
+| Total Tasks | 92 | 192 |
+| NUnit Tests | 133 (8 suites) | 200+ (estimated) |
