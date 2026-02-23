@@ -25,14 +25,14 @@ BLOCKED ────────────────────────
 | T | Automated Testing | 7 | 7 | 100% |
 | P | Polish Pass | 7 | 7 | 100% |
 | M | Multiplayer Bug Fixes | 8 | 8 | 100% |
-| I | Online Infrastructure | 7 | 0 | 0% |
+| I | Online Infrastructure | 7 | 7 | 100% |
 | II | New Abilities & Hero Powers | 18 | 18 | 100% |
 | III | Card Pool to 100+ | 16 | 16 | 100% |
 | IV | Combat Animation & VFX | 20 | 20 | 100% |
 | V | UI Overhaul | 18 | 18 | 100% |
 | VI | Ranked System | 15 | 0 | 0% |
 | VII | 8-Player Scale & Polish | 20 | 0 | 0% |
-| **Total** | | **192** | **150** | **78%** |
+| **Total** | | **192** | **157** | **82%** |
 
 ## Milestones
 
@@ -91,13 +91,13 @@ Phases A-M (78/78 DONE)
 
 | ID | Task | Priority | Status | Depends On | Blocks |
 |----|------|----------|--------|------------|--------|
-| T001 | Add PlayersTable to SAM template + deploy | HIGH | PENDING | — | T002 |
-| T002 | Game auth endpoints (register, login, guest, profile) | HIGH | PENDING | T001 | T003, T004 |
-| T003 | Unity GameAuthManager + login/register/guest UI | HIGH | PENDING | T002 | T005, T006 |
-| T004 | Matchmaking queue endpoint (DynamoDB + Lambda) | HIGH | PENDING | T002 | T005 |
-| T005 | Unity MatchmakingManager + queue UI | HIGH | PENDING | T003, T004 | T006, T007 |
-| T006 | Wire Photon lobbies with player identity + reconnection | HIGH | PENDING | T003 | T007 |
-| T007 | Integration testing + live playtest via CloudFront | HIGH | PENDING | T005, T006 | — |
+| T001 | Add PlayersTable to SAM template + deploy | HIGH | DONE | — | T002 |
+| T002 | Game auth endpoints (register, login, guest, profile) | HIGH | DONE | T001 | T003, T004 |
+| T003 | Unity GameAuthManager + login/register/guest UI | HIGH | DONE | T002 | T005, T006 |
+| T004 | Matchmaking queue endpoint (DynamoDB + Lambda) | HIGH | DONE | T002 | T005 |
+| T005 | Unity MatchmakingManager + queue UI | HIGH | DONE | T003, T004 | T006, T007 |
+| T006 | Wire Photon lobbies with player identity + reconnection | HIGH | DONE | T003 | T007 |
+| T007 | Integration testing + live playtest via CloudFront | HIGH | DONE | T005, T006 | — |
 
 ---
 
