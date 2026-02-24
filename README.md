@@ -49,8 +49,30 @@ This documentation serves as a centralized knowledge base for the Tarot Battlegr
 
 ## Current Status
 
-**Phase M: Multiplayer Bug Fixes** — COMPLETE (February 2026)
-**Next: Phase I (AWS Online Multiplayer Infrastructure)**
+**Production Audit Complete** — February 24, 2026 | Branch: `tarot-skin`
+**Upgrade Phases II-VII**: DONE (150/192 tasks)
+**Quality Gate**: 240 unit tests, 3 audit rounds (38 bugs fixed), triple-agent verification
+
+### What to Expect
+
+This is a **fully playable single-player POC** against AI opponents. The game loop is complete: recruit cards, build synergies, fight auto-battles, upgrade your tavern, and climb toward victory.
+
+**What works well:**
+- Complete recruit-phase economy (buy/sell/reroll/freeze/upgrade)
+- 91 cards across 6 tribes with 16 ability types
+- 12 hero powers with unique playstyles
+- Combat with Windfury, Venomous, Reborn, Aegis, Cleave, Deathrattle, Aura
+- Triple fusion into golden cards with discovery rewards
+- 3 AI difficulty levels (Easy/Medium/Hard)
+- 2-8 player game configurations
+- WebGL deployment on AWS (play in browser)
+
+**Known limitations (see [Known Issues](resources/known-issues.md)):**
+- Online multiplayer infrastructure is scaffolded but not production-ready (Phase I endpoints exist but need deployment)
+- Some synergy triggers (OnBuy, Passive) are defined but not wired to call sites
+- AI does not use hero powers
+- Balance is functional but not tournament-ready (synergy stacking favors Stars/Swords)
+- Some spec mismatches between PLAN.md and implementation (Cups T6, Swords T6, Wands T2)
 
 ### Working Features
 - Buy/sell/reroll cards from shop
@@ -61,15 +83,25 @@ This documentation serves as a centralized knowledge base for the Tarot Battlegr
 - AI opponents (Easy/Medium/Hard)
 - Triple fusion: 3 copies = golden card + discovery
 - Board reordering (click-to-swap)
-- Tribe synergies with tiered thresholds (2/4/6)
-- Cross-tribe combo bonuses
-- Battlecry, Deathrattle, OnAttack, Taunt/Guardian abilities
-- Event-driven UI with card tooltips
+- 6 tribes: Swords, Cups, Wands, Pentacles, Stars, Coins
+- Tribe synergies with tiered thresholds (2/4/6) + cross-tribe combos
+- 16 ability types (Battlecry, Deathrattle, OnAttack, OnAllyDeath, OnAllySummoned, OnSell, Aura, Reborn, Windfury, Venomous, SummonToken, StealBuff, GainArmor, BuffAllTribes, RandomTransform, Taunt)
+- 12 hero powers (Midas Touch, Empower, Healer, Arcane Bolt, Fortify, Reroller, Life Tap, Blade Master, War Chief, Tactician, Economist, Recruiter)
+- Combat animation + VFX system with replay
+- Event-driven UI with card tooltips, hover zoom, drag-and-drop
 - Game Over screen with standings
-- Online multiplayer via Photon PUN 2
+- Online multiplayer scaffolding via Photon PUN 2
 - WebGL build deployed to AWS S3 + CloudFront
 - Runtime JSON data loading from S3 (with built-in fallback)
 - DevZone web editor (React + Express + AWS Lambda)
+
+### Test Coverage (240 tests)
+- **AbilityTests.cs**: 90 tests across 16 abilities
+- **HeroPowerTests.cs**: 118 tests across 12 hero powers
+- **SynergyTests.cs**: 65 tests (4 original tribes + Stars + Coins)
+- **CombatTests.cs**: 17 tests (combat, deathrattle cascade, golden cards)
+- **AIBattleTests.cs**: 15+ tests (game completion, balance, difficulty)
+- **CardSystemTests.cs, EconomyTests.cs, EdgeCaseTests.cs**: Core system tests
 
 ### Architecture Highlights
 
@@ -104,4 +136,4 @@ Key events: `OnHandChanged`, `OnBoardChanged`, `OnCoinsChanged`, `OnTierChanged`
 
 ---
 
-Last Updated: February 21, 2026
+Last Updated: February 24, 2026

@@ -3,6 +3,7 @@
 * [Overview](README.md)
 * [Master Plan](PLAN.md)
 * [Task Board](TASK_BOARD.md)
+* [Production Fix Plan](PRODUCTION-FIX-PLAN.md)
 * [Development Agents](development-agents.md)
 * [Skinning Guide](SKINNING-GUIDE.md)
 

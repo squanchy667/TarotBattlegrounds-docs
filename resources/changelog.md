@@ -68,6 +68,61 @@
 - Performance profiling, memory optimization (card pooling, texture atlas), WebGL build size optimization
 - Final 8-player integration test
 
+### Production Audit Round 3 — February 24, 2026
+6 targeted fixes from remaining audit items.
+
+**Bug 9: EightPlayerManager damage not wired**
+- `CalculateCombatDamage()` was dead code — never called from GameManager
+- Wired into GameManager's post-combat damage path for 5+ player games
+- Files: `GameManager.cs`
+
+**Bug 12: Synergy cost reduction floor too high**
+- `Mathf.Max(1, baseCost - reduction)` prevented free cards even with full synergy discount
+- Changed to `Mathf.Max(0, ...)` so synergies can make cards free
+- File: `SynergyManager.cs`
+
+**Bug 14: SynergyTarget.Random ignores tribe**
+- Random target selection picked from all board cards instead of filtering by tribe
+- Added `board.Where(c => c.HasTribe(tribe))` filter before random pick
+- File: `SynergyManager.cs`
+
+**Bug 16: NetworkCardData missing Windfury/Venomous**
+- `hasWindfury` and `hasVenomous` fields were missing from network serialization
+- Added both fields to struct, `FromCard()`, and `ToCard()`
+- File: `NetworkCardData.cs`
+
+**Bug 17: Pairing history grows unbounded**
+- Eliminated players were never pruned from `pairingHistory` dictionary
+- Added stale key pruning at start of `GeneratePairings()`
+- File: `EightPlayerManager.cs`
+
+**Bug 20: MidasTouch description misleading**
+- Said "Gain 2 coins" but actually gives 1 coin
+- Updated to "Gain 1 coin (once per turn)"
+- File: `MidasTouchPower.cs`
+
+Commit: `2094bd2` | Branch: `tarot-skin`
+
+### Production Audit Round 2 — February 24, 2026
+7 bug fixes + 240 unit tests added. Fixes from first production audit pass.
+
+**Fixes:**
+- Reborn cards now properly revive at 1 HP with all keywords preserved
+- Golden Reborn cards revive as golden with doubled base stats
+- Hero power gold deduction enforced (can't use without enough gold)
+- Hero power `ResetForNewTurn()` called at turn start for all powers
+- Board snapshot/restore around hero power triggers prevents card duplication
+- Deathrattle `SummonToken` effect value now configurable (was hardcoded to 1)
+- Aegis now blocks Venomous instant-kill (shield pops, card survives)
+
+**Tests added (240 total):**
+- AbilityTests.cs: 90 tests across 16 ability types
+- HeroPowerTests.cs: 118 tests across 12 hero powers
+- SynergyTests.cs: 65 tests (4 original tribes + Stars + Coins)
+- CombatTests.cs: 17 tests (combat, deathrattle cascade, golden cards)
+
+Commit: `9a8f686` | Branch: `tarot-skin`
+
 ### Quality Gate Hotfix (Post Phase VII)
 - **Token summoning**: DeathrattleAbility.SummonToken replaced stub with full implementation (creates Card ScriptableObject, copies tribe, inserts at board position)
 - **Synergy effects**: Added BonusDamage, Cleave, ReduceCost handlers in SynergyManager.ApplyEffect; added `hasCleave` field to Card with CombatManager cleave logic

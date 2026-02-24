@@ -111,27 +111,85 @@
 
 See [PRODUCTION-FIX-PLAN.md](/PRODUCTION-FIX-PLAN.md) for full fix plan.
 
-### Balance Tuning (from Phase VII Quality Gate — February 23, 2026)
-Balance auditor score: 6.5/10. The following tuning recommendations are logged for follow-up:
+### Production Audit Round 2 — Fixed (February 24, 2026)
+7 bugs fixed + 240 unit tests added. Commit: `9a8f686`
 
-**Hero Power Outliers:**
-- **Midas Touch** — too strong in economy; consider reducing gold gain from 2→1 or adding cooldown
-- **The Tactician** — reposition + buff combo too versatile; consider removing the +1/+1 buff component
-- **Arcane Bolt** — description says "2 damage to random enemy" but actual value may drift; verify consistency
+- ~~**Reborn+OnAllyDeath double-trigger** — Reborn cards stayed in board and received their own death notification. Skip OnAllyDeath for reborn cards. Fixed.~~ *(Note: per triple-agent audit, this may need revisiting — BG rules say Reborn deaths should trigger OnAllyDeath on other allies)*
+- ~~**ArcaneBolt armed flag persists** — `armed` private field never cleared by `ResetForNewTurn()`. Made ResetForNewTurn virtual, override in ArcaneBolt. Fixed.~~
+- ~~**RecruiterPower pool corruption** — `pool.Remove(picked)` operated on live `allCards` list. Changed to `TavernManager.RemoveCardFromPool()`. Fixed.~~
+- ~~**Hero power combat buffs corrupt live boards** — WarChief/Tactician/ArcaneBolt modified live boards before SimulateBattle cloned them. Added board snapshot/restore around hero power triggers. Fixed.~~
+- ~~**SellCardFromHand missing aura cleanup** — No `AuraManager.RemoveAurasForCard()` call in hand sell path. Added. Fixed.~~
+- ~~**Golden card doubles buffed stats** — `CreateGoldenVersion` used current (possibly buffed) stats. Changed to use `_baseAttack`/`_baseHealth`. Fixed.~~
+- ~~**Combo effect asymmetry** — `ApplyComboEffects` only checked synergy1's comboTribe. Now checks both synergy sides. Fixed.~~
 
-**Tribe Representation:**
-- **Stars** — under-represented in winning boards; needs stronger tier 2-3 cards or synergy value bump
-- **Coins** — under-represented; economy synergy not impactful enough vs combat tribes
-- **Swords** — slightly over-represented; consider trimming tier 1-2 stat lines by 1 attack
+### Production Audit Round 3 — Fixed (February 24, 2026)
+6 bugs fixed. Commit: `2094bd2`
+
+- ~~**CalculateCombatDamage dead code** — `EightPlayerManager.CalculateCombatDamage()` never called. Wired into GameManager for 5+ player games. Fixed.~~
+- ~~**SynergyTarget.Random not tribe-filtered** — Cups T6 Aegis could hit non-Cups cards. Now filters by tribe before random pick. Fixed.~~
+- ~~**NetworkCardData missing hasWindfury/hasVenomous** — Added both fields to serialization and reconstruction. Fixed.~~
+- ~~**Pairing history stale entries** — Eliminated players left stale entries in pairingHistory dict. Now pruned each round. Fixed.~~
+- ~~**Cost reduction floor prevents free cards** — `Mathf.Max(1, ...)` blocked cost going to 0. Changed to `Mathf.Max(0, ...)`. Fixed.~~
+- ~~**MidasTouch description** — Description lacked once-per-turn note. Updated to "Gain 1 coin (once per turn)". Fixed.~~
+
+### Triple-Agent Audit Findings (February 24, 2026)
+3 independent audit agents ran in parallel. Score: 5.5-6.01/10. The following are NEW issues not yet fixed, categorized by confidence:
+
+**HIGH CONFIDENCE (2+ agents agree):**
+
+| ID | Finding | Severity | Status |
+|----|---------|----------|--------|
+| TA-1 | ArcaneBolt kills bypass death pipeline (no Deathrattle/Reborn) + card resurrects after combat via board restore | CRITICAL | OPEN |
+| TA-2 | Cleave damage (synergy + ability paths) bypasses GainArmorAbility.ApplyArmor | HIGH | OPEN |
+| TA-3 | RandomTransformAbility takes card from pool without removing (pool duplication) | HIGH | OPEN |
+| TA-4 | Reborn+OnAllyDeath: per BG rules, Reborn deaths SHOULD trigger OnAllyDeath on surviving allies (our fix may be wrong) | HIGH | NEEDS DESIGN DECISION |
+| TA-5 | Reroller hero power costs 1 gold = same as normal refresh (zero value) | HIGH | OPEN |
+| TA-6 | Windfury: dead target counterattacks during second strike | MEDIUM | OPEN |
+| TA-7 | Dewdrop Fairy assigned to Wands, should be Cups | LOW | OPEN |
+| TA-8 | Upgrade costs T3-T5 are 1 gold above BG standard | MEDIUM | OPEN |
+
+**SINGLE-AGENT (need verification):**
+
+| ID | Finding | Severity | Status |
+|----|---------|----------|--------|
+| TA-9 | OnBuy/Passive synergy triggers never called (Coins T2, Wands T2/T4 are dead code) | CRITICAL | NEEDS VERIFICATION |
+| TA-10 | Intuitive Novice: `hasAegis` never set despite `EffectType.Aegis` in CardDatabase | CRITICAL | NEEDS VERIFICATION |
+| TA-11 | Turn 1 shop may be empty (RefreshShop gated by `turnNumber > 1`, but InitializeAI may cover it) | CRITICAL | NEEDS VERIFICATION |
+| TA-12 | Pentacles T6 cost reduction only applies to Pentacles cards, not all cards per PLAN.md | HIGH | OPEN |
+| TA-13 | Cups T6 gives Aegis to 1 random Cup; PLAN.md says "Shield all 2" | HIGH | DESIGN MISMATCH |
+| TA-14 | Swords T6 gives +2/+2; PLAN.md says "Cleave" | HIGH | DESIGN MISMATCH |
+| TA-15 | Hero power selection callback overwritten for multi-human players | HIGH | OPEN |
+| TA-16 | RecruiterPower doesn't call CheckAndResolveTriples (triple from hero power missed) | HIGH | OPEN |
+| TA-17 | Deathrattle damage bypasses Aegis (DealDamage skips hasAegis check) | MEDIUM | OPEN |
+| TA-18 | OnSell bonus double-counted (synergy + ability both fire for Pentacles OnSell cards) | HIGH | OPEN |
+| TA-19 | LifeTap modifies Player.Health without syncing GameManager.playerHealths | MEDIUM | OPEN |
+| TA-20 | Aura removal can kill wounded card (health drops to 0 when aura-granter sold) | MEDIUM | OPEN |
+| TA-21 | AI never uses hero powers | MEDIUM | OPEN |
+| TA-22 | HeroPowerManager not cleared between games | LOW | OPEN |
+
+### Balance Findings (from Triple-Agent Audit — February 24, 2026)
+Balance auditor score: 5.5/10.
+
+**Critical Balance:**
+- Synergy tier stacking makes Stars (+6/+5 at 6 units) and Swords (+5/+2) dramatically OP vs other tribes
+- Coins tribe only 11 cards (T6 synergy nearly impossible to achieve)
+- Only 5 T6 cards for 6 tribes — late game feels random not strategic
+
+**Hero Power Tier List:**
+- **S Tier**: Midas Touch (free +1 gold), Economist (+1 net gold)
+- **A Tier**: Tactician (free +2/+2), Healer (+3 HP), Fortify (Aegis), Recruiter (card advantage)
+- **B Tier**: Empower, Blade Master, War Chief, Arcane Bolt
+- **C Tier**: Reroller (zero value), Life Tap (strictly worse than Midas Touch)
 
 **Card Pool:**
-- **Razor Scout** (T3, Swords) — too efficient for tier 3; consider moving to T2 with stat reduction
-- Stars and Coins each need 2-3 more cards at tier 4-5 to compete in late game
-- Multi-tribe cards skew toward Swords/Wands; add 2-3 Stars/Coins multi-tribe options
+- Battlecry overrepresented (28.5% of all cards)
+- Swords has 22 cards (above 15-20 target), Coins has 11 (below target)
+- Overstatted: Leviathan (T6, 5/12+Guardian), Abyssal Leviathan (T5, 4/10+Guardian), Warmonger (T4, 6/5+OnAllyDeath)
+- Pentacles gets zero combat stats from synergies (pure economy)
 
 **Economy:**
-- Sell bonus from Pentacles synergy (+2 gold) stacks too efficiently with Midas Touch hero power
-- 8-player gold scaling may need adjustment at turns 8-12 (too many rerolls available)
+- Gold curve matches BG exactly (3 base, +1/turn, cap 10)
+- Upgrade costs T3/T4/T5 are each 1 gold above BG standard
 
 ### Medium Priority
 - **Scene wiring needed for Phase P** - The following must be added manually in Unity Inspector:
